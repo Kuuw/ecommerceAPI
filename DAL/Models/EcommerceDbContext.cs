@@ -47,7 +47,7 @@ public partial class EcommerceDbContext : DbContext
 
             entity.ToTable("Address");
 
-            entity.Property(e => e.AddressId).ValueGeneratedNever();
+            entity.Property(e => e.AddressId).ValueGeneratedOnAdd();
             entity.Property(e => e.AddressLine1).HasMaxLength(254);
             entity.Property(e => e.AddressLine2).HasMaxLength(254);
             entity.Property(e => e.CreatedAt)
@@ -93,7 +93,7 @@ public partial class EcommerceDbContext : DbContext
 
             entity.ToTable("Country");
 
-            entity.Property(e => e.CountryId).ValueGeneratedNever();
+            entity.Property(e => e.CountryId).ValueGeneratedOnAdd();
             entity.Property(e => e.CountryName).HasMaxLength(127);
         });
 
@@ -103,7 +103,7 @@ public partial class EcommerceDbContext : DbContext
 
             entity.ToTable("Order");
 
-            entity.Property(e => e.OrderId).ValueGeneratedNever();
+            entity.Property(e => e.OrderId).ValueGeneratedOnAdd();
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
@@ -146,7 +146,7 @@ public partial class EcommerceDbContext : DbContext
 
             entity.ToTable("Product");
 
-            entity.Property(e => e.ProductId).ValueGeneratedNever();
+            entity.Property(e => e.ProductId).ValueGeneratedOnAdd();
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
@@ -197,7 +197,7 @@ public partial class EcommerceDbContext : DbContext
 
             entity.ToTable("ShipmentCompany");
 
-            entity.Property(e => e.ShipmentCompanyId).ValueGeneratedNever();
+            entity.Property(e => e.ShipmentCompanyId).ValueGeneratedOnAdd();
             entity.Property(e => e.CompanyLogoUrl).HasMaxLength(127);
             entity.Property(e => e.CompanyName).HasMaxLength(127);
             entity.Property(e => e.CompanySite).HasMaxLength(127);
@@ -211,7 +211,7 @@ public partial class EcommerceDbContext : DbContext
 
             entity.HasIndex(e => e.Email, "UQ__User__A9D10534CAD6D1B1").IsUnique();
 
-            entity.Property(e => e.UserId).ValueGeneratedNever();
+            entity.Property(e => e.UserId).ValueGeneratedOnAdd();
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");

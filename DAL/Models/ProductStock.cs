@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DAL.Models;
 
 public partial class ProductStock
 {
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int ProductId { get; set; }
 
     public int Stock { get; set; }
