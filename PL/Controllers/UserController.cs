@@ -1,8 +1,10 @@
 ﻿using BAL.Concrete;
 using DAL.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
+using System.Text.RegularExpressions;
 
 namespace PL.Controllers
 {
@@ -11,10 +13,13 @@ namespace PL.Controllers
     public class UserController : ControllerBase
     {
         UserRepository userRepository = new UserRepository();
+        BcryptService bcryptService = new BcryptService();
 
-        [HttpPost]
-        public IActionResult Register(String FirstName, String LastName, String Email, String PasswordHash)
+
+        [HttpPost("Register")]
+        public IActionResult Register(String FirstName, String LastName, String Email, String Password)
         {
+            String PasswordHash = bcryptService.HashPassword(Password);
             User newUser = new User();
             newUser.FirstName = FirstName;
             newUser.LastName = LastName;
@@ -33,6 +38,10 @@ namespace PL.Controllers
             } 
             catch(Exception e) 
             {
+                if (e.InnerException != null)
+                {
+                    Console.WriteLine(e.InnerException.ToString());
+                }
                 return StatusCode(500, new { message = "İsteğinizi işlerken bir hata oluştu.", error = e.Message}); 
             }
         }
