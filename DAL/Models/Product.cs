@@ -27,5 +27,5 @@ public partial class Product
 
     public virtual ICollection<ProductImage> ProductImages { get; set; } = new List<ProductImage>();
 
-    public virtual ProductStock? ProductStock { get; set; }
+    public virtual ProductStock ProductStock { get; set; }
 }
