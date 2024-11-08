@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace DAL.Models;
+namespace Entities.Models;
 
 public partial class ProductImage
 {

@@ -16,7 +16,6 @@ namespace PL.Controllers
     {
         ProductRepository productRepository = new ProductRepository();
 
-
         [HttpGet("List")]
         public void List(bool OnlyShowInStock, int? UnitPriceLowerThan, int? UnitPriceBiggerThan, String? NameLike)
         {

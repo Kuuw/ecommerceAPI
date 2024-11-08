@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace DAL.Models;
+namespace DAL;
 
 public partial class EcommerceDbContext : DbContext
 {

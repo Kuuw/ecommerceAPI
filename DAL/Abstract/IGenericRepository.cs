@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BAL.Abstract
+﻿namespace DAL.Abstract
 {
-    public interface IRepository<T>
+    public interface IGenericRepository<T>
     {
         List<T> List();
         void Insert(T p);

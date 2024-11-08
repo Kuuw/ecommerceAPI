@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DAL.Models;
+namespace Entities.Models;
 
 public partial class ProductStock
 {

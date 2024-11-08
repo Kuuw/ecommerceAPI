@@ -1,5 +1,6 @@
 ﻿using BAL.Concrete;
-using DAL.Models;
+using BAL.Services;
+using Entities.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -45,5 +46,7 @@ namespace PL.Controllers
                 return StatusCode(500, new { message = "İsteğinizi işlerken bir hata oluştu.", error = e.Message}); 
             }
         }
+
+
     }
 }

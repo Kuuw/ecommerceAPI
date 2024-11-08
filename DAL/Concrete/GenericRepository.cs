@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DAL.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using DAL.Abstract;
 
-namespace BAL.Abstract
+namespace DAL.Concrete
 {
-    public class GenericRepository<T> : IRepository<T> where T : class, new()
+    public class GenericRepository<T> : IGenericRepository<T> where T : class, new()
     {
         EcommerceDbContext context = new EcommerceDbContext();
         DbSet<T> data;
