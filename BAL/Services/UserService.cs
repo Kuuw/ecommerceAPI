@@ -11,7 +11,8 @@ namespace BAL.Services
     public class UserService
     {
         UserRepository userRepository = new UserRepository();
-        
+        BcryptService bcryptService = new BcryptService();
+
         public User Register(User user)
         {
             user.IsAdmin = false;
@@ -20,6 +21,7 @@ namespace BAL.Services
             user.Addresses = [];
             user.CartItems = [];
             user.Orders = [];
+            user.PasswordHash = bcryptService.HashPassword(user.PasswordHash);
 
             userRepository.Insert(user);
             return user;
