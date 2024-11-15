@@ -17,9 +17,9 @@ public partial class Product
 
     public double UnitPrice { get; set; }
 
-    public DateTime? CreatedAt { get; set; }
+    public DateTime CreatedAt { get; set; }
 
-    public DateTime? UpdatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
 
     public virtual ICollection<CartItem> CartItems { get; set; } = new List<CartItem>();
 
@@ -27,5 +27,5 @@ public partial class Product
 
     public virtual ICollection<ProductImage> ProductImages { get; set; } = new List<ProductImage>();
 
-    public virtual ProductStock ProductStock { get; set; }
+    public virtual ProductStock? ProductStock { get; set; }
 }

@@ -11,7 +11,7 @@ public partial class ShipmentCompany
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int ShipmentCompanyId { get; set; }
 
-    public string? CompanyName { get; set; }
+    public string CompanyName { get; set; }
 
     public string? CompanySite { get; set; }
 

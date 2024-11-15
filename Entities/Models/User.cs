@@ -15,17 +15,17 @@ public partial class User
 
     public string PasswordHash { get; set; } = null!;
 
-    public string? FirstName { get; set; }
+    public string FirstName { get; set; }
 
-    public string? LastName { get; set; }
+    public string LastName { get; set; }
 
     public string? Telephone { get; set; }
 
-    public bool? IsAdmin { get; set; }
+    public bool IsAdmin { get; set; }
 
-    public DateTime? CreatedAt { get; set; }
+    public DateTime CreatedAt { get; set; }
 
-    public DateTime? UpdatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
 
     public virtual ICollection<Address> Addresses { get; set; } = new List<Address>();
 
