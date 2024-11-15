@@ -1,4 +1,4 @@
-﻿using BAL.Concrete;
+﻿using Asp.Versioning;
 using BAL.Services;
 using Entities.Models;
 using Microsoft.AspNetCore.Http;
@@ -11,42 +11,18 @@ namespace PL.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [ApiVersion("1.0")]
     public class UserController : ControllerBase
     {
-        UserRepository userRepository = new UserRepository();
+        UserService userService = new UserService();
         BcryptService bcryptService = new BcryptService();
 
 
         [HttpPost("Register")]
-        public IActionResult Register(String FirstName, String LastName, String Email, String Password)
+        public User Register(User user)
         {
-            String PasswordHash = bcryptService.HashPassword(Password);
-            User newUser = new User();
-            newUser.FirstName = FirstName;
-            newUser.LastName = LastName;
-            newUser.Email = Email;
-            newUser.PasswordHash = PasswordHash;
-            newUser.IsAdmin = false;
-
-            try
-            {
-                if (newUser == null)
-                {
-                    BadRequest(new { message="Kullanıcı verisi geçersiz." });
-                }
-                userRepository.Insert(newUser);
-                return Ok(new { message = "Kullanıcı başarıyla oluşturuldu."});
-            } 
-            catch(Exception e) 
-            {
-                if (e.InnerException != null)
-                {
-                    Console.WriteLine(e.InnerException.ToString());
-                }
-                return StatusCode(500, new { message = "İsteğinizi işlerken bir hata oluştu.", error = e.Message}); 
-            }
+            userService.Register(user);
+            return user;
         }
-
-
     }
 }
