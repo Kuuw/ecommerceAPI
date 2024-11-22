@@ -2,7 +2,7 @@
 {
     public interface IGenericRepository<T>
     {
-        List<T> List();
+        List<T> List(); 
         void Insert(T p);
         void Delete(T p);
         void Update(T p);

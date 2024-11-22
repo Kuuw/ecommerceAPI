@@ -1,9 +1,10 @@
-﻿using Entities.Models;
+﻿using DAL.Abstract;
+using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace DAL.Concrete
 {
-    public class ProductRepository:GenericRepository<Product>
+    public class ProductRepository:GenericRepository<Product>, IProductRepository
     {
         EcommerceDbContext context = new EcommerceDbContext();
         DbSet<ProductStock> data;

@@ -1,5 +1,6 @@
 ﻿using Asp.Versioning;
-using BAL.Services;
+using BAL.Concrete;
+using Entities.DTO;
 using Entities.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -27,10 +28,16 @@ namespace PL.Controllers
 
         [HttpPost("Register")]
         [AllowAnonymous]
-        public User Register(User user)
+        public User Register(UserRegister userData)
         {
-            userService.Register(user);
-            return user;
+            User newUser = new User();
+            newUser.FirstName = userData.FirstName;
+            newUser.LastName = userData.LastName;
+            newUser.Email = userData.Email;
+            newUser.Email = userData.Email;
+
+            userService.Register(newUser);
+            return newUser;
         }
 
         [HttpPost("Login")]

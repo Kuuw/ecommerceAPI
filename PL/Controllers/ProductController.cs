@@ -1,5 +1,5 @@
 ﻿using Asp.Versioning;
-using BAL.Services;
+using BAL.Concrete;
 using Entities.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -25,8 +25,24 @@ namespace PL.Controllers
             return;
         }
 
+        [Route]
+        [HttpPost]
         [HttpPost("AddProduct")]
-        public Product AddProduct(Product product)
+        public Product Product(Product product)
+        {
+            productService.AddProduct(product);
+            return product;
+        }
+
+        [HttpPut("AddProduct")]
+        public Product Product(Product product)
+        {
+            productService.AddProduct(product);
+            return product;
+        }
+
+        [HttpDelete("AddProduct")]
+        public Product Product(Product product)
         {
             productService.AddProduct(product);
             return product;

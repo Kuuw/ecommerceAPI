@@ -1,8 +1,9 @@
-﻿using Entities.Models;
+﻿using DAL.Abstract;
+using Entities.Models;
 
 namespace DAL.Concrete
 {
-    public class CartRepository:GenericRepository<CartItem>
+    public class CartRepository:GenericRepository<CartItem>, ICartRepository
     {
     }
 }

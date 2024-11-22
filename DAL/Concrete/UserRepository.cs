@@ -1,8 +1,9 @@
-﻿using Entities.Models;
+﻿using DAL.Abstract;
+using Entities.Models;
 
 namespace DAL.Concrete
 {
-    public class UserRepository:GenericRepository<User>
+    public class UserRepository:GenericRepository<User>, IUserRepository
     {
 
     }

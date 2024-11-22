@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using DAL.Abstract;
+﻿using DAL.Abstract;
+using Microsoft.EntityFrameworkCore;
 
 namespace DAL.Concrete
 {
