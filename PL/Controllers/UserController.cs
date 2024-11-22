@@ -1,4 +1,5 @@
 ﻿using Asp.Versioning;
+using AutoMapper;
 using BAL.Concrete;
 using Entities.DTO;
 using Entities.Models;
@@ -20,6 +21,8 @@ namespace PL.Controllers
         UserService userService = new UserService();
         BcryptService bcryptService = new BcryptService();
         AuthService authService;
+        Mapper mapper = MapperConfig.InitializeAutomapper();
+
 
         public UserController(IConfiguration config)
         {
@@ -30,11 +33,7 @@ namespace PL.Controllers
         [AllowAnonymous]
         public User Register(UserRegister userData)
         {
-            User newUser = new User();
-            newUser.FirstName = userData.FirstName;
-            newUser.LastName = userData.LastName;
-            newUser.Email = userData.Email;
-            newUser.Email = userData.Email;
+            var newUser = mapper.Map<User>(userData);
 
             userService.Register(newUser);
             return newUser;
