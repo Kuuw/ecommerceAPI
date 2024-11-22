@@ -19,29 +19,14 @@ namespace PL.Controllers
         ProductService productService = new ProductService();
 
         [HttpGet("List")]
-        public void List(bool OnlyShowInStock, int? UnitPriceLowerThan, int? UnitPriceBiggerThan, String? NameLike)
+        public void List(/* TODO */)
         {
             // TODO
             return;
         }
 
-        [Route]
         [HttpPost]
-        [HttpPost("AddProduct")]
-        public Product Product(Product product)
-        {
-            productService.AddProduct(product);
-            return product;
-        }
-
-        [HttpPut("AddProduct")]
-        public Product Product(Product product)
-        {
-            productService.AddProduct(product);
-            return product;
-        }
-
-        [HttpDelete("AddProduct")]
+        [HttpPost("Add")]
         public Product Product(Product product)
         {
             productService.AddProduct(product);
