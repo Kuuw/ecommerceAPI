@@ -17,6 +17,7 @@ namespace BAL.Concrete
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<UserRegister, User>();
+                cfg.CreateMap<ProductDTO, Product>();
             });
             var mapper = new Mapper(config);
             return mapper;

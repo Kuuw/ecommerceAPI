@@ -1,5 +1,7 @@
 ﻿using Asp.Versioning;
+using AutoMapper;
 using BAL.Concrete;
+using Entities.DTO;
 using Entities.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -17,6 +19,7 @@ namespace PL.Controllers
     public class ProductController : ControllerBase
     {
         ProductService productService = new ProductService();
+        Mapper mapper = MapperConfig.InitializeAutomapper();
 
         [HttpGet("List")]
         public void List(/* TODO */)
@@ -27,8 +30,9 @@ namespace PL.Controllers
 
         [HttpPost]
         [HttpPost("Add")]
-        public Product Product(Product product)
+        public Product Product(ProductDTO productDTO)
         {
+            var product = mapper.Map<Product>(productDTO);
             productService.AddProduct(product);
             return product;
         }
