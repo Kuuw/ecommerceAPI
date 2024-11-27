@@ -21,20 +21,47 @@ namespace PL.Controllers
         ProductService productService = new ProductService();
         Mapper mapper = MapperConfig.InitializeAutomapper();
 
-        [HttpGet("List")]
-        public void List(/* TODO */)
+        [HttpGet]
+        public IActionResult Product()
         {
-            // TODO
-            return;
+
+            return Ok();
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult Product(int id)
+        {
+            Product? product = productService.GetById(id);
+
+            if (product != null)
+            {
+                return Ok(mapper.Map<ProductDTO>(product));
+            }
+            return NotFound();
+
         }
 
         [HttpPost]
-        [HttpPost("Add")]
-        public Product Product(ProductDTO productDTO)
+        public IActionResult Product(ProductDTO productDTO)
         {
             var product = mapper.Map<Product>(productDTO);
-            productService.AddProduct(product);
-            return product;
+            productService.Add(product);
+            return Ok(product);
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult Product(int id, ProductDTO productDTO) 
+        {
+            Product? product = productService.GetById(id);
+
+            if (product == null) { return NotFound(); }
+
+            product.Name = productDTO.Name;
+            product.Description = productDTO.Description;
+            product.UnitPrice = productDTO.UnitPrice;
+
+            productService.Update(product);
+            return Ok(product);
         }
     }
 }
