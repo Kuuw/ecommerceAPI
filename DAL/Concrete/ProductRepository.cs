@@ -7,7 +7,8 @@ namespace DAL.Concrete
     public class ProductRepository:GenericRepository<Product>, IProductRepository
     {
         EcommerceDbContext context = new EcommerceDbContext();
-        DbSet<ProductStock> data;
+        DbSet<ProductStock> stockData;
+        DbSet<Product> productData;
         public void AddStockEntry(int ProductId, int Stock)
         {
             ProductStock ps = new ProductStock();
@@ -16,8 +17,18 @@ namespace DAL.Concrete
             ps.UpdatedAt = DateTime.Now;
             ps.CreatedAt = DateTime.Now;
 
-            data.Add(ps);
+            stockData.Add(ps);
             context.SaveChanges();
+        }
+
+        public List<Product> GetPaged(int page, int pageSize)
+        {
+            var items = productData.OrderBy(data => data.ProductId)
+                                   .Skip((page - 1) * pageSize)
+                                   .Take(pageSize)
+                                   .ToListAsync();
+
+            return items;
         }
     }
 }
