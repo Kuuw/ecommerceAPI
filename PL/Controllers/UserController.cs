@@ -19,7 +19,6 @@ namespace PL.Controllers
     public class UserController : ControllerBase
     {
         UserService userService = new UserService();
-        BcryptService bcryptService = new BcryptService();
         AuthService authService;
         Mapper mapper = MapperConfig.InitializeAutomapper();
 
@@ -44,13 +43,15 @@ namespace PL.Controllers
         public IActionResult Login([FromBody] UserLogin userLogin)
         {
             var token = authService.Authenticate(userLogin);
-
-            if (token != null)
+            if (token == null)
             {
-                return Ok(token);
+                return NotFound();
             }
 
-            return NotFound();
+            var user = userService.GetUserFromEmail(userLogin.Email);
+            var authenticateResponse = new AuthenticateResponse(user!, token);
+            
+            return Ok(authenticateResponse);
         }
     }
 }
