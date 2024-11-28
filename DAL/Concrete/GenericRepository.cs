@@ -18,7 +18,7 @@ namespace DAL.Concrete
             context.SaveChanges();
         }
 
-        public T GetById(int id)
+        public T? GetById(int id)
         {
             return data.Find(id);
         }
