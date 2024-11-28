@@ -10,5 +10,6 @@ namespace BAL.Abstract
     public interface IUserService
     {
         public User Register(User user);
+        public User? GetUserFromEmail(string email);
     }
 }

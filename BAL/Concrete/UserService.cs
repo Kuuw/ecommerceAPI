@@ -22,9 +22,17 @@ namespace BAL.Concrete
             user.Addresses = [];
             user.CartItems = [];
             user.Orders = [];
-            user.PasswordHash = bcryptService.HashPassword(user.PasswordHash);
+            var PasswordHash = bcryptService.HashPassword(user.PasswordHash);
+            user.PasswordHash = PasswordHash;
 
             userRepository.Insert(user);
+            return user;
+        }
+
+        public User? GetUserFromEmail(string email) 
+        {
+            User? user = userRepository.Where(x => x.Email == email).FirstOrDefault();
+
             return user;
         }
     }
