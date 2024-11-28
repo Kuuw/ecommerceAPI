@@ -26,7 +26,7 @@ namespace DAL.Concrete
             var items = productData.OrderBy(data => data.ProductId)
                                    .Skip((page - 1) * pageSize)
                                    .Take(pageSize)
-                                   .ToListAsync();
+                                   .ToList();
 
             return items;
         }
