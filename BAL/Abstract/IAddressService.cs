@@ -9,7 +9,8 @@ namespace BAL.Abstract
 {
     public interface IAddressService
     {
-        public List<Address> GetAddresses(int UserId);
-        public Address AddAddress(Address address);
+        public List<Address> GetByUserId(int UserId);
+        public Address? GetByAddressId(int addressId);
+        public Address Add(Address address);
     }
 }
