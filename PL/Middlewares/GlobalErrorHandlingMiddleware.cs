@@ -17,7 +17,7 @@ public class GlobalErrorHandlingMiddleware
     {
         try
         {
-            await _next(context); // Proceed to the next middleware
+            await _next(context);
         }
         catch (Exception ex)
         {
@@ -27,15 +27,13 @@ public class GlobalErrorHandlingMiddleware
 
     private static Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
-        // Log the exception if needed
         Console.WriteLine($"Exception: {exception.Message}");
 
-        // Set response details
         var response = new
         {
             StatusCode = (int)HttpStatusCode.InternalServerError,
             Message = "An unexpected error occurred. Please try again later.",
-            Detailed = exception.Message // Optional: Include only in dev environments
+            Detailed = exception.Message
         };
 
         context.Response.ContentType = "application/json";
