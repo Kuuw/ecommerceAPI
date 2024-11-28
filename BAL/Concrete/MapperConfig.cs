@@ -16,8 +16,11 @@ namespace BAL.Concrete
         {
             var config = new MapperConfiguration(cfg =>
             {
-                cfg.CreateMap<UserRegister, User>();
+                cfg.CreateMap<UserRegister, User>()
+                   .ForMember(dest => dest.PasswordHash, opt => opt.MapFrom(src => src.Password)); ;
                 cfg.CreateMap<ProductDTO, Product>();
+                cfg.CreateMap<AddressDTO, Address>();
+                cfg.CreateMap<Address, AddressDTO>();
             });
             var mapper = new Mapper(config);
             return mapper;
