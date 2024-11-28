@@ -27,24 +27,23 @@ namespace BAL.Concrete
 
         private string Generate(User user)
         {
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JwtSettings:Key"]));
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JwtSettings:Key"]!));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-            var role = "";
-            if (user.IsAdmin) { role = "Admin"; } else { role = "User"; };
 
             var claims = new[]
             {
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.GivenName, user.FirstName),
-                new Claim(ClaimTypes.Surname, user.LastName),
-                new Claim(ClaimTypes.Role, role)
+                new Claim("UserId", user.UserId.ToString()),
+                new Claim("Email", user.Email),
+                new Claim("FirstName", user.FirstName),
+                new Claim("LastName", user.LastName),
+                new Claim("IsAdmin", user.IsAdmin.ToString())
             };
 
             var token = new JwtSecurityToken(
-              _config["Jwt:Issuer"],
-              _config["Jwt:Audience"],
+              _config["JwtSettings:Issuer"],
+              _config["JwtSettings:Audience"],
               claims,
-              expires: DateTime.Now.AddMinutes(15),
+              expires: DateTime.UtcNow.AddHours(1),
               signingCredentials: credentials);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
