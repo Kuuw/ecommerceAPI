@@ -59,6 +59,7 @@ namespace PL.Controllers
             product.Name = productDTO.Name;
             product.Description = productDTO.Description;
             product.UnitPrice = productDTO.UnitPrice;
+            product.UpdatedAt = DateTime.Now;
 
             productService.Update(product);
             return Ok(product);
