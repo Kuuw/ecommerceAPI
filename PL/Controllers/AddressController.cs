@@ -34,11 +34,11 @@ namespace PL.Controllers
             return Ok(address);
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         [Authorize]
-        public IActionResult Address(int addressId)
+        public IActionResult Address(int id)
         {
-            Address? address = addressService.GetByAddressId(addressId);
+            Address? address = addressService.GetByAddressId(id);
             int userId = int.Parse(User.FindFirst("UserId")?.Value!);
             if (address == null || address.UserId == userId)
             {
@@ -48,11 +48,11 @@ namespace PL.Controllers
             return Ok();
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
         [Authorize]
-        public IActionResult Address(int addressId, AddressDTO addressDTO)
+        public IActionResult Address(int id, AddressDTO addressDTO)
         {
-            Address? existingAddress = addressService.GetByAddressId(addressId);
+            Address? existingAddress = addressService.GetByAddressId(id);
             int userId = int.Parse(User.FindFirst("UserId")?.Value!);
 
             if (existingAddress == null || existingAddress.UserId != userId)
