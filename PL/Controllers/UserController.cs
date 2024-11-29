@@ -4,12 +4,8 @@ using BAL.Concrete;
 using Entities.DTO;
 using Entities.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using System.ComponentModel.DataAnnotations;
-using System.Text.RegularExpressions;
+using Microsoft.Extensions.Configuration.UserSecrets;
 
 namespace PL.Controllers
 {
@@ -30,7 +26,7 @@ namespace PL.Controllers
 
         [HttpPost("Register")]
         [AllowAnonymous]
-        public User Register(UserRegister userData)
+        public User Register(UserDTO userData)
         {
             var newUser = mapper.Map<User>(userData);
 
@@ -48,10 +44,39 @@ namespace PL.Controllers
                 return NotFound();
             }
 
-            var user = userService.GetUserFromEmail(userLogin.Email);
+            var user = userService.GetByEmail(userLogin.Email);
             var authenticateResponse = new AuthenticateResponse(user!, token);
-            
+
             return Ok(authenticateResponse);
+        }
+
+        [HttpGet]
+        [Authorize]
+        public IActionResult UserGet()
+        {
+            var userId = int.Parse(User.FindFirst("UserId")?.Value!);
+            var user = userService.GetById(userId);
+
+            UserDTO userDTO = new();
+            mapper.Map(user, userDTO);
+            userDTO.Password = "private";
+
+            return Ok(userDTO);
+        }
+
+        [HttpPut]
+        [Authorize]
+        public IActionResult UserPut(UserDTO userDTO)
+        {
+            var userId = int.Parse(User.FindFirst("UserId")?.Value!);
+            var user = userService.GetById(userId);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            mapper.Map(userDTO, user);
+            userService.Update(user);
+            return Ok();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Asp.Versioning;
+using AutoMapper;
 using BAL.Concrete;
 using Entities.DTO;
 using Entities.Models;
@@ -7,6 +8,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace PL.Controllers
 {
+    [ApiController]
+    [Route("[controller]")]
+    [ApiVersion("1.0")]
     public class AddressController : Controller
     {
         AddressService addressService = new AddressService();

@@ -3,6 +3,7 @@ using AutoMapper;
 using BAL.Concrete;
 using Entities.DTO;
 using Entities.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace PL.Controllers
@@ -16,13 +17,29 @@ namespace PL.Controllers
         Mapper mapper = MapperConfig.InitializeAutomapper();
 
         [HttpGet]
-        public IActionResult Product()
+        [AllowAnonymous]
+        public IActionResult Product(int page, int pageSize)
         {
+            List<Product> products = productService.GetPaged(page, pageSize);
+            int totalItems = productService.GetTotalCount();
+            int totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
 
-            return Ok();
+            var output = new {
+                items = products,
+                metadata = new
+                {
+                    page = page,
+                    pageSize = pageSize,
+                    totalItems = totalItems,
+                    totalPages = totalPages
+                }
+            };
+
+            return Ok(output);
         }
 
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public IActionResult Product(int id)
         {
             Product? product = productService.GetById(id);
@@ -36,6 +53,7 @@ namespace PL.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles="Admin")]
         public IActionResult Product(ProductDTO productDTO)
         {
             var product = mapper.Map<Product>(productDTO);
@@ -44,6 +62,7 @@ namespace PL.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public IActionResult Product(int id, ProductDTO productDTO)
         {
             Product? product = productService.GetById(id);
@@ -57,6 +76,13 @@ namespace PL.Controllers
 
             productService.Update(product);
             return Ok(product);
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            productService.Delete(id);
+            return Ok();
         }
     }
 }
