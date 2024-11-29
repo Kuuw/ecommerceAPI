@@ -9,5 +9,6 @@ namespace BAL.Abstract
         public List<Product> GetPaged(int page, int pageSize);
         public void Delete(int id);
         public void Update(Product product);
+        public int GetTotalCount();
     }
 }

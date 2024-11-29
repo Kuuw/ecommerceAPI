@@ -11,7 +11,7 @@ namespace BAL.Concrete
 
         public User Register(User user)
         {
-            user.IsAdmin = false;
+            user.Role = "User";
             user.UpdatedAt = DateTime.Now;
             user.CreatedAt = DateTime.Now;
             user.Addresses = [];

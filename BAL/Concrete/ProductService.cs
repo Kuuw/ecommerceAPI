@@ -50,5 +50,11 @@ namespace BAL.Concrete
         {
             productRepository.Update(product);
         }
+
+        public int GetTotalCount()
+        {
+            var size = productRepository.List().Count;
+            return size;
+        }
     }
 }

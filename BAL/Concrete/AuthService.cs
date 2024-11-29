@@ -32,7 +32,7 @@ namespace BAL.Concrete
                 new Claim("Email", user.Email),
                 new Claim("FirstName", user.FirstName),
                 new Claim("LastName", user.LastName),
-                new Claim("IsAdmin", user.IsAdmin.ToString())
+                new Claim(ClaimTypes.Role, user.Role)
             };
 
             var token = new JwtSecurityToken(
