@@ -19,7 +19,7 @@ public partial class User
 
     public string? Telephone { get; set; }
 
-    public bool IsAdmin { get; set; }
+    public string Role { get; set; }
 
     public DateTime CreatedAt { get; set; }
 

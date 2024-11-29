@@ -216,7 +216,7 @@ public partial class EcommerceDbContext : DbContext
                 .HasColumnType("datetime");
             entity.Property(e => e.Email).HasMaxLength(254);
             entity.Property(e => e.FirstName).HasMaxLength(127);
-            entity.Property(e => e.IsAdmin).HasDefaultValue(false);
+            entity.Property(e => e.Role).HasMaxLength(63);
             entity.Property(e => e.LastName).HasMaxLength(127);
             entity.Property(e => e.PasswordHash).HasMaxLength(63);
             entity.Property(e => e.Telephone).HasMaxLength(127);
