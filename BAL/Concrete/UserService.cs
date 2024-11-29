@@ -1,15 +1,10 @@
-﻿using Entities.Models;
+﻿using BAL.Abstract;
 using DAL.Concrete;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BAL.Abstract;
+using Entities.Models;
 
 namespace BAL.Concrete
 {
-    public class UserService: IUserService
+    public class UserService : IUserService
     {
         UserRepository userRepository = new UserRepository();
         BcryptService bcryptService = new BcryptService();
@@ -29,11 +24,22 @@ namespace BAL.Concrete
             return user;
         }
 
-        public User? GetUserFromEmail(string email) 
+        public User? GetByEmail(string email)
         {
             User? user = userRepository.Where(x => x.Email == email).FirstOrDefault();
 
             return user;
+        }
+
+        public User? GetById(int userId)
+        {
+            User? user = userRepository.GetById(userId);
+
+            return user;
+        }
+        public void Update(User user)
+        {
+            userRepository.Update(user);
         }
     }
 }

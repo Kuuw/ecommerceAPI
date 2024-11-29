@@ -3,13 +3,7 @@ using AutoMapper;
 using BAL.Concrete;
 using Entities.DTO;
 using Entities.Models;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.ComponentModel.DataAnnotations;
-using System.Text.RegularExpressions;
 
 namespace PL.Controllers
 {
@@ -50,7 +44,7 @@ namespace PL.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Product(int id, ProductDTO productDTO) 
+        public IActionResult Product(int id, ProductDTO productDTO)
         {
             Product? product = productService.GetById(id);
 

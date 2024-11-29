@@ -1,15 +1,10 @@
 ﻿using BAL.Abstract;
 using DAL.Concrete;
 using Entities.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BAL.Concrete
 {
-    public class ProductService: IProductService
+    public class ProductService : IProductService
     {
         ProductRepository productRepository = new ProductRepository();
         public Product Add(Product product)
@@ -31,7 +26,8 @@ namespace BAL.Concrete
             if (product != null)
             {
                 productRepository.Delete(product);
-            } else
+            }
+            else
             {
                 Console.WriteLine($"Product with id:{id} is not found.");
             }

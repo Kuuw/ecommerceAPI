@@ -1,15 +1,10 @@
 ﻿using BAL.Abstract;
 using DAL.Concrete;
 using Entities.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BAL.Concrete
 {
-    public class AddressService: IAddressService
+    public class AddressService : IAddressService
     {
         AddressRepository addressRepository = new AddressRepository();
         public List<Address> GetByUserId(int UserId)
