@@ -1,5 +1,6 @@
 ﻿using Asp.Versioning;
 using AutoMapper;
+using BAL.Abstract;
 using BAL.Concrete;
 using Entities.DTO;
 using Entities.Models;
@@ -13,75 +14,52 @@ namespace PL.Controllers
     [ApiVersion("1.0")]
     public class ProductController : ControllerBase
     {
-        ProductService productService = new ProductService();
-        Mapper mapper = MapperConfig.InitializeAutomapper();
+        private IProductService _productService;
+
+        public ProductController(IProductService service)
+        {
+            _productService = service;
+        }
 
         [HttpGet]
         [AllowAnonymous]
         public IActionResult Product(int page, int pageSize)
         {
-            List<Product> products = productService.GetPaged(page, pageSize);
-            int totalItems = productService.GetTotalCount();
-            int totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
+            var response = _productService.GetPaged(page, pageSize);
 
-            var output = new {
-                items = products,
-                metadata = new
-                {
-                    page = page,
-                    pageSize = pageSize,
-                    totalItems = totalItems,
-                    totalPages = totalPages
-                }
-            };
-
-            return Ok(output);
+            return Ok(response);
         }
 
         [HttpGet("{id}")]
         [AllowAnonymous]
         public IActionResult Product(int id)
         {
-            Product? product = productService.GetById(id);
+            ProductDTO? product = _productService.GetById(id);
 
-            if (product != null)
-            {
-                return Ok(mapper.Map<ProductDTO>(product));
-            }
+            if (product != null) { return Ok(product); }
             return NotFound();
-
         }
 
         [HttpPost]
-        [Authorize(Roles="Admin")]
+        [Authorize(Roles = "Admin")]
         public IActionResult Product(ProductDTO productDTO)
         {
-            var product = mapper.Map<Product>(productDTO);
-            productService.Add(product);
+            var product = _productService.Add(productDTO);
             return Ok(product);
         }
 
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
         public IActionResult Product(int id, ProductDTO productDTO)
-        {
-            Product? product = productService.GetById(id);
-
-            if (product == null) { return NotFound(); }
-
-            product.Name = productDTO.Name;
-            product.Description = productDTO.Description;
-            product.UnitPrice = productDTO.UnitPrice;
-            product.UpdatedAt = DateTime.Now;
-
-            productService.Update(product);
-            return Ok(product);
+        { 
+            var success = _productService.Update(productDTO, id);
+            if (success) { return Ok(); } else { return BadRequest(); }
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            productService.Delete(id);
+            _productService.Delete(id);
             return Ok();
         }
     }

@@ -1,5 +1,6 @@
 ﻿using Asp.Versioning;
 using AutoMapper;
+using BAL.Abstract;
 using BAL.Concrete;
 using Entities.DTO;
 using Entities.Models;
@@ -14,37 +15,36 @@ namespace PL.Controllers
     [ApiVersion("1.0")]
     public class UserController : ControllerBase
     {
-        UserService userService = new UserService();
-        AuthService authService;
-        Mapper mapper = MapperConfig.InitializeAutomapper();
+        private IUserService _userService;
+        private IAuthService _authService;
 
-
-        public UserController(IConfiguration config)
+        public UserController(IUserService service)
         {
-            authService = new AuthService(config);
+            _userService = service;
+        }
+        public UserController(IAuthService service)
+        {
+            _authService = service;
         }
 
         [HttpPost("Register")]
         [AllowAnonymous]
         public User Register(UserDTO userData)
         {
-            var newUser = mapper.Map<User>(userData);
-
-            userService.Register(newUser);
-            return newUser;
+            return _userService.Register(userData);
         }
 
         [HttpPost("Login")]
         [AllowAnonymous]
-        public IActionResult Login([FromBody] UserLogin userLogin)
+        public IActionResult Login(UserLogin userLogin)
         {
-            var token = authService.Authenticate(userLogin);
+            var token = _authService.Authenticate(userLogin);
             if (token == null)
             {
                 return NotFound();
             }
 
-            var user = userService.GetByEmail(userLogin.Email);
+            var user = _userService.GetByEmail(userLogin.Email);
             var authenticateResponse = new AuthenticateResponse(user!, token);
 
             return Ok(authenticateResponse);
@@ -55,13 +55,9 @@ namespace PL.Controllers
         public IActionResult UserGet()
         {
             var userId = int.Parse(User.FindFirst("UserId")?.Value!);
-            var user = userService.GetById(userId);
-
-            UserDTO userDTO = new();
-            mapper.Map(user, userDTO);
-            userDTO.Password = "private";
-
-            return Ok(userDTO);
+            var user = _userService.GetById(userId);
+            
+            return Ok(user);
         }
 
         [HttpPut]
@@ -69,13 +65,12 @@ namespace PL.Controllers
         public IActionResult UserPut(UserDTO userDTO)
         {
             var userId = int.Parse(User.FindFirst("UserId")?.Value!);
-            var user = userService.GetById(userId);
+            var user = _userService.GetById(userId);
             if (user == null)
             {
                 return NotFound();
             }
-            mapper.Map(userDTO, user);
-            userService.Update(user);
+            _userService.Update(userDTO, userId);
             return Ok();
         }
     }

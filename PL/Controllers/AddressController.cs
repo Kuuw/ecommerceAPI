@@ -14,7 +14,6 @@ namespace PL.Controllers
     public class AddressController : Controller
     {
         AddressService addressService = new AddressService();
-        Mapper mapper = MapperConfig.InitializeAutomapper();
 
         [HttpGet]
         [Authorize]
@@ -30,11 +29,10 @@ namespace PL.Controllers
         [Authorize]
         public IActionResult Address(AddressDTO addressDTO)
         {
-            Address address = mapper.Map<Address>(addressDTO);
             var userId = int.Parse(User.FindFirst("UserId")?.Value!);
+            addressDTO.UserId = userId;
 
-            address.UserId = userId;
-            addressService.Add(address);
+            var address = addressService.Add(addressDTO);
             return Ok(address);
         }
 
@@ -42,33 +40,22 @@ namespace PL.Controllers
         [Authorize]
         public IActionResult Address(int id)
         {
-            Address? address = addressService.GetByAddressId(id);
             int userId = int.Parse(User.FindFirst("UserId")?.Value!);
-            if (address == null || address.UserId == userId)
-            {
-                return NotFound();
-            }
-            addressService.Delete(address);
-            return Ok();
+            var success = addressService.Delete(id, userId);
+
+            if (success) { return Ok(); }
+            else { return BadRequest(); }
         }
 
         [HttpPut("{id}")]
         [Authorize]
-        public IActionResult Address(int id, AddressDTO addressDTO)
+        public IActionResult Address(int addressId, AddressDTO addressDTO)
         {
-            Address? existingAddress = addressService.GetByAddressId(id);
             int userId = int.Parse(User.FindFirst("UserId")?.Value!);
+            var success = addressService.Update(addressDTO, addressId, userId);
 
-            if (existingAddress == null || existingAddress.UserId != userId)
-            {
-                return NotFound();
-            }
-
-            mapper.Map(addressDTO, existingAddress);
-
-            addressService.Update(existingAddress);
-
-            return Ok(existingAddress);
+            if (success) { return Ok(); } 
+            else { return BadRequest(); }
         }
     }
 }
