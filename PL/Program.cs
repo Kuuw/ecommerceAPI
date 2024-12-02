@@ -5,17 +5,15 @@ using Asp.Versioning;
 using PL.Middlewares;
 using Microsoft.OpenApi.Models;
 using Microsoft.Extensions.DependencyInjection;
+using BAL.Abstract;
+using BAL.Concrete;
 
 var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
 builder.Services.AddApiVersioning(o =>
 {
     o.AssumeDefaultVersionWhenUnspecified = true;
@@ -32,6 +30,14 @@ builder.Services.AddApiVersioning(o =>
     options.SubstituteApiVersionInUrl = true;
 });
 
+builder.Services.AddScoped<IAddressService, AddressService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IBcryptService, BcryptService>();
+builder.Services.AddScoped<ICountryService, CountryService>();
+builder.Services.AddScoped<IMapperConfig, MapperConfig>();
+builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services
     .AddAuthentication(x =>
