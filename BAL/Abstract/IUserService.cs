@@ -1,12 +1,13 @@
-﻿using Entities.Models;
+﻿using Entities.DTO;
+using Entities.Models;
 
 namespace BAL.Abstract
 {
     public interface IUserService
     {
-        public User Register(User user);
-        public User? GetByEmail(string email);
-        public User? GetById(int id);
-        public void Update(User user);
+        public User Register(UserDTO userData);
+        public UserDTO? GetByEmail(string email);
+        public UserDTO? GetById(int id);
+        public bool Update(UserDTO userData, int userId);
     }
 }

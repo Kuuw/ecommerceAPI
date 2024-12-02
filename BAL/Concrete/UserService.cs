@@ -1,5 +1,7 @@
-﻿using BAL.Abstract;
+﻿using AutoMapper;
+using BAL.Abstract;
 using DAL.Concrete;
+using Entities.DTO;
 using Entities.Models;
 
 namespace BAL.Concrete
@@ -8,38 +10,46 @@ namespace BAL.Concrete
     {
         UserRepository userRepository = new UserRepository();
         BcryptService bcryptService = new BcryptService();
+        Mapper mapper = MapperConfig.InitializeAutomapper();
 
-        public User Register(User user)
+
+        public User Register(UserDTO userData)
         {
+            var user = mapper.Map<User>(userData);
+
             user.Role = "User";
             user.UpdatedAt = DateTime.Now;
             user.CreatedAt = DateTime.Now;
             user.Addresses = [];
             user.CartItems = [];
             user.Orders = [];
-            var PasswordHash = bcryptService.HashPassword(user.PasswordHash);
-            user.PasswordHash = PasswordHash;
+            user.PasswordHash = bcryptService.HashPassword(user.PasswordHash);
 
             userRepository.Insert(user);
             return user;
         }
 
-        public User? GetByEmail(string email)
+        public UserDTO? GetByEmail(string email)
         {
             User? user = userRepository.Where(x => x.Email == email).FirstOrDefault();
 
-            return user;
+            return mapper.Map<UserDTO>(user);
         }
 
-        public User? GetById(int userId)
+        public UserDTO? GetById(int userId)
         {
             User? user = userRepository.GetById(userId);
-
-            return user;
+            
+            return mapper.Map<UserDTO>(user);
         }
-        public void Update(User user)
+        public bool Update(UserDTO userData, int userId)
         {
+            User? user = userRepository.GetById(userId);
+            if (user == null) { return false; }
+            mapper.Map(userData, user);
+
             userRepository.Update(user);
+            return true;
         }
     }
 }

@@ -1,21 +1,25 @@
-﻿using BAL.Abstract;
+﻿using AutoMapper;
+using BAL.Abstract;
 using DAL.Concrete;
+using Entities.DTO;
 using Entities.Models;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace BAL.Concrete
 {
     public class ProductService : IProductService
     {
         ProductRepository productRepository = new ProductRepository();
-        public Product Add(Product product)
+        Mapper mapper = MapperConfig.InitializeAutomapper();
+        public Product Add(ProductDTO productDTO)
         {
+            Product product = new();
+            mapper.Map(productDTO, product);
+
             product.CreatedAt = DateTime.Now;
             product.UpdatedAt = DateTime.Now;
 
             productRepository.Insert(product);
-
-            Console.WriteLine(product.ProductId);
-            productRepository.AddStockEntry(product.ProductId, 0);
 
             return product;
         }
@@ -33,25 +37,46 @@ namespace BAL.Concrete
             }
         }
 
-        public List<Product> GetPaged(int page, int pageSize)
+        public ProductPagedResponse GetPaged(int page, int pageSize)
         {
             var items = productRepository.GetPaged(page, pageSize);
+            int totalItems = this.GetTotalCount();
+            int totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
 
-            return items;
+            var response = new ProductPagedResponse();
+            response.Items = items;
+            response.Metadata.Page = page;
+            response.Metadata.PageSize = pageSize;
+            response.Metadata.TotalPages = totalPages;
+
+            return response;
         }
 
-        public Product? GetById(int id)
+        public ProductDTO? GetById(int id)
         {
             var item = productRepository.GetById(id);
-            return item;
+            if (item != null)
+            {
+                return mapper.Map<ProductDTO>(item);
+            }
+            return null;
         }
 
-        public void Update(Product product)
+        public bool Update(ProductDTO productDTO, int id)
         {
+            Product? product = productRepository.GetById(id);
+
+            if (product == null) { return false; }
+
+            mapper.Map(productDTO, product);
+            product.UpdatedAt = DateTime.Now;
+
             productRepository.Update(product);
+
+            return true;
         }
 
-        public int GetTotalCount()
+        private int GetTotalCount()
         {
             var size = productRepository.List().Count;
             return size;

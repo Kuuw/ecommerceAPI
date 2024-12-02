@@ -48,6 +48,7 @@ namespace BAL.Concrete
         public string? Authenticate(UserLogin userLogin)
         {
             var user = userRepository.Where(x => x.Email == userLogin.Email.ToLower()).FirstOrDefault();
+            if (user == null) { return null; }
 
             if (bcryptService.VerifyPassword(userLogin.Password, user.PasswordHash))
             {
