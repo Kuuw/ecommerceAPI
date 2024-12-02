@@ -2,6 +2,8 @@
 {
     public class AddressDTO
     {
+        public int UserId { get; set; }
+
         public int CountryId { get; set; }
 
         public string FirstName { get; set; }
