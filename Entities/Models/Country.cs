@@ -9,7 +9,7 @@ public partial class Country
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int CountryId { get; set; }
 
-    public string CountryName { get; set; }
+    public string CountryName { get; set; } = null!;
 
     public int CountryPhoneCode { get; set; }
 

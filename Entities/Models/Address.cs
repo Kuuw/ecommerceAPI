@@ -13,25 +13,25 @@ public partial class Address
 
     public int CountryId { get; set; }
 
-    public string FirstName { get; set; }
+    public string FirstName { get; set; } = null!;
 
-    public string LastName { get; set; }
+    public string LastName { get; set; } = null!;
 
     public string AddressLine1 { get; set; } = null!;
 
     public string? AddressLine2 { get; set; }
 
-    public string PostalCode { get; set; }
+    public string PostalCode { get; set; } = null!;
 
-    public string Telephone { get; set; }
+    public string Telephone { get; set; } = null!;
 
     public DateTime CreatedAt { get; set; }
 
     public DateTime UpdatedAt { get; set; }
 
-    public virtual Country Country { get; set; }
+    public virtual Country Country { get; set; } = null!;
 
     public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
 
-    public virtual User User { get; set; }
+    public virtual User User { get; set; } = null!;
 }

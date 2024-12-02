@@ -13,13 +13,13 @@ public partial class User
 
     public string PasswordHash { get; set; } = null!;
 
-    public string FirstName { get; set; }
+    public string FirstName { get; set; } = null!;
 
-    public string LastName { get; set; }
+    public string LastName { get; set; } = null!;
 
     public string? Telephone { get; set; }
 
-    public string Role { get; set; }
+    public string Role { get; set; } = null!;
 
     public DateTime CreatedAt { get; set; }
 

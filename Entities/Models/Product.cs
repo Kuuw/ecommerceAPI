@@ -13,6 +13,8 @@ public partial class Product
 
     public string? Description { get; set; }
 
+    public int CategoryId { get; set; }
+
     public double UnitPrice { get; set; }
 
     public DateTime CreatedAt { get; set; }
@@ -20,6 +22,8 @@ public partial class Product
     public DateTime UpdatedAt { get; set; }
 
     public virtual ICollection<CartItem> CartItems { get; set; } = new List<CartItem>();
+
+    public virtual Category Category { get; set; } = null!;
 
     public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
 

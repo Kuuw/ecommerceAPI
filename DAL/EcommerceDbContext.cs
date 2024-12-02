@@ -1,4 +1,6 @@
-﻿using Entities.Models;
+﻿using System;
+using System.Collections.Generic;
+using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace DAL;
@@ -17,6 +19,8 @@ public partial class EcommerceDbContext : DbContext
     public virtual DbSet<Address> Addresses { get; set; }
 
     public virtual DbSet<CartItem> CartItems { get; set; }
+
+    public virtual DbSet<Category> Categories { get; set; }
 
     public virtual DbSet<Country> Countries { get; set; }
 
@@ -46,7 +50,6 @@ public partial class EcommerceDbContext : DbContext
 
             entity.ToTable("Address");
 
-            entity.Property(e => e.AddressId).ValueGeneratedOnAdd();
             entity.Property(e => e.AddressLine1).HasMaxLength(254);
             entity.Property(e => e.AddressLine2).HasMaxLength(254);
             entity.Property(e => e.CreatedAt)
@@ -62,10 +65,12 @@ public partial class EcommerceDbContext : DbContext
 
             entity.HasOne(d => d.Country).WithMany(p => p.Addresses)
                 .HasForeignKey(d => d.CountryId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__Address__Country__2D27B809");
 
             entity.HasOne(d => d.User).WithMany(p => p.Addresses)
                 .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__Address__UserId__2C3393D0");
         });
 
@@ -86,14 +91,25 @@ public partial class EcommerceDbContext : DbContext
                 .HasConstraintName("FK__CartItem__UserId__3F466844");
         });
 
+        modelBuilder.Entity<Category>(entity =>
+        {
+            entity.HasKey(e => e.CategoryId).HasName("PK__Category__19093A0B5124EBED");
+
+            entity.ToTable("Category");
+
+            entity.Property(e => e.Description).HasMaxLength(127);
+            entity.Property(e => e.Name).HasMaxLength(127);
+        });
+
         modelBuilder.Entity<Country>(entity =>
         {
             entity.HasKey(e => e.CountryId).HasName("PK__Country__10D1609F426CB050");
 
             entity.ToTable("Country");
 
-            entity.Property(e => e.CountryId).ValueGeneratedOnAdd();
             entity.Property(e => e.CountryName).HasMaxLength(127);
+            entity.Property(e => e.CreatedAt).HasColumnType("datetime");
+            entity.Property(e => e.UpdatedAt).HasColumnType("datetime");
         });
 
         modelBuilder.Entity<Order>(entity =>
@@ -102,7 +118,6 @@ public partial class EcommerceDbContext : DbContext
 
             entity.ToTable("Order");
 
-            entity.Property(e => e.OrderId).ValueGeneratedOnAdd();
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
@@ -111,6 +126,7 @@ public partial class EcommerceDbContext : DbContext
 
             entity.HasOne(d => d.Address).WithMany(p => p.Orders)
                 .HasForeignKey(d => d.AddressId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__Order__AddressId__440B1D61");
 
             entity.HasOne(d => d.ShipmentCompany).WithMany(p => p.Orders)
@@ -119,6 +135,7 @@ public partial class EcommerceDbContext : DbContext
 
             entity.HasOne(d => d.User).WithMany(p => p.Orders)
                 .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__Order__UserId__4316F928");
         });
 
@@ -145,7 +162,6 @@ public partial class EcommerceDbContext : DbContext
 
             entity.ToTable("Product");
 
-            entity.Property(e => e.ProductId).ValueGeneratedOnAdd();
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
@@ -154,6 +170,11 @@ public partial class EcommerceDbContext : DbContext
             entity.Property(e => e.UpdatedAt)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
+
+            entity.HasOne(d => d.Category).WithMany(p => p.Products)
+                .HasForeignKey(d => d.CategoryId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Product_Category");
         });
 
         modelBuilder.Entity<ProductImage>(entity =>
@@ -196,7 +217,6 @@ public partial class EcommerceDbContext : DbContext
 
             entity.ToTable("ShipmentCompany");
 
-            entity.Property(e => e.ShipmentCompanyId).ValueGeneratedOnAdd();
             entity.Property(e => e.CompanyLogoUrl).HasMaxLength(127);
             entity.Property(e => e.CompanyName).HasMaxLength(127);
             entity.Property(e => e.CompanySite).HasMaxLength(127);
@@ -210,15 +230,16 @@ public partial class EcommerceDbContext : DbContext
 
             entity.HasIndex(e => e.Email, "UQ__User__A9D10534CAD6D1B1").IsUnique();
 
-            entity.Property(e => e.UserId).ValueGeneratedOnAdd();
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
             entity.Property(e => e.Email).HasMaxLength(254);
             entity.Property(e => e.FirstName).HasMaxLength(127);
-            entity.Property(e => e.Role).HasMaxLength(63);
             entity.Property(e => e.LastName).HasMaxLength(127);
             entity.Property(e => e.PasswordHash).HasMaxLength(63);
+            entity.Property(e => e.Role)
+                .HasMaxLength(63)
+                .HasDefaultValueSql("((0))");
             entity.Property(e => e.Telephone).HasMaxLength(127);
             entity.Property(e => e.UpdatedAt)
                 .HasDefaultValueSql("(getdate())")

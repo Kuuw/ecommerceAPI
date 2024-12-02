@@ -1,10 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Entities.Models;
+﻿namespace Entities.Models;
 
 public partial class ProductStock
 {
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int ProductId { get; set; }
 
     public int Stock { get; set; }

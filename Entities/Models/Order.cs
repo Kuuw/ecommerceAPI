@@ -1,5 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace Entities.Models;
 
@@ -21,11 +21,11 @@ public partial class Order
 
     public DateTime ShippedAt { get; set; }
 
-    public virtual Address Address { get; set; }
+    public virtual Address Address { get; set; } = null!;
 
     public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
 
     public virtual ShipmentCompany? ShipmentCompany { get; set; }
 
-    public virtual User User { get; set; }
+    public virtual User User { get; set; } = null!;
 }
