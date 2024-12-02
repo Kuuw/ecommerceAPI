@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BAL.Abstract;
+using DAL.Abstract;
 using DAL.Concrete;
 using Entities.DTO;
 using Entities.Models;
@@ -8,10 +9,15 @@ namespace BAL.Concrete
 {
     public class UserService : IUserService
     {
-        UserRepository userRepository = new UserRepository();
-        BcryptService bcryptService = new BcryptService();
+        IUserRepository _userRepository;
+        IBcryptService _bcryptService;
         Mapper mapper = MapperConfig.InitializeAutomapper();
 
+        public UserService(IBcryptService bcrypt, IUserRepository repository)
+        {
+            _bcryptService = bcrypt;
+            _userRepository = repository;
+        }
 
         public User Register(UserDTO userData)
         {
@@ -23,32 +29,32 @@ namespace BAL.Concrete
             user.Addresses = [];
             user.CartItems = [];
             user.Orders = [];
-            user.PasswordHash = bcryptService.HashPassword(user.PasswordHash);
+            user.PasswordHash = _bcryptService.HashPassword(user.PasswordHash);
 
-            userRepository.Insert(user);
+            _userRepository.Insert(user);
             return user;
         }
 
         public UserDTO? GetByEmail(string email)
         {
-            User? user = userRepository.Where(x => x.Email == email).FirstOrDefault();
+            User? user = _userRepository.Where(x => x.Email == email).FirstOrDefault();
 
             return mapper.Map<UserDTO>(user);
         }
 
         public UserDTO? GetById(int userId)
         {
-            User? user = userRepository.GetById(userId);
+            User? user = _userRepository.GetById(userId);
             
             return mapper.Map<UserDTO>(user);
         }
         public bool Update(UserDTO userData, int userId)
         {
-            User? user = userRepository.GetById(userId);
+            User? user = _userRepository.GetById(userId);
             if (user == null) { return false; }
             mapper.Map(userData, user);
 
-            userRepository.Update(user);
+            _userRepository.Update(user);
             return true;
         }
     }

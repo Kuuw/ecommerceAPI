@@ -7,6 +7,8 @@ using Microsoft.OpenApi.Models;
 using Microsoft.Extensions.DependencyInjection;
 using BAL.Abstract;
 using BAL.Concrete;
+using DAL.Abstract;
+using DAL.Concrete;
 
 var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
@@ -38,6 +40,16 @@ builder.Services.AddScoped<IMapperConfig, MapperConfig>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IUserService, UserService>();
+
+builder.Services.AddScoped<IAddressRepository, AddressRepository>();
+builder.Services.AddScoped<ICartRepository, CartRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<ICountryRepository, CountryRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IShipmentCompanyRepository, ShipmentCompanyRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+
 
 builder.Services
     .AddAuthentication(x =>

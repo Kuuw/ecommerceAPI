@@ -1,4 +1,5 @@
 ﻿using BAL.Abstract;
+using DAL.Abstract;
 using DAL.Concrete;
 using Entities.DTO;
 using Entities.Models;
@@ -13,12 +14,13 @@ namespace BAL.Concrete
     public class AuthService : IAuthService
     {
         private IConfiguration _config;
-        UserRepository userRepository = new UserRepository();
+        IUserRepository _userRepository;
         BcryptService bcryptService = new BcryptService();
 
-        public AuthService(IConfiguration config)
+        public AuthService(IConfiguration config, IUserRepository repository)
         {
             _config = config;
+            _userRepository = repository;
         }
 
         private string Generate(User user)
@@ -47,7 +49,7 @@ namespace BAL.Concrete
 
         public string? Authenticate(UserLogin userLogin)
         {
-            var user = userRepository.Where(x => x.Email == userLogin.Email.ToLower()).FirstOrDefault();
+            var user = _userRepository.Where(x => x.Email == userLogin.Email.ToLower()).FirstOrDefault();
             if (user == null) { return null; }
 
             if (bcryptService.VerifyPassword(userLogin.Password, user.PasswordHash))

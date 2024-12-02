@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BAL.Abstract;
+using DAL.Abstract;
 using DAL.Concrete;
 using Entities.DTO;
 using Entities.Models;
@@ -8,12 +9,17 @@ namespace BAL.Concrete
 {
     public class AddressService : IAddressService
     {
-        AddressRepository addressRepository = new AddressRepository();
+        IAddressRepository _addressRepository;
         Mapper mapper = MapperConfig.InitializeAutomapper();
+
+        public AddressService(IAddressRepository repository)
+        {
+            _addressRepository = repository;
+        }
 
         public List<AddressDTO> GetByUserId(int UserId)
         {
-            var adresses = addressRepository.Where(x => x.UserId == UserId).ToList();
+            var adresses = _addressRepository.Where(x => x.UserId == UserId).ToList();
             var addressDTOs = new List<AddressDTO>();
 
             foreach (var address in adresses)
@@ -26,7 +32,7 @@ namespace BAL.Concrete
 
         public AddressDTO? GetByAddressId(int AddressId)
         {
-            var address = addressRepository.GetById(AddressId);
+            var address = _addressRepository.GetById(AddressId);
             return mapper.Map<AddressDTO>(address);
         }
 
@@ -37,16 +43,16 @@ namespace BAL.Concrete
             address.CreatedAt = DateTime.Now;
             address.UpdatedAt = DateTime.Now;
 
-            addressRepository.Insert(address);
+            _addressRepository.Insert(address);
             return address;
         }
 
         public bool Delete(int addressID, int userId)
         {
-            var address = addressRepository.GetById(addressID);
+            var address = _addressRepository.GetById(addressID);
             if (address != null && address.UserId == userId)
             {
-                addressRepository.Delete(address);
+                _addressRepository.Delete(address);
                 return true;
             }
             return false;
@@ -54,14 +60,14 @@ namespace BAL.Concrete
 
         public bool Update(AddressDTO addressDTO, int addressId, int userId)
         {
-            var address = addressRepository.GetById(addressId);
+            var address = _addressRepository.GetById(addressId);
             if (address == null) { return false; }
             if (address.UserId != userId) { return false; }
 
             mapper.Map(addressDTO, address);
             address.UpdatedAt = DateTime.Now;
 
-            addressRepository.Update(address);
+            _addressRepository.Update(address);
             return true;
         }
     }

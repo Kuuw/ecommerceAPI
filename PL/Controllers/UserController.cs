@@ -18,13 +18,11 @@ namespace PL.Controllers
         private IUserService _userService;
         private IAuthService _authService;
 
-        public UserController(IUserService service)
+        public UserController(IUserService userService, IAuthService authService)
         {
-            _userService = service;
-        }
-        public UserController(IAuthService service)
-        {
-            _authService = service;
+            _userService = userService;
+            _authService = authService;
+
         }
 
         [HttpPost("Register")]

@@ -1,5 +1,6 @@
 ﻿using Asp.Versioning;
 using AutoMapper;
+using BAL.Abstract;
 using BAL.Concrete;
 using Entities.DTO;
 using Microsoft.AspNetCore.Authorization;
@@ -12,8 +13,12 @@ namespace PL.Controllers
     [ApiVersion("1.0")]
     public class CountryController : Controller
     {
-        CountryService countryService = new CountryService();
-        Mapper mapper = MapperConfig.InitializeAutomapper();
+        ICountryService _countryService;
+
+        public CountryController(ICountryService service)
+        {
+            _countryService = service;
+        }
 
         [HttpGet]
         [AllowAnonymous]

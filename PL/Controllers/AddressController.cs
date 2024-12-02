@@ -1,5 +1,6 @@
 ﻿using Asp.Versioning;
 using AutoMapper;
+using BAL.Abstract;
 using BAL.Concrete;
 using Entities.DTO;
 using Entities.Models;
@@ -13,14 +14,19 @@ namespace PL.Controllers
     [ApiVersion("1.0")]
     public class AddressController : Controller
     {
-        AddressService addressService = new AddressService();
+        IAddressService _addressService;
+
+        public AddressController(IAddressService service)
+        {
+            _addressService = service;
+        }
 
         [HttpGet]
         [Authorize]
         public IActionResult Address()
         {
             var userId = int.Parse(User.FindFirst("UserId")?.Value!);
-            var addresses = addressService.GetByUserId(userId);
+            var addresses = _addressService.GetByUserId(userId);
 
             return Ok(addresses);
         }
@@ -32,7 +38,7 @@ namespace PL.Controllers
             var userId = int.Parse(User.FindFirst("UserId")?.Value!);
             addressDTO.UserId = userId;
 
-            var address = addressService.Add(addressDTO);
+            var address = _addressService.Add(addressDTO);
             return Ok(address);
         }
 
@@ -41,7 +47,7 @@ namespace PL.Controllers
         public IActionResult Address(int id)
         {
             int userId = int.Parse(User.FindFirst("UserId")?.Value!);
-            var success = addressService.Delete(id, userId);
+            var success = _addressService.Delete(id, userId);
 
             if (success) { return Ok(); }
             else { return BadRequest(); }
@@ -52,7 +58,7 @@ namespace PL.Controllers
         public IActionResult Address(int addressId, AddressDTO addressDTO)
         {
             int userId = int.Parse(User.FindFirst("UserId")?.Value!);
-            var success = addressService.Update(addressDTO, addressId, userId);
+            var success = _addressService.Update(addressDTO, addressId, userId);
 
             if (success) { return Ok(); } 
             else { return BadRequest(); }

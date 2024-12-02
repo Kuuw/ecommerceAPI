@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BAL.Abstract;
+using DAL.Abstract;
 using DAL.Concrete;
 using Entities.DTO;
 using Entities.Models;
@@ -9,8 +10,14 @@ namespace BAL.Concrete
 {
     public class ProductService : IProductService
     {
-        ProductRepository productRepository = new ProductRepository();
+        IProductRepository _productRepository;
         Mapper mapper = MapperConfig.InitializeAutomapper();
+
+        public ProductService(IProductRepository repository)
+        {
+            _productRepository = repository;
+        }
+
         public Product Add(ProductDTO productDTO)
         {
             Product product = new();
@@ -19,17 +26,17 @@ namespace BAL.Concrete
             product.CreatedAt = DateTime.Now;
             product.UpdatedAt = DateTime.Now;
 
-            productRepository.Insert(product);
+            _productRepository.Insert(product);
 
             return product;
         }
 
         public void Delete(int id)
         {
-            Product product = productRepository.GetById(id);
+            Product product = _productRepository.GetById(id);
             if (product != null)
             {
-                productRepository.Delete(product);
+                _productRepository.Delete(product);
             }
             else
             {
@@ -39,7 +46,7 @@ namespace BAL.Concrete
 
         public ProductPagedResponse GetPaged(int page, int pageSize)
         {
-            var items = productRepository.GetPaged(page, pageSize);
+            var items = _productRepository.GetPaged(page, pageSize);
             int totalItems = this.GetTotalCount();
             int totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
 
@@ -54,7 +61,7 @@ namespace BAL.Concrete
 
         public ProductDTO? GetById(int id)
         {
-            var item = productRepository.GetById(id);
+            var item = _productRepository.GetById(id);
             if (item != null)
             {
                 return mapper.Map<ProductDTO>(item);
@@ -64,21 +71,21 @@ namespace BAL.Concrete
 
         public bool Update(ProductDTO productDTO, int id)
         {
-            Product? product = productRepository.GetById(id);
+            Product? product = _productRepository.GetById(id);
 
             if (product == null) { return false; }
 
             mapper.Map(productDTO, product);
             product.UpdatedAt = DateTime.Now;
 
-            productRepository.Update(product);
+            _productRepository.Update(product);
 
             return true;
         }
 
         private int GetTotalCount()
         {
-            var size = productRepository.List().Count;
+            var size = _productRepository.List().Count;
             return size;
         }
     }
