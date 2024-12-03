@@ -24,20 +24,23 @@ namespace PL.Controllers
         [AllowAnonymous]
         public IActionResult Country()
         {
-            return Ok();
+            var countries = _countryService.Get();
+            return Ok(countries);
         }
 
         [HttpGet("{id}")]
         [AllowAnonymous]
         public IActionResult Country(int id)
         {
-            return Ok();
+            var country = _countryService.GetById(id);
+            return Ok(country);
         }
 
         [HttpPost]
         [Authorize(Roles="Admin")]
         public IActionResult Country(CountryDTO countryDTO)
         {
+            _countryService.Update(countryDTO);
             return Ok();
         }
 
@@ -45,6 +48,16 @@ namespace PL.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Country(int id, CountryDTO countryDTO)
         {
+            countryDTO.CountryId = id;
+            _countryService.Update(countryDTO);
+            return Ok();
+        }
+
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
+        public IActionResult CountryDelete(int id)
+        {
+            _countryService.Delete(id);
             return Ok();
         }
     }

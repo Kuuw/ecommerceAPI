@@ -11,6 +11,7 @@ namespace PL.Controllers
     [ApiController]
     [Route("[controller]")]
     [ApiVersion("1.0")]
+    [Authorize]
     public class OrderController : Controller
     {
         IOrderService _orderService;
@@ -21,30 +22,27 @@ namespace PL.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         public IActionResult Order()
         {
-            return Ok();
+            var userId = int.Parse(User.FindFirst("UserId")?.Value!);
+            var orders = _orderService.Get(userId);
+            return Ok(orders);
         }
 
         [HttpGet("{id}")]
-        [Authorize]
         public IActionResult Order(int id)
         {
-            return Ok();
+            var userId = int.Parse(User.FindFirst("UserId")?.Value!);
+            var order = _orderService.GetById(id, userId);
+            if (order == null) { return BadRequest(); }
+            return Ok(order);
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
-        public IActionResult Order(CountryDTO countryDTO)
+        public IActionResult Order(OrderDTO orderDTO)
         {
-            return Ok();
-        }
-
-        [HttpPut("{id}")]
-        [Authorize(Roles = "Admin")]
-        public IActionResult Order(int id, CountryDTO countryDTO)
-        {
+            var userId = int.Parse(User.FindFirst("UserId")?.Value!);
+            _orderService.Add(orderDTO, userId);
             return Ok();
         }
     }
