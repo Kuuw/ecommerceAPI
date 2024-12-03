@@ -23,7 +23,7 @@ namespace BAL.Concrete
 
             _repository.Insert(country);
 
-            countryDTO.CountryId = countryDTO.CountryId;
+            countryDTO.CountryId = country.CountryId;
             return countryDTO;
         }
 
