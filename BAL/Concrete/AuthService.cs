@@ -4,6 +4,7 @@ using DAL.Concrete;
 using Entities.DTO;
 using Entities.Models;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Protocols;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -26,6 +27,8 @@ namespace BAL.Concrete
 
         private string Generate(User user)
         {
+            var key = Environment.GetEnvironmentVariable("JWT_KEY") ??
+            throw new ApplicationException("JWT key is not configured.");
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JwtSettings:Key"]!));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
