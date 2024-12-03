@@ -42,9 +42,9 @@ namespace BAL.Concrete
             return mapper.Map<UserDTO>(user);
         }
 
-        public UserDTO? GetById(int userId)
+        public UserDTO? GetById(int id)
         {
-            User? user = _userRepository.GetById(userId);
+            User? user = _userRepository.GetById(id);
             
             return mapper.Map<UserDTO>(user);
         }
