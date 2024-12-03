@@ -10,7 +10,7 @@ namespace PL.Controllers
     [Route("[controller]")]
     [ApiVersion("1.0")]
     [Authorize]
-    public class CartController : Controller
+    public class CartController : ControllerBase
     {
         ICartService _cartService;
 

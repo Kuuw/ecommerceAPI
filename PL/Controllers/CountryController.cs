@@ -11,7 +11,7 @@ namespace PL.Controllers
     [ApiController]
     [Route("[controller]")]
     [ApiVersion("1.0")]
-    public class CountryController : Controller
+    public class CountryController : ControllerBase
     {
         ICountryService _countryService;
 

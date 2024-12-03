@@ -12,7 +12,7 @@ namespace PL.Controllers
     [Route("[controller]")]
     [ApiVersion("1.0")]
     [Authorize]
-    public class OrderController : Controller
+    public class OrderController : ControllerBase
     {
         IOrderService _orderService;
 
