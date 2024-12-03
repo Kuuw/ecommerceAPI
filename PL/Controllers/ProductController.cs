@@ -14,7 +14,7 @@ namespace PL.Controllers
     [ApiVersion("1.0")]
     public class ProductController : ControllerBase
     {
-        private IProductService _productService;
+        private readonly IProductService _productService;
 
         public ProductController(IProductService service)
         {

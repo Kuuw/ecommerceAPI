@@ -13,7 +13,7 @@ namespace PL.Controllers
     [ApiVersion("1.0")]
     public class ShipmentCompanyController : ControllerBase
     {
-        IShipmentCompanyService _shipmentCompanyService;
+        private readonly IShipmentCompanyService _shipmentCompanyService;
 
         public ShipmentCompanyController(IShipmentCompanyService service)
         {

@@ -12,7 +12,7 @@ namespace PL.Controllers
     [Authorize]
     public class CartController : ControllerBase
     {
-        ICartService _cartService;
+        private readonly ICartService _cartService;
 
         public CartController(ICartService service)
         {

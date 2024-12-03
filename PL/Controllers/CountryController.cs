@@ -13,7 +13,7 @@ namespace PL.Controllers
     [ApiVersion("1.0")]
     public class CountryController : ControllerBase
     {
-        ICountryService _countryService;
+        private readonly ICountryService _countryService;
 
         public CountryController(ICountryService service)
         {

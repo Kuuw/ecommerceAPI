@@ -14,7 +14,7 @@ namespace PL.Controllers
     [Authorize]
     public class OrderController : ControllerBase
     {
-        IOrderService _orderService;
+        private readonly IOrderService _orderService;
 
         public OrderController(IOrderService service)
         {

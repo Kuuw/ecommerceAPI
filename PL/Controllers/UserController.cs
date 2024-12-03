@@ -15,8 +15,8 @@ namespace PL.Controllers
     [ApiVersion("1.0")]
     public class UserController : ControllerBase
     {
-        private IUserService _userService;
-        private IAuthService _authService;
+        private readonly IUserService _userService;
+        private readonly IAuthService _authService;
 
         public UserController(IUserService userService, IAuthService authService)
         {
