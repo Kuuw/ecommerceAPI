@@ -11,6 +11,11 @@ namespace BAL.Concrete
         private readonly IOrderRepository _repository;
         private readonly Mapper mapper = MapperConfig.InitializeAutomapper();
 
+        public OrderService(IOrderRepository repository)
+        {
+            _repository = repository;
+        }
+
         public OrderDTO Add(OrderDTO orderDTO, int userId)
         {
             orderDTO.OrderId = null;
