@@ -12,9 +12,9 @@ namespace PL.Controllers
     [ApiController]
     [Route("[controller]")]
     [ApiVersion("1.0")]
-    public class AddressController : Controller
+    public class AddressController : ControllerBase
     {
-        IAddressService _addressService;
+        private readonly IAddressService _addressService;
 
         public AddressController(IAddressService service)
         {
