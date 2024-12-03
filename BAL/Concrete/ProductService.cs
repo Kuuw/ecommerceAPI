@@ -10,8 +10,8 @@ namespace BAL.Concrete
 {
     public class ProductService : IProductService
     {
-        IProductRepository _productRepository;
-        Mapper mapper = MapperConfig.InitializeAutomapper();
+        private readonly IProductRepository _productRepository;
+        private readonly Mapper mapper = MapperConfig.InitializeAutomapper();
 
         public ProductService(IProductRepository repository)
         {

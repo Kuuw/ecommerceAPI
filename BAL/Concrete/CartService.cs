@@ -8,8 +8,8 @@ namespace BAL.Concrete
 {
     public class CartService : ICartService
     {
-        ICartRepository _repository;
-        Mapper mapper = MapperConfig.InitializeAutomapper();
+        private readonly ICartRepository _repository;
+        private readonly Mapper mapper = MapperConfig.InitializeAutomapper();
 
         public CartService(ICartRepository repository)
         {

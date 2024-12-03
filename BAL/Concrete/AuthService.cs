@@ -13,14 +13,15 @@ namespace BAL.Concrete
 {
     public class AuthService : IAuthService
     {
-        private IConfiguration _config;
-        IUserRepository _userRepository;
-        BcryptService bcryptService = new BcryptService();
+        private readonly IConfiguration _config;
+        private readonly IUserRepository _userRepository;
+        private readonly IBcryptService _bcryptService;
 
-        public AuthService(IConfiguration config, IUserRepository repository)
+        public AuthService(IConfiguration config, IUserRepository repository, IBcryptService bcrypt)
         {
             _config = config;
             _userRepository = repository;
+            _bcryptService = bcrypt;
         }
 
         private string Generate(User user)
@@ -52,7 +53,7 @@ namespace BAL.Concrete
             var user = _userRepository.Where(x => x.Email == userLogin.Email.ToLower()).FirstOrDefault();
             if (user == null) { return null; }
 
-            if (bcryptService.VerifyPassword(userLogin.Password, user.PasswordHash))
+            if (_bcryptService.VerifyPassword(userLogin.Password, user.PasswordHash))
             {
                 return Generate(user);
             }

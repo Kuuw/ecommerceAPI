@@ -8,8 +8,8 @@ namespace BAL.Concrete
 {
     public class ShipmentCompanyService : IShipmentCompanyService
     {
-        IShipmentCompanyRepository _repository;
-        Mapper mapper = MapperConfig.InitializeAutomapper();
+        private readonly IShipmentCompanyRepository _repository;
+        private readonly Mapper mapper = MapperConfig.InitializeAutomapper();
 
         public ShipmentCompanyService(IShipmentCompanyRepository repository)
         {

@@ -9,9 +9,9 @@ namespace BAL.Concrete
 {
     public class UserService : IUserService
     {
-        IUserRepository _userRepository;
-        IBcryptService _bcryptService;
-        Mapper mapper = MapperConfig.InitializeAutomapper();
+        private readonly IUserRepository _userRepository;
+        private readonly IBcryptService _bcryptService;
+        private readonly Mapper mapper = MapperConfig.InitializeAutomapper();
 
         public UserService(IBcryptService bcrypt, IUserRepository repository)
         {

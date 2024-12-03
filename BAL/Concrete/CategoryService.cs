@@ -8,8 +8,8 @@ namespace BAL.Concrete
 {
     public class CategoryService : ICategoryService
     {
-        ICategoryRepository _repository;
-        Mapper mapper = MapperConfig.InitializeAutomapper();
+        private readonly ICategoryRepository _repository;
+        private readonly Mapper mapper = MapperConfig.InitializeAutomapper();
 
         public CategoryService(ICategoryRepository repository)
         {

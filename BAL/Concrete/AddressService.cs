@@ -9,8 +9,8 @@ namespace BAL.Concrete
 {
     public class AddressService : IAddressService
     {
-        IAddressRepository _addressRepository;
-        Mapper mapper = MapperConfig.InitializeAutomapper();
+        private readonly IAddressRepository _addressRepository;
+        private readonly Mapper mapper = MapperConfig.InitializeAutomapper();
 
         public AddressService(IAddressRepository repository)
         {
