@@ -29,7 +29,7 @@ namespace BAL.Concrete
         {
             var key = Environment.GetEnvironmentVariable("JWT_KEY") ??
             throw new ApplicationException("JWT key is not configured.");
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JwtSettings:Key"]!));
+            var securityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             var claims = new[]
