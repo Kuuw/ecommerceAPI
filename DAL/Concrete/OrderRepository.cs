@@ -6,8 +6,8 @@ namespace DAL.Concrete
 {
     public class OrderRepository : GenericRepository<Order>, IOrderRepository
     {
-        EcommerceDbContext context = new EcommerceDbContext();
-        DbSet<OrderItem> _orderItems;
+        private readonly EcommerceDbContext context = new EcommerceDbContext();
+        private readonly DbSet<OrderItem> _orderItems;
 
         public void DeleteItem(OrderItem item)
         {

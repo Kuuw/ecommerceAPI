@@ -5,8 +5,8 @@ namespace DAL.Concrete
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class, new()
     {
-        EcommerceDbContext context = new EcommerceDbContext();
-        DbSet<T> data;
+        private readonly EcommerceDbContext context = new EcommerceDbContext();
+        private readonly DbSet<T> data;
         public GenericRepository()
         {
             data = context.Set<T>();

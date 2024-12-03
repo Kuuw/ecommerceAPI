@@ -6,9 +6,10 @@ namespace DAL.Concrete
 {
     public class ProductRepository:GenericRepository<Product>, IProductRepository
     {
-        EcommerceDbContext context = new EcommerceDbContext();
-        DbSet<ProductStock> stockData;
-        DbSet<Product> productData;
+        private readonly EcommerceDbContext context = new EcommerceDbContext();
+        private readonly DbSet<ProductStock> stockData;
+        private readonly DbSet<Product> productData;
+
         public void AddStockEntry(int ProductId, int Stock)
         {
             ProductStock ps = new ProductStock();
