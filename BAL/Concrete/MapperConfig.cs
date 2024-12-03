@@ -14,7 +14,7 @@ namespace BAL.Concrete
                 cfg.CreateMap<UserDTO, User>()
                    .ForMember(dest => dest.PasswordHash, opt => opt.MapFrom(src => src.Password));
                 cfg.CreateMap<User, UserDTO>()
-                   .ForMember(dest => dest.Password, opt => opt.MapFrom(src => src.PasswordHash)); ;
+                   .ForMember(dest => dest.Password, opt => opt.MapFrom(src => src.PasswordHash));
                 cfg.CreateMap<ProductDTO, Product>();
                 cfg.CreateMap<Product, ProductDTO>();
                 cfg.CreateMap<AddressDTO, Address>();
