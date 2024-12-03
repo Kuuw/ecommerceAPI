@@ -21,6 +21,14 @@ namespace BAL.Concrete
                 cfg.CreateMap<Address, AddressDTO>();
                 cfg.CreateMap<CountryDTO, Country>();
                 cfg.CreateMap<Country, CountryDTO>();
+                cfg.CreateMap<CartItem, CartItemDTO>();
+                cfg.CreateMap<CartItemDTO, CartItem>();
+                cfg.CreateMap<OrderItemDTO, OrderItem>();
+                cfg.CreateMap<OrderItem, OrderItemDTO>();
+                cfg.CreateMap<OrderDTO, Order>();
+                cfg.CreateMap<Order, OrderDTO>();
+                cfg.CreateMap<ShipmentCompanyDTO, ShipmentCompany>();
+                cfg.CreateMap<ShipmentCompany, ShipmentCompanyDTO>();
             });
             var mapper = new Mapper(config);
             return mapper;
