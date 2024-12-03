@@ -2,6 +2,8 @@
 {
     public class OrderDTO
     {
+        public int? OrderId { get; set; }
+        
         public int AddressId { get; set; }
 
         public int? ShipmentCompanyId { get; set; }
