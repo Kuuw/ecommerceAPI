@@ -35,10 +35,13 @@ builder.Services.AddApiVersioning(o =>
 builder.Services.AddScoped<IAddressService, AddressService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IBcryptService, BcryptService>();
+builder.Services.AddScoped<ICartService, CartService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ICountryService, CountryService>();
 builder.Services.AddScoped<IMapperConfig, MapperConfig>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IShipmentCompanyService, ShipmentCompanyService>();
 builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddScoped<IAddressRepository, AddressRepository>();
