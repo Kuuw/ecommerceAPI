@@ -62,5 +62,14 @@ namespace PL.Controllers
             _productService.Delete(id);
             return Ok();
         }
+
+        [HttpPut("Stock/{id}")]
+        [Authorize(Roles = "Admin")]
+        public IActionResult Stock(int id, int stock)
+        {
+            var success = _productService.UpdateStock(id, stock);
+            if (success) { return Ok(); } 
+            else { return BadRequest(); }
+        }
     }
 }
