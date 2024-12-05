@@ -31,6 +31,21 @@ namespace DAL.Concrete
             _context.SaveChanges();
         }
 
+        public void UpdateStock(int ProductId, int Stock)
+        {
+            ProductStock? ps = stockData.FirstOrDefault(x => x.ProductId == ProductId);
+            if (ps == null)
+            {
+                AddStockEntry(ProductId, Stock);
+            }
+            else
+            {
+                ps.Stock = Stock;
+                ps.UpdatedAt = DateTime.Now;
+                _context.SaveChanges();
+            }
+        }
+
         public List<Product>? GetPaged(int page, int pageSize)
         {
             if(page < 1)
@@ -45,6 +60,7 @@ namespace DAL.Concrete
             var items = productData.OrderBy(data => data.ProductId)
                                    .Skip((page - 1) * pageSize)
                                    .Take(pageSize)
+                                   .Include(e => e.ProductStock)
                                    .ToList();
 
             return items;
