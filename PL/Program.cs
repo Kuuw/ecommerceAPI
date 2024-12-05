@@ -11,13 +11,16 @@ using DAL.Abstract;
 using DAL.Concrete;
 using DAL;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
 
 
 builder.Services.AddDbContext<EcommerceDbContext>(options =>
-    options.UseSqlServer(config.GetConnectionString("Server=localhost\\SQLEXPRESS;Database=ecommerceDB; Trusted_Connection=True; integrated security=true; Encrypt=false")));
+    options.UseSqlServer(config.GetConnectionString("Server=localhost\\SQLEXPRESS;Database=ecommerceDB; Trusted_Connection=True; integrated security=true; Encrypt=false"))
+           .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
+    );
 
 
 builder.Services.AddControllers();
