@@ -19,7 +19,7 @@ public partial class Order
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-    public DateTime ShippedAt { get; set; }
+    public DateTime? ShippedAt { get; set; }
 
     public virtual Address Address { get; set; } = null!;
 

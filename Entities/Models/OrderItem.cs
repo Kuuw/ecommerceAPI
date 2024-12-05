@@ -1,4 +1,6 @@
-﻿namespace Entities.Models;
+﻿using System.Text.Json.Serialization;
+
+namespace Entities.Models;
 
 public partial class OrderItem
 {
@@ -10,6 +12,7 @@ public partial class OrderItem
 
     public double UnitPrice { get; set; }
 
+    [JsonIgnore]
     public virtual Order Order { get; set; } = null!;
 
     public virtual Product Product { get; set; } = null!;

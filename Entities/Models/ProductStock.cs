@@ -1,4 +1,6 @@
-﻿namespace Entities.Models;
+﻿using System.Text.Json.Serialization;
+
+namespace Entities.Models;
 
 public partial class ProductStock
 {
@@ -10,5 +12,6 @@ public partial class ProductStock
 
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
+    [JsonIgnore]
     public virtual Product Product { get; set; } = null!;
 }

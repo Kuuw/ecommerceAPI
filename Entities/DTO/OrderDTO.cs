@@ -10,6 +10,6 @@
 
         public string? ShipmentTrack { get; set; }
 
-        public List<OrderItemDTO> Items { get; set; }
+        public List<OrderItemDTO> OrderItems { get; set; }
     }
 }
