@@ -33,7 +33,7 @@ namespace BAL.Concrete
 
         public void Delete(int id)
         {
-            Product product = _productRepository.GetById(id);
+            Product? product = _productRepository.GetById(id);
             if (product != null)
             {
                 _productRepository.Delete(product);
@@ -46,15 +46,23 @@ namespace BAL.Concrete
 
         public ProductPagedResponse GetPaged(int page, int pageSize)
         {
+            if (page < 1) { page = 1; }
+            if (pageSize > 30 || pageSize < 1) { pageSize = 10; }
             var items = _productRepository.GetPaged(page, pageSize);
             int totalItems = this.GetTotalCount();
             int totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
+            List<ProductDTO> itemsDTO = mapper.Map<List<Product>,List<ProductDTO>>(items);
 
             var response = new ProductPagedResponse();
-            response.Items = items;
-            response.Metadata.Page = page;
-            response.Metadata.PageSize = pageSize;
-            response.Metadata.TotalPages = totalPages;
+            var metadata = new PageMetadata();
+            metadata.Page = page;
+            metadata.PageSize = pageSize;
+            metadata.TotalPages = totalPages;
+
+            response.Items = itemsDTO;
+            response.Metadata = metadata;
+
+            Console.WriteLine($"Metadata: Page={response.Metadata.Page}, PageSize={response.Metadata.PageSize}, TotalPages={response.Metadata.TotalPages}");
 
             return response;
         }
@@ -74,7 +82,7 @@ namespace BAL.Concrete
             Product? product = _productRepository.GetById(id);
 
             if (product == null) { return false; }
-
+            productDTO.ProductId = id;
             mapper.Map(productDTO, product);
             product.UpdatedAt = DateTime.Now;
 

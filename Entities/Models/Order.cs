@@ -17,7 +17,7 @@ public partial class Order
 
     public string? ShipmentTrack { get; set; }
 
-    public DateTime CreatedAt { get; set; }
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     public DateTime ShippedAt { get; set; }
 

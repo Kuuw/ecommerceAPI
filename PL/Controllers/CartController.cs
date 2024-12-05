@@ -34,5 +34,13 @@ namespace PL.Controllers
             _cartService.Update(userId, cartItemDTO);
             return Ok();
         }
+
+        [HttpDelete("{productId}")]
+        public IActionResult Cart(int productId)
+        {
+            var userId = int.Parse(User.FindFirst("UserId")?.Value!);
+            _cartService.Delete(userId, productId);
+            return Ok();
+        }
     }
 }

@@ -7,6 +7,7 @@ using Entities.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration.UserSecrets;
+using System.Security.Claims;
 
 namespace PL.Controllers
 {
@@ -63,12 +64,15 @@ namespace PL.Controllers
         public IActionResult UserPut(UserDTO userDTO)
         {
             var userId = int.Parse(User.FindFirst("UserId")?.Value!);
+            var userRole = User.FindFirst(ClaimTypes.Role)!.Value;
             var user = _userService.GetById(userId);
             if (user == null)
             {
                 return NotFound();
             }
-            _userService.Update(userDTO, userId);
+            userDTO.UserId = userId;
+            userDTO.Role = userRole;
+            _userService.Update(userDTO);
             return Ok();
         }
     }

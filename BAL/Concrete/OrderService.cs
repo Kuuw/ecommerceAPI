@@ -20,11 +20,11 @@ namespace BAL.Concrete
         {
             orderDTO.OrderId = null;
             var order = mapper.Map<Order>(orderDTO);
-            order.CreatedAt = DateTime.Now;
+            order.CreatedAt = DateTime.UtcNow;
             _repository.Insert(order);
 
             foreach (var item in orderDTO.Items) 
-            { 
+            {
                 _repository.InsertItem(mapper.Map<OrderItem>(item));
             }
             return orderDTO;

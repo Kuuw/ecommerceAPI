@@ -2,7 +2,9 @@
 {
     public class AddressDTO
     {
-        public int UserId { get; set; }
+        public int? AddressId { get; set; }
+
+        public int? UserId { get; set; }
 
         public int CountryId { get; set; }
 

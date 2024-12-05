@@ -20,10 +20,9 @@ namespace BAL.Concrete
         {
             var items = _repository.Where(x => x.UserId == userId);
             var itemsDTO = new CartDTO();
-            foreach (var item in items)
-            {
-                itemsDTO.Cart.Add(mapper.Map<CartItemDTO>(item));
-            }
+            List<CartItemDTO> CartDTO = new();
+            mapper.Map(items, CartDTO);
+            itemsDTO.Cart = CartDTO;
             return itemsDTO;
         }
 
@@ -37,7 +36,9 @@ namespace BAL.Concrete
             }
             else
             {
-                _repository.Insert(mapper.Map<CartItem>(cartItemDTO));
+                var newCartItem = mapper.Map<CartItem>(cartItemDTO);
+                newCartItem.UserId = userId;
+                _repository.Insert(newCartItem);
             }
         }
 

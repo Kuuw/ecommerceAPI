@@ -9,6 +9,6 @@ namespace BAL.Abstract
         public AddressDTO? GetByAddressId(int AddressId);
         public Address Add(AddressDTO addressDTO);
         public bool Delete(int addressID, int userId);
-        public bool Update(AddressDTO addressDTO, int addressId, int userId);
+        public bool Update(AddressDTO addressDTO, int userId);
     }
 }

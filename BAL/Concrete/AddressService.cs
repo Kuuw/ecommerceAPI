@@ -58,9 +58,9 @@ namespace BAL.Concrete
             return false;
         }
 
-        public bool Update(AddressDTO addressDTO, int addressId, int userId)
+        public bool Update(AddressDTO addressDTO, int userId)
         {
-            var address = _addressRepository.GetById(addressId);
+            var address = _addressRepository.GetById((int)addressDTO.AddressId!);
             if (address == null) { return false; }
             if (address.UserId != userId) { return false; }
 

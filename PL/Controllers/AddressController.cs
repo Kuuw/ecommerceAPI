@@ -55,10 +55,12 @@ namespace PL.Controllers
 
         [HttpPut("{id}")]
         [Authorize]
-        public IActionResult Address(int addressId, AddressDTO addressDTO)
+        public IActionResult Address(int id, AddressDTO addressDTO)
         {
             int userId = int.Parse(User.FindFirst("UserId")?.Value!);
-            var success = _addressService.Update(addressDTO, addressId, userId);
+            addressDTO.AddressId = id;
+            addressDTO.UserId = userId;
+            var success = _addressService.Update(addressDTO, userId);
 
             if (success) { return Ok(); } 
             else { return BadRequest(); }

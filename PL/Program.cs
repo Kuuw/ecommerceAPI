@@ -9,9 +9,16 @@ using BAL.Abstract;
 using BAL.Concrete;
 using DAL.Abstract;
 using DAL.Concrete;
+using DAL;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
+
+
+builder.Services.AddDbContext<EcommerceDbContext>(options =>
+    options.UseSqlServer(config.GetConnectionString("Server=localhost\\SQLEXPRESS;Database=ecommerceDB; Trusted_Connection=True; integrated security=true; Encrypt=false")));
+
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -72,7 +79,7 @@ builder.Services
             ValidateIssuerSigningKey = true,
             ValidIssuer = config["JwtSettings:Issuer"],
             ValidAudience = config["JwtSettings:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["JwtSettings:Key"]!))
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JWT_KEY")!))
         };
     });
 

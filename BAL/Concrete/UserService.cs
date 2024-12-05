@@ -48,10 +48,11 @@ namespace BAL.Concrete
             
             return mapper.Map<UserDTO>(user);
         }
-        public bool Update(UserDTO userData, int userId)
+        public bool Update(UserDTO userData)
         {
-            User? user = _userRepository.GetById(userId);
+            User? user = _userRepository.GetById((int)userData.UserId!);
             if (user == null) { return false; }
+            userData.Password = _bcryptService.HashPassword(userData.Password);
             mapper.Map(userData, user);
 
             _userRepository.Update(user);

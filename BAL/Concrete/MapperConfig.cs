@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.Configuration.Conventions;
 using BAL.Abstract;
 using Entities.DTO;
 using Entities.Models;
@@ -12,7 +13,9 @@ namespace BAL.Concrete
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<UserDTO, User>()
-                   .ForMember(dest => dest.PasswordHash, opt => opt.MapFrom(src => src.Password));
+                   .ForMember(dest => dest.PasswordHash, opt => opt.MapFrom(src => src.Password))
+                   .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId))
+                   .ForMember(dest => dest.Role, opt => opt.NullSubstitute("User"));
                 cfg.CreateMap<User, UserDTO>()
                    .ForMember(dest => dest.Password, opt => opt.MapFrom(src => src.PasswordHash));
                 cfg.CreateMap<ProductDTO, Product>();
@@ -29,6 +32,8 @@ namespace BAL.Concrete
                 cfg.CreateMap<Order, OrderDTO>();
                 cfg.CreateMap<ShipmentCompanyDTO, ShipmentCompany>();
                 cfg.CreateMap<ShipmentCompany, ShipmentCompanyDTO>();
+                cfg.CreateMap<CategoryDTO, Category>();
+                cfg.CreateMap<Category, CategoryDTO>();
             });
             var mapper = new Mapper(config);
             return mapper;

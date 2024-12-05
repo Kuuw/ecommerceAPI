@@ -40,7 +40,7 @@ namespace PL.Controllers
         [Authorize(Roles="Admin")]
         public IActionResult Country(CountryDTO countryDTO)
         {
-            _countryService.Update(countryDTO);
+            _countryService.Add(countryDTO);
             return Ok();
         }
 

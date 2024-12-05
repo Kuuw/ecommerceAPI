@@ -5,6 +5,7 @@ namespace DAL.Abstract
     public interface IProductRepository: IGenericRepository<Product>
     {
         public void AddStockEntry(int ProductId, int Stock);
-        public List<Product> GetPaged(int page, int pageSize);
+        public List<Product>? GetPaged(int page, int pageSize);
+        public ProductStock GetStock(int ProductId);
     }
 }

@@ -21,9 +21,9 @@ public partial class User
 
     public string Role { get; set; } = null!;
 
-    public DateTime CreatedAt { get; set; }
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-    public DateTime UpdatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
     public virtual ICollection<Address> Addresses { get; set; } = new List<Address>();
 

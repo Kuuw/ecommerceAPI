@@ -35,12 +35,9 @@ namespace BAL.Concrete
 
         public List<CategoryDTO> Get()
         {
-            var listDTO = new List<CategoryDTO>();
             var list = _repository.List();
-            for (int i = 0; i < list.Count; i++) 
-            {
-                listDTO.Add(mapper.Map<CategoryDTO>(list[i]));
-            }
+            List<CategoryDTO> listDTO;
+            listDTO = mapper.Map<List<CategoryDTO>>(list).ToList();
             return listDTO;
         }
 

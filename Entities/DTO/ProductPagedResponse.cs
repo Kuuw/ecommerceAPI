@@ -4,7 +4,7 @@ namespace Entities.DTO
 {
     public class ProductPagedResponse
     {
-        public List<Product> Items { get; set; }
+        public List<ProductDTO> Items { get; set; }
         public PageMetadata Metadata { get; set; }
     }
 }

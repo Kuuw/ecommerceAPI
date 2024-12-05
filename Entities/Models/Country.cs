@@ -13,9 +13,9 @@ public partial class Country
 
     public int CountryPhoneCode { get; set; }
 
-    public DateTime UpdatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
-    public DateTime CreatedAt { get; set; }
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     public virtual ICollection<Address> Addresses { get; set; } = new List<Address>();
 }

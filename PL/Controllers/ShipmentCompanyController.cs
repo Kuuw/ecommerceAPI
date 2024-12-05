@@ -48,6 +48,7 @@ namespace PL.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult ShipmentCompany(int id, ShipmentCompanyDTO shipmentCompanyDTO)
         {
+            shipmentCompanyDTO.ShipmentCompanyId = id;
             _shipmentCompanyService.Update(shipmentCompanyDTO);
             return Ok();
         }

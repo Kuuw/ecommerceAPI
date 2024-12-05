@@ -35,12 +35,8 @@ namespace BAL.Concrete
 
         public List<CountryDTO> Get()
         {
-            var list = new List<CountryDTO>();
             var countries = _repository.List();
-            foreach (var country in countries) 
-            {
-                list.Add(mapper.Map<CountryDTO>(country));
-            }
+            var list = mapper.Map<List<CountryDTO>>(countries).ToList();
             return list;
         }
 
@@ -56,10 +52,10 @@ namespace BAL.Concrete
 
         public void Update(CountryDTO countryDTO)
         {
-            if (countryDTO.CountryId != null)
-            {
-                _repository.Update(mapper.Map<Country>(countryDTO));
-            }
+            var country = mapper.Map<Country>(countryDTO);
+            country.UpdatedAt = DateTime.UtcNow;
+            _repository.Update(country);
+            Console.WriteLine($"Country {country.CountryName}, {country.CountryId}, {country.CountryPhoneCode}");
         }
     }
 }

@@ -8,6 +8,6 @@ namespace Entities.DTO
 {
     public class CartDTO
     {
-        public List<CartItemDTO> Cart = new List<CartItemDTO>();
+        public List<CartItemDTO> Cart { get; set; }
     }
 }
