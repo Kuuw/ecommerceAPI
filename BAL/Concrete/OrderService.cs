@@ -8,11 +8,13 @@ namespace BAL.Concrete
 {
     public class OrderService : IOrderService
     {
+        private readonly IProductRepository _productRepository;
         private readonly IOrderRepository _repository;
         private readonly Mapper mapper = MapperConfig.InitializeAutomapper();
 
-        public OrderService(IOrderRepository repository)
+        public OrderService(IOrderRepository repository, IProductRepository productService)
         {
+            _productRepository = productService;
             _repository = repository;
         }
 
@@ -20,12 +22,25 @@ namespace BAL.Concrete
         {
             orderDTO.OrderId = null;
             var order = mapper.Map<Order>(orderDTO);
-            order.CreatedAt = DateTime.UtcNow;
+            order.UserId = userId;
+            order.CreatedAt = DateTime.Now;
             _repository.Insert(order);
 
-            foreach (var item in orderDTO.Items) 
+            foreach (var item in orderDTO.OrderItems) 
             {
-                _repository.InsertItem(mapper.Map<OrderItem>(item));
+                var productStock = _productRepository.GetStock(item.ProductId);
+                if (productStock == null) { throw new Exception("Product not found"); }
+                if (productStock.Stock < item.Quantity) { throw new Exception("Not enough stock"); }
+                if (productStock.Stock == 0) { throw new Exception("Out of stock"); }
+
+                var productPrice = _productRepository.GetById(item.ProductId)!.UnitPrice;
+                item.UnitPrice = productPrice; // Set the unit price of the product so that the price cannot be changed by the user.
+
+                var orderItem = mapper.Map<OrderItem>(item);
+                orderItem.OrderId = order.OrderId;
+
+                _productRepository.UpdateStock(item.ProductId, productStock.Stock-item.Quantity);
+                _repository.InsertItem(orderItem);
             }
             return orderDTO;
         }
@@ -41,12 +56,9 @@ namespace BAL.Concrete
 
         public List<OrderDTO> Get(int userId)
         {
-            var orders = _repository.Where(x => x.UserId == userId);
-            var ordersDTO = new List<OrderDTO>();
-            foreach (var item in orders)
-            {
-                ordersDTO.Add(mapper.Map<OrderDTO>(item));
-            }
+            var orders = _repository.Get(userId);
+            List<OrderDTO> ordersDTO = mapper.Map<List<OrderDTO>>(orders);
+
             return ordersDTO;
         }
 
@@ -63,7 +75,7 @@ namespace BAL.Concrete
                 {
                     orderItemsDTO.Add(mapper.Map<OrderItemDTO>(item));
                 }
-                orderDTO.Items = orderItemsDTO;
+                orderDTO.OrderItems = orderItemsDTO;
 
                 return orderDTO;
             }

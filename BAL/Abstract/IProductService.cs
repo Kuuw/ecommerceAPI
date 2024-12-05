@@ -10,5 +10,7 @@ namespace BAL.Abstract
         public ProductPagedResponse GetPaged(int page, int pageSize);
         public void Delete(int id);
         public bool Update(ProductDTO productDTO, int id);
+        public int GetStock(int productId);
+        public bool UpdateStock(int productId, int stock);
     }
 }

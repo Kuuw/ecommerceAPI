@@ -34,6 +34,8 @@ namespace BAL.Concrete
                 cfg.CreateMap<ShipmentCompany, ShipmentCompanyDTO>();
                 cfg.CreateMap<CategoryDTO, Category>();
                 cfg.CreateMap<Category, CategoryDTO>();
+                cfg.CreateMap<ProductStockDTO, ProductStock>();
+                cfg.CreateMap<ProductStock, ProductStockDTO>();
             });
             var mapper = new Mapper(config);
             return mapper;

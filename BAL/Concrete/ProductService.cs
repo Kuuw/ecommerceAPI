@@ -91,6 +91,20 @@ namespace BAL.Concrete
             return true;
         }
 
+        public int GetStock(int productId)
+        {
+            var stock = _productRepository.GetStock(productId);
+            return stock.Stock;
+        }
+
+        public bool UpdateStock(int productId, int stock)
+        {
+            var product = _productRepository.GetById(productId);
+            if(product == null) { return false; }
+            _productRepository.UpdateStock(productId, stock);
+            return true;
+        }
+
         private int GetTotalCount()
         {
             var size = _productRepository.List().Count;
