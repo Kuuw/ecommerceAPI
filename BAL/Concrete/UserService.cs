@@ -24,8 +24,6 @@ namespace BAL.Concrete
             var user = mapper.Map<User>(userData);
 
             user.Role = "User";
-            user.UpdatedAt = DateTime.Now;
-            user.CreatedAt = DateTime.Now;
             user.Addresses = [];
             user.CartItems = [];
             user.Orders = [];
