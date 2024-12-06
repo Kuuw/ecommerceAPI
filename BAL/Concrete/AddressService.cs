@@ -40,8 +40,8 @@ namespace BAL.Concrete
         {
             var address = mapper.Map<Address>(addressDTO);
 
-            address.CreatedAt = DateTime.Now;
-            address.UpdatedAt = DateTime.Now;
+            address.CreatedAt = DateTime.UtcNow;
+            address.UpdatedAt = DateTime.UtcNow;
 
             _addressRepository.Insert(address);
             return address;
@@ -65,7 +65,7 @@ namespace BAL.Concrete
             if (address.UserId != userId) { return false; }
 
             mapper.Map(addressDTO, address);
-            address.UpdatedAt = DateTime.Now;
+            address.UpdatedAt = DateTime.UtcNow;
 
             _addressRepository.Update(address);
             return true;
