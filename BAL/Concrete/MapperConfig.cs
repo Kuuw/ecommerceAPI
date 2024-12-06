@@ -15,7 +15,9 @@ namespace BAL.Concrete
                 cfg.CreateMap<UserDTO, User>()
                    .ForMember(dest => dest.PasswordHash, opt => opt.MapFrom(src => src.Password))
                    .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId))
-                   .ForMember(dest => dest.Role, opt => opt.NullSubstitute("User"));
+                   .ForMember(dest => dest.Role, opt => opt.NullSubstitute("User"))
+                   .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => DateTime.UtcNow))
+                   .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => DateTime.UtcNow));
                 cfg.CreateMap<User, UserDTO>()
                    .ForMember(dest => dest.Password, opt => opt.MapFrom(src => src.PasswordHash));
                 cfg.CreateMap<ProductDTO, Product>();
@@ -28,7 +30,8 @@ namespace BAL.Concrete
                 cfg.CreateMap<CartItemDTO, CartItem>();
                 cfg.CreateMap<OrderItemDTO, OrderItem>();
                 cfg.CreateMap<OrderItem, OrderItemDTO>();
-                cfg.CreateMap<OrderDTO, Order>();
+                cfg.CreateMap<OrderDTO, Order>()
+                   .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => DateTime.UtcNow));
                 cfg.CreateMap<Order, OrderDTO>();
                 cfg.CreateMap<ShipmentCompanyDTO, ShipmentCompany>();
                 cfg.CreateMap<ShipmentCompany, ShipmentCompanyDTO>();
