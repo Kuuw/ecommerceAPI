@@ -9,12 +9,14 @@ namespace DAL.Concrete
         private readonly EcommerceDbContext _context = new EcommerceDbContext();
         private readonly DbSet<OrderItem> _orderItems;
         private readonly DbSet<Order> _order;
+        private readonly DbSet<ProductStock> _stock;
 
         public OrderRepository(EcommerceDbContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _orderItems = context.Set<OrderItem>();
             _order = context.Set<Order>();
+            _stock = context.Set<ProductStock>();
         }
 
         public void DeleteItem(OrderItem item)
@@ -37,10 +39,39 @@ namespace DAL.Concrete
             return _orderItems.Where(x => x.OrderId == OrderId).ToList();
         }
 
-        public void InsertItem(OrderItem item)
+        public new void Insert(Order order)
         {
-            _orderItems.Add(item);
-            _context.SaveChanges();
+            using (var dbContextTransaction = _context.Database.BeginTransaction())
+            {
+                try
+                {
+                    _order.Add(order);
+
+                    // Reduce stock count for each order item
+                    foreach (var orderItem in order.OrderItems)
+                    {
+                        var stock = _stock.FirstOrDefault(s => s.ProductId == orderItem.ProductId);
+                        if (stock != null)
+                        {
+                            stock.Stock -= orderItem.Quantity;
+                            if (stock.Stock < 0)
+                            {
+                                throw new InvalidOperationException("Insufficient stock for product: " + stock.ProductId);
+                            }
+                            stock.UpdatedAt = DateTime.UtcNow;
+                            _stock.Update(stock);
+                        }
+                    }
+
+                    _context.SaveChanges();
+                    dbContextTransaction.Commit();
+                }
+                catch (Exception)
+                {
+                    dbContextTransaction.Rollback();
+                    throw;
+                }
+            }
         }
 
         public void UpdateItem(OrderItem item)

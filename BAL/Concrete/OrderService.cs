@@ -23,25 +23,8 @@ namespace BAL.Concrete
             orderDTO.OrderId = null;
             var order = mapper.Map<Order>(orderDTO);
             order.UserId = userId;
-            order.CreatedAt = DateTime.Now;
             _repository.Insert(order);
 
-            foreach (var item in orderDTO.OrderItems) 
-            {
-                var productStock = _productRepository.GetStock(item.ProductId);
-                if (productStock == null) { throw new Exception("Product not found"); }
-                if (productStock.Stock < item.Quantity) { throw new Exception("Not enough stock"); }
-                if (productStock.Stock == 0) { throw new Exception("Out of stock"); }
-
-                var productPrice = _productRepository.GetById(item.ProductId)!.UnitPrice;
-                item.UnitPrice = productPrice; // Set the unit price of the product so that the price cannot be changed by the user.
-
-                var orderItem = mapper.Map<OrderItem>(item);
-                orderItem.OrderId = order.OrderId;
-
-                _productRepository.UpdateStock(item.ProductId, productStock.Stock-item.Quantity);
-                _repository.InsertItem(orderItem);
-            }
             return orderDTO;
         }
 
