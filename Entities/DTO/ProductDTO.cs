@@ -1,6 +1,4 @@
-﻿using Entities.Models;
-
-namespace Entities.DTO
+﻿namespace Entities.DTO
 {
     public class ProductDTO
     {
@@ -14,6 +12,8 @@ namespace Entities.DTO
 
         public double UnitPrice { get; set; }
 
-        public ProductStock? ProductStock { get; set; }
+        public ProductStockDTO? ProductStock { get; set; }
+
+        public ICollection<ProductImageDTO>? ProductImages { get; set; }
     }
 }

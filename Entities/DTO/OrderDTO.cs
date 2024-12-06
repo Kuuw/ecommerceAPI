@@ -10,6 +10,6 @@
 
         public string? ShipmentTrack { get; set; }
 
-        public List<OrderItemDTO> OrderItems { get; set; }
+        public ICollection<OrderItemDTO> OrderItems { get; set; } = new List<OrderItemDTO>();
     }
 }
