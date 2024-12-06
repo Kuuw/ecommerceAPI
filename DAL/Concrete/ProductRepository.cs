@@ -24,8 +24,8 @@ namespace DAL.Concrete
             ProductStock ps = new ProductStock();
             ps.ProductId = ProductId;
             ps.Stock = Stock;
-            ps.UpdatedAt = DateTime.Now;
-            ps.CreatedAt = DateTime.Now;
+            ps.UpdatedAt = DateTime.UtcNow;
+            ps.CreatedAt = DateTime.UtcNow;
 
             stockData.Add(ps);
             _context.SaveChanges();
@@ -41,22 +41,13 @@ namespace DAL.Concrete
             else
             {
                 ps.Stock = Stock;
-                ps.UpdatedAt = DateTime.Now;
+                ps.UpdatedAt = DateTime.UtcNow;
                 _context.SaveChanges();
             }
         }
 
         public List<Product>? GetPaged(int page, int pageSize)
         {
-            if(page < 1)
-            {
-                page = 1;
-            }
-            if (pageSize < 1 || pageSize > 30)
-            {
-                pageSize = 10;
-            }
-
             var items = productData.OrderBy(data => data.ProductId)
                                    .Skip((page - 1) * pageSize)
                                    .Take(pageSize)
@@ -74,9 +65,27 @@ namespace DAL.Concrete
                 AddStockEntry(ProductId, 0);
 
                 var addedStock = stockData.FirstOrDefault(x => x.ProductId == ProductId);
-                return addedStock;
+                return addedStock!;
             }
             return stock;
+        }
+
+        public new void Insert(Product product)
+        {
+            using (var dbContextTransaction = _context.Database.BeginTransaction())
+            {
+                try
+                {
+                    productData.Add(product);
+                    _context.SaveChanges();
+                    dbContextTransaction.Commit();
+                }
+                catch (Exception)
+                {
+                    dbContextTransaction.Rollback();
+                    throw;
+                }
+            }
         }
     }
 }

@@ -23,8 +23,8 @@ namespace BAL.Concrete
             Product product = new();
             mapper.Map(productDTO, product);
 
-            product.CreatedAt = DateTime.Now;
-            product.UpdatedAt = DateTime.Now;
+            product.CreatedAt = DateTime.UtcNow;
+            product.UpdatedAt = DateTime.UtcNow;
 
             _productRepository.Insert(product);
 
@@ -84,7 +84,7 @@ namespace BAL.Concrete
             if (product == null) { return false; }
             productDTO.ProductId = id;
             mapper.Map(productDTO, product);
-            product.UpdatedAt = DateTime.Now;
+            product.UpdatedAt = DateTime.UtcNow;
 
             _productRepository.Update(product);
 
