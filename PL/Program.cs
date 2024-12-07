@@ -12,6 +12,12 @@ using DAL.Concrete;
 using DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using FluentValidation.AspNetCore;
+using FluentValidation;
+using PL.FluentValidation;
+using System;
+using Entities.Models;
+using Entities.DTO;
 
 var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
@@ -41,6 +47,15 @@ builder.Services.AddApiVersioning(o =>
     options.GroupNameFormat = "'v'VVV";
     options.SubstituteApiVersionInUrl = true;
 });
+
+builder.Services.AddValidatorsFromAssemblyContaining<AddressDtoValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<CartDtotValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<CategoryDtoValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<CountryDtoValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<OrderDtoValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<ProductDtoValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<ShipmentCompanyDtoValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<UserDtoValidator>();
 
 builder.Services.AddScoped<IAddressService, AddressService>();
 builder.Services.AddScoped<IAuthService, AuthService>();

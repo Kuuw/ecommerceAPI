@@ -4,6 +4,8 @@ using BAL.Abstract;
 using BAL.Concrete;
 using Entities.DTO;
 using Entities.Models;
+using FluentValidation;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration.UserSecrets;
@@ -18,19 +20,29 @@ namespace PL.Controllers
     {
         private readonly IUserService _userService;
         private readonly IAuthService _authService;
+        private readonly IValidator<UserDTO> _validator;
 
-        public UserController(IUserService userService, IAuthService authService)
+        public UserController(IUserService userService, IAuthService authService, IValidator<UserDTO> validator)
         {
             _userService = userService;
             _authService = authService;
-
+            _validator = validator;
         }
 
         [HttpPost("Register")]
         [AllowAnonymous]
-        public User Register(UserDTO userData)
+        public IActionResult Register(UserDTO userData)
         {
-            return _userService.Register(userData);
+            var result = _validator.Validate(userData);
+            if (!result.IsValid)
+            {
+                List<String> errors = new();
+                foreach (var error in result.Errors) { errors.Add(error.ErrorMessage); }
+                return BadRequest(errors);
+            }
+
+            var user = _userService.Register(userData);
+            return Ok(user);
         }
 
         [HttpPost("Login")]
@@ -63,6 +75,14 @@ namespace PL.Controllers
         [Authorize]
         public IActionResult UserPut(UserDTO userDTO)
         {
+            var result = _validator.Validate(userDTO);
+            if (!result.IsValid) 
+            {
+                List<String> errors = new();
+                foreach(var error in result.Errors) { errors.Add(error.ErrorMessage); }
+                return BadRequest(errors);
+            }
+
             var userId = int.Parse(User.FindFirst("UserId")?.Value!);
             var userRole = User.FindFirst(ClaimTypes.Role)!.Value;
             var user = _userService.GetById(userId);
