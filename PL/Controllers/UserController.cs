@@ -1,14 +1,8 @@
 ﻿using Asp.Versioning;
-using AutoMapper;
 using BAL.Abstract;
-using BAL.Concrete;
 using Entities.DTO;
-using Entities.Models;
-using FluentValidation;
-using FluentValidation.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration.UserSecrets;
 using System.Security.Claims;
 
 namespace PL.Controllers
@@ -20,27 +14,18 @@ namespace PL.Controllers
     {
         private readonly IUserService _userService;
         private readonly IAuthService _authService;
-        private readonly IValidator<UserDTO> _validator;
 
-        public UserController(IUserService userService, IAuthService authService, IValidator<UserDTO> validator)
+        public UserController(IUserService userService, IAuthService authService)
         {
             _userService = userService;
             _authService = authService;
-            _validator = validator;
         }
 
         [HttpPost("Register")]
         [AllowAnonymous]
+        [ValidateModel]
         public IActionResult Register(UserDTO userData)
         {
-            var result = _validator.Validate(userData);
-            if (!result.IsValid)
-            {
-                List<String> errors = new();
-                foreach (var error in result.Errors) { errors.Add(error.ErrorMessage); }
-                return BadRequest(errors);
-            }
-
             var user = _userService.Register(userData);
             return Ok(user);
         }
@@ -67,22 +52,15 @@ namespace PL.Controllers
         {
             var userId = int.Parse(User.FindFirst("UserId")?.Value!);
             var user = _userService.GetById(userId);
-            
+
             return Ok(user);
         }
 
         [HttpPut]
         [Authorize]
+        [ValidateModel]
         public IActionResult UserPut(UserDTO userDTO)
         {
-            var result = _validator.Validate(userDTO);
-            if (!result.IsValid) 
-            {
-                List<String> errors = new();
-                foreach(var error in result.Errors) { errors.Add(error.ErrorMessage); }
-                return BadRequest(errors);
-            }
-
             var userId = int.Parse(User.FindFirst("UserId")?.Value!);
             var userRole = User.FindFirst(ClaimTypes.Role)!.Value;
             var user = _userService.GetById(userId);
