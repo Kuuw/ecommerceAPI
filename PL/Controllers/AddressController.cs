@@ -1,9 +1,6 @@
 ﻿using Asp.Versioning;
-using AutoMapper;
 using BAL.Abstract;
-using BAL.Concrete;
 using Entities.DTO;
-using Entities.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -62,7 +59,7 @@ namespace PL.Controllers
             addressDTO.UserId = userId;
             var success = _addressService.Update(addressDTO, userId);
 
-            if (success) { return Ok(); } 
+            if (success) { return Ok(); }
             else { return BadRequest(); }
         }
     }

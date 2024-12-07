@@ -1,7 +1,5 @@
 ﻿using Asp.Versioning;
 using BAL.Abstract;
-using BAL.Concrete;
-using DAL.Abstract;
 using Entities.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

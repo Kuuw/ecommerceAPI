@@ -1,9 +1,6 @@
 ﻿using Asp.Versioning;
-using AutoMapper;
 using BAL.Abstract;
-using BAL.Concrete;
 using Entities.DTO;
-using Entities.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -51,7 +48,7 @@ namespace PL.Controllers
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
         public IActionResult Product(int id, ProductDTO productDTO)
-        { 
+        {
             var success = _productService.Update(productDTO, id);
             if (success) { return Ok(); } else { return BadRequest(); }
         }
@@ -68,7 +65,7 @@ namespace PL.Controllers
         public IActionResult Stock(int id, int stock)
         {
             var success = _productService.UpdateStock(id, stock);
-            if (success) { return Ok(); } 
+            if (success) { return Ok(); }
             else { return BadRequest(); }
         }
     }

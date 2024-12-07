@@ -1,7 +1,5 @@
 ﻿using Asp.Versioning;
-using AutoMapper;
 using BAL.Abstract;
-using BAL.Concrete;
 using Entities.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -37,7 +35,7 @@ namespace PL.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles="Admin")]
+        [Authorize(Roles = "Admin")]
         public IActionResult Country(CountryDTO countryDTO)
         {
             _countryService.Add(countryDTO);
