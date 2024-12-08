@@ -1,38 +1,39 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.Extensions.DependencyInjection;
-using System.Linq;
 
-public class ValidateModelAttribute : ActionFilterAttribute
+namespace PL.ActionFilters
 {
-    public override void OnActionExecuting(ActionExecutingContext context)
+    public class ValidateModelAttribute : ActionFilterAttribute
     {
-        // Iterate through all action arguments
-        foreach (var argument in context.ActionArguments)
+        public override void OnActionExecuting(ActionExecutingContext context)
         {
-            var model = argument.Value;
-            if (model == null)
+            // Iterate through all action arguments
+            foreach (var argument in context.ActionArguments)
             {
-                continue;
-            }
-
-            var validatorType = typeof(IValidator<>).MakeGenericType(model.GetType());
-            var validator = context.HttpContext.RequestServices.GetService(validatorType) as IValidator;
-
-            if (validator != null)
-            {
-                var validationResult = validator.Validate(new ValidationContext<object>(model));
-
-                if (!validationResult.IsValid)
+                var model = argument.Value;
+                if (model == null)
                 {
-                    var errors = validationResult.Errors.Select(e => e.ErrorMessage);
-                    context.Result = new BadRequestObjectResult(new { Errors = errors });
-                    return;
+                    continue;
+                }
+
+                var validatorType = typeof(IValidator<>).MakeGenericType(model.GetType());
+                var validator = context.HttpContext.RequestServices.GetService(validatorType) as IValidator;
+
+                if (validator != null)
+                {
+                    var validationResult = validator.Validate(new ValidationContext<object>(model));
+
+                    if (!validationResult.IsValid)
+                    {
+                        var errors = validationResult.Errors.Select(e => e.ErrorMessage);
+                        context.Result = new BadRequestObjectResult(new { Errors = errors });
+                        return;
+                    }
                 }
             }
-        }
 
-        base.OnActionExecuting(context);
+            base.OnActionExecuting(context);
+        }
     }
 }
