@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace PL.ActionFilters
 {
+    [AttributeUsage(AttributeTargets.Method)]
     public class ValidateModelAttribute : ActionFilterAttribute
     {
         public override void OnActionExecuting(ActionExecutingContext context)
