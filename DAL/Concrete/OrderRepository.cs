@@ -34,9 +34,9 @@ namespace DAL.Concrete
             return orders;
         }
 
-        public List<OrderItem> GetItems(int OrderId)
+        public List<OrderItem> GetItems(int orderId)
         {
-            return _orderItems.Where(x => x.OrderId == OrderId).ToList();
+            return _orderItems.Where(x => x.OrderId == orderId).ToList();
         }
 
         public new void Insert(Order order)
