@@ -3,6 +3,7 @@ using BAL.Abstract;
 using Entities.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PL.ActionFilters;
 
 namespace PL.Controllers
 {
@@ -36,6 +37,7 @@ namespace PL.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
+        [ValidateModel]
         public IActionResult Country(CountryDTO countryDTO)
         {
             _countryService.Add(countryDTO);
@@ -44,6 +46,7 @@ namespace PL.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
+        [ValidateModel]
         public IActionResult Country(int id, CountryDTO countryDTO)
         {
             countryDTO.CountryId = id;

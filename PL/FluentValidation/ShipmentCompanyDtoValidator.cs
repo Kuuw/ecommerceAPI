@@ -7,6 +7,7 @@ namespace PL.FluentValidation
     {
         public ShipmentCompanyDtoValidator()
         {
+            RuleFor(model => model.CompanyName).NotEmpty().NotNull().WithMessage("Kargo şirketi adı boş geçilemez.");
         }
     }
 }

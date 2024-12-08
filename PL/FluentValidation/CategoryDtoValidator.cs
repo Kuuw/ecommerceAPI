@@ -7,6 +7,7 @@ namespace PL.FluentValidation
     {
         public CategoryDtoValidator()
         {
+            RuleFor(model => model.Name).NotEmpty().NotNull().WithMessage("Kategori adı boş geçilemez.");
         }
     }
 }

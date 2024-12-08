@@ -3,6 +3,7 @@ using BAL.Abstract;
 using Entities.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PL.ActionFilters;
 
 namespace PL.Controllers
 {
@@ -36,6 +37,7 @@ namespace PL.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
+        [ValidateModel]
         public IActionResult Category(CategoryDTO categoryDTO)
         {
             _categoryService.Add(categoryDTO);
@@ -44,6 +46,7 @@ namespace PL.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
+        [ValidateModel]
         public IActionResult Category(int id, CategoryDTO categoryDTO)
         {
             categoryDTO.CategoryId = id;

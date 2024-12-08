@@ -3,6 +3,7 @@ using BAL.Abstract;
 using Entities.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PL.ActionFilters;
 
 namespace PL.Controllers
 {
@@ -37,6 +38,7 @@ namespace PL.Controllers
         }
 
         [HttpPost]
+        [ValidateModel]
         public IActionResult Order(OrderDTO orderDTO)
         {
             var userId = int.Parse(User.FindFirst("UserId")?.Value!);

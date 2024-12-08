@@ -3,6 +3,7 @@ using BAL.Abstract;
 using Entities.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PL.ActionFilters;
 
 namespace PL.Controllers
 {
@@ -36,6 +37,7 @@ namespace PL.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
+        [ValidateModel]
         public IActionResult ShipmentCompany(ShipmentCompanyDTO shipmentCompanyDTO)
         {
             _shipmentCompanyService.Add(shipmentCompanyDTO);
@@ -44,6 +46,7 @@ namespace PL.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
+        [ValidateModel]
         public IActionResult ShipmentCompany(int id, ShipmentCompanyDTO shipmentCompanyDTO)
         {
             shipmentCompanyDTO.ShipmentCompanyId = id;

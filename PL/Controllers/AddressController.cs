@@ -3,6 +3,7 @@ using BAL.Abstract;
 using Entities.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PL.ActionFilters;
 
 namespace PL.Controllers
 {
@@ -30,6 +31,7 @@ namespace PL.Controllers
 
         [HttpPost]
         [Authorize]
+        [ValidateModel]
         public IActionResult Address(AddressDTO addressDTO)
         {
             var userId = int.Parse(User.FindFirst("UserId")?.Value!);
@@ -52,6 +54,7 @@ namespace PL.Controllers
 
         [HttpPut("{id}")]
         [Authorize]
+        [ValidateModel]
         public IActionResult Address(int id, AddressDTO addressDTO)
         {
             int userId = int.Parse(User.FindFirst("UserId")?.Value!);

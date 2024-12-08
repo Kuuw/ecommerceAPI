@@ -8,6 +8,7 @@ namespace PL.FluentValidation
         public OrderDtoValidator()
         {
             RuleFor(model => model.OrderItems).NotEmpty().NotNull().WithMessage("Siparişinizde en az 1 ürün bulunmalı.");
+            RuleFor(model => model.AddressId).NotNull().WithMessage("Adres seçimi yapmalısınız.");
         }
     }
 }

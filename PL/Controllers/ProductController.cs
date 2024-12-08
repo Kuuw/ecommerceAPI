@@ -3,6 +3,7 @@ using BAL.Abstract;
 using Entities.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PL.ActionFilters;
 
 namespace PL.Controllers
 {
@@ -39,6 +40,7 @@ namespace PL.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
+        [ValidateModel]
         public IActionResult Product(ProductDTO productDTO)
         {
             var product = _productService.Add(productDTO);
@@ -47,6 +49,7 @@ namespace PL.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
+        [ValidateModel]
         public IActionResult Product(int id, ProductDTO productDTO)
         {
             var success = _productService.Update(productDTO, id);
