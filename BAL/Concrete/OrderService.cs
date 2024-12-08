@@ -8,13 +8,11 @@ namespace BAL.Concrete
 {
     public class OrderService : IOrderService
     {
-        private readonly IProductRepository _productRepository;
         private readonly IOrderRepository _repository;
         private readonly Mapper mapper = MapperConfig.InitializeAutomapper();
 
-        public OrderService(IOrderRepository repository, IProductRepository productService)
+        public OrderService(IOrderRepository repository)
         {
-            _productRepository = productService;
             _repository = repository;
         }
 
