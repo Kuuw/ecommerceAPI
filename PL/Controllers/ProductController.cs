@@ -19,11 +19,11 @@ namespace PL.Controllers
             _productService = service;
         }
 
-        [HttpGet]
+        [HttpPost("GetPaged")]
         [AllowAnonymous]
-        public IActionResult Product(int page, int pageSize)
+        public IActionResult Product(int page, int pageSize, ProductFilter? productFilter)
         {
-            var response = _productService.GetPaged(page, pageSize);
+            var response = _productService.GetPaged(page, pageSize, productFilter);
 
             return Ok(response);
         }

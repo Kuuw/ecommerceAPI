@@ -44,12 +44,14 @@ namespace BAL.Concrete
             }
         }
 
-        public ProductPagedResponse GetPaged(int page, int pageSize)
+        public ProductPagedResponse GetPaged(int page, int pageSize, ProductFilter? productFilter)
         {
             if (page < 1) { page = 1; }
             if (pageSize > 30 || pageSize < 1) { pageSize = 10; }
-            var items = _productRepository.GetPaged(page, pageSize);
-            int totalItems = this.GetTotalCount();
+            if (productFilter == null) { productFilter = new ProductFilter(); }
+
+            var items = _productRepository.GetPaged(page, pageSize, productFilter);
+            int totalItems = _productRepository.GetFilteredCount(productFilter);
             int totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
             List<ProductDTO> itemsDTO = mapper.Map<List<Product>,List<ProductDTO>>(items);
 
@@ -103,12 +105,6 @@ namespace BAL.Concrete
             if(product == null) { return false; }
             _productRepository.UpdateStock(productId, stock);
             return true;
-        }
-
-        private int GetTotalCount()
-        {
-            var size = _productRepository.List().Count;
-            return size;
         }
     }
 }

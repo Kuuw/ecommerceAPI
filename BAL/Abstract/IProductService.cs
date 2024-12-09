@@ -7,7 +7,7 @@ namespace BAL.Abstract
     {
         public Product Add(ProductDTO productDTO);
         public ProductDTO? GetById(int id);
-        public ProductPagedResponse GetPaged(int page, int pageSize);
+        public ProductPagedResponse GetPaged(int page, int pageSize, ProductFilter? productFilter);
         public void Delete(int id);
         public bool Update(ProductDTO productDTO, int id);
         public int GetStock(int productId);

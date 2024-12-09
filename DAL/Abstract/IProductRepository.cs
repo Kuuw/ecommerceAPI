@@ -7,7 +7,8 @@ namespace DAL.Abstract
     {
         public void AddStockEntry(int ProductId, int Stock);
         public void UpdateStock(int ProductId, int Stock);
-        public List<Product>? GetPaged(int page, int pageSize);
+        public List<Product>? GetPaged(int page, int pageSize, ProductFilter productFilter);
         public ProductStock GetStock(int ProductId);
+        public int GetFilteredCount(ProductFilter productFilter);
     }
 }

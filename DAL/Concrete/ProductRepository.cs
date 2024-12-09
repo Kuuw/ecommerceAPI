@@ -46,13 +46,31 @@ namespace DAL.Concrete
             }
         }
 
-        public List<Product>? GetPaged(int page, int pageSize)
+        public List<Product>? GetPaged(int page, int pageSize, ProductFilter productFilter)
         {
-            var items = productData.OrderBy(data => data.ProductId)
-                                   .Skip((page - 1) * pageSize)
-                                   .Take(pageSize)
-                                   .Include(e => e.ProductStock)
-                                   .ToList();
+            var query = productData.AsQueryable();
+
+            switch (productFilter)
+            {
+                case { CategoryId: not null }:
+                    query = query.Where(p => p.CategoryId == productFilter.CategoryId.Value);
+                    break;
+                case { MinPrice: not null }:
+                    query = query.Where(p => p.UnitPrice >= productFilter.MinPrice.Value);
+                    break;
+                case { MaxPrice: not null }:
+                    query = query.Where(p => p.UnitPrice <= productFilter.MaxPrice.Value);
+                    break;
+                case { ProductName: not null }:
+                    query = query.Where(p => p.Name.Contains(productFilter.ProductName));
+                    break;
+            }
+
+            var items = query.OrderBy(data => data.ProductId)
+                             .Skip((page - 1) * pageSize)
+                             .Take(pageSize)
+                             .Include(e => e.ProductStock)
+                             .ToList();
 
             return items;
         }
@@ -86,6 +104,30 @@ namespace DAL.Concrete
                     throw;
                 }
             }
+        }
+
+        public int GetFilteredCount(ProductFilter productFilter)
+        {
+            var query = productData.AsQueryable();
+
+            if (productFilter.CategoryId != null)
+            {
+                query = query.Where(p => p.CategoryId == productFilter.CategoryId.Value);
+            }
+            if (productFilter.MinPrice != null)
+            {
+                query = query.Where(p => p.UnitPrice >= productFilter.MinPrice.Value);
+            }
+            if (productFilter.MaxPrice != null)
+            {
+                query = query.Where(p => p.UnitPrice <= productFilter.MaxPrice.Value);
+            }
+            if (productFilter.ProductName != null)
+            {
+                query = query.AsEnumerable().Where(p => p.Name.Contains(productFilter.ProductName, StringComparison.OrdinalIgnoreCase)).AsQueryable();
+            }
+
+            return query.Count();
         }
     }
 }
