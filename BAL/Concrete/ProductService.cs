@@ -130,9 +130,9 @@ namespace BAL.Concrete
             return _productRepository.GetImages(productId).Select(x => x.ImagePath).ToList();
         }
 
-        private FileStream ConvertIFormFileToFileStream(IFormFile formFile)
+        private static FileStream ConvertIFormFileToFileStream(IFormFile formFile)
         {
-            var tempFilePath = Path.GetTempFileName();
+            var tempFilePath = Path.GetRandomFileName();
             using (var fileStream = new FileStream(tempFilePath, FileMode.Create))
             {
                 formFile.CopyTo(fileStream);
