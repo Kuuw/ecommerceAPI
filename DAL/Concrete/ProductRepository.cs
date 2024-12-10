@@ -11,12 +11,14 @@ namespace DAL.Concrete
         private readonly EcommerceDbContext _context;
         private readonly DbSet<ProductStock> stockData;
         private readonly DbSet<Product> productData;
+        private readonly DbSet<ProductImage> imageData;
 
         public ProductRepository(EcommerceDbContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
             this.stockData = context.Set<ProductStock>();
             this.productData = context.Set<Product>();
+            this.imageData = context.Set<ProductImage>();
         }
 
         public void AddStockEntry(int ProductId, int Stock)
@@ -46,7 +48,7 @@ namespace DAL.Concrete
             }
         }
 
-        public List<Product>? GetPaged(int page, int pageSize, ProductFilter productFilter)
+        public List<Product> GetPaged(int page, int pageSize, ProductFilter productFilter)
         {
             var query = productData.AsQueryable();
 
@@ -70,6 +72,7 @@ namespace DAL.Concrete
                              .Skip((page - 1) * pageSize)
                              .Take(pageSize)
                              .Include(e => e.ProductStock)
+                             .Include(e => e.ProductImages)
                              .ToList();
 
             return items;
@@ -128,6 +131,35 @@ namespace DAL.Concrete
             }
 
             return query.Count();
+        }
+
+        public void AddImage(int productId, Guid guid, string ImagePath)
+        {
+            Product? product = productData.FirstOrDefault(x => x.ProductId == productId);
+            if (product == null)
+            { throw new Exception("Product not found"); }
+
+            ProductImage pi = new ProductImage();
+            pi.ProductId = productId;
+            pi.ProductImageId = guid;
+            pi.ImagePath = ImagePath;
+
+            imageData.Add(pi);
+            _context.SaveChanges();
+        }
+
+        public List<ProductImage> GetImages(int productId)
+        {
+            return imageData.Where(x => x.ProductId == productId).ToList();
+        }
+
+        public void DeleteImage(Guid imageId)
+        {
+            ProductImage? image = imageData.FirstOrDefault(x => x.ProductImageId == imageId);
+            if (image == null)
+            { throw new Exception("Image not found"); }
+            imageData.Remove(image);
+            _context.SaveChanges();
         }
     }
 }

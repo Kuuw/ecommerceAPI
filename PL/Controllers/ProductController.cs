@@ -71,5 +71,14 @@ namespace PL.Controllers
             if (success) { return Ok(); }
             else { return BadRequest(); }
         }
+
+        [HttpPost("Images/{id}")]
+        [Authorize(Roles = "Admin")]
+        public IActionResult Image(int id, IFormFile file)
+        {
+            var success = _productService.UploadImage(id, file);
+            if (success != null) { return Ok(success); }
+            else { return BadRequest(); }
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Entities.DTO;
 using Entities.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace BAL.Abstract
 {
@@ -12,5 +13,7 @@ namespace BAL.Abstract
         public bool Update(ProductDTO productDTO, int id);
         public int GetStock(int productId);
         public bool UpdateStock(int productId, int stock);
+        public string UploadImage(int productId, IFormFile file);
+        public List<string> GetImages(int productId);
     }
 }

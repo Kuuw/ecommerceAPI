@@ -46,6 +46,7 @@ public partial class EcommerceDbContext : DbContext
             entity.HasKey(e => e.AddressId).HasName("PK__Address__091C2AFBB08AA636");
 
             entity.ToTable("Address");
+
             entity.Property(e => e.AddressLine1).HasMaxLength(254);
             entity.Property(e => e.AddressLine2).HasMaxLength(254);
             entity.Property(e => e.CreatedAt)
@@ -175,10 +176,11 @@ public partial class EcommerceDbContext : DbContext
 
         modelBuilder.Entity<ProductImage>(entity =>
         {
-            entity.HasKey(e => new { e.ProductId, e.ImagePath }).HasName("PK__ProductI__C27DB42B5C12ED3D");
+            entity.HasKey(e => e.ProductImageId).HasName("PK__ProductI__C27DB42B5C12ED3D");
 
             entity.ToTable("ProductImage");
 
+            entity.Property(e => e.ProductImageId).HasDefaultValueSql("(newid())");
             entity.Property(e => e.ImagePath).HasMaxLength(254);
 
             entity.HasOne(d => d.Product).WithMany(p => p.ProductImages)

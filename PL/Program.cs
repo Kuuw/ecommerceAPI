@@ -77,6 +77,7 @@ builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IShipmentCompanyRepository, ShipmentCompanyRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IFileRepository>(provider => new FileRepository(config["Azurite:connectionString"]!, config["Azurite:containerName"]!));
 
 
 builder.Services

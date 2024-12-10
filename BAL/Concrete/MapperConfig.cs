@@ -39,6 +39,8 @@ namespace BAL.Concrete
                 cfg.CreateMap<Category, CategoryDTO>();
                 cfg.CreateMap<ProductStockDTO, ProductStock>();
                 cfg.CreateMap<ProductStock, ProductStockDTO>();
+                cfg.CreateMap<ProductImage, ProductImageDTO>();
+                cfg.CreateMap<ProductImageDTO, ProductImage>();
             });
             var mapper = new Mapper(config);
             return mapper;
