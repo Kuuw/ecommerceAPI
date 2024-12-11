@@ -72,7 +72,7 @@ namespace PL.Controllers
             else { return BadRequest(); }
         }
 
-        [HttpPost("Images/{id}")]
+        [HttpPost("Image/{id}")]
         [Authorize(Roles = "Admin")]
         public IActionResult Image(int id, IFormFile file)
         {
@@ -81,7 +81,7 @@ namespace PL.Controllers
             else { return BadRequest(); }
         }
 
-        [HttpDelete("Images/{id}")]
+        [HttpDelete("Image/{id}")]
         [Authorize(Roles = "Admin")]
         public IActionResult Image(Guid id)
         {
