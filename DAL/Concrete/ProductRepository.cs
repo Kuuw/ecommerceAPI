@@ -133,18 +133,9 @@ namespace DAL.Concrete
             return query.Count();
         }
 
-        public void AddImage(int productId, Guid guid, string ImagePath)
+        public void AddImage(ProductImage productImage)
         {
-            Product? product = productData.FirstOrDefault(x => x.ProductId == productId);
-            if (product == null)
-            { throw new Exception("Product not found"); }
-
-            ProductImage pi = new ProductImage();
-            pi.ProductId = productId;
-            pi.ProductImageId = guid;
-            pi.ImagePath = ImagePath;
-
-            imageData.Add(pi);
+            imageData.Add(productImage);
             _context.SaveChanges();
         }
 

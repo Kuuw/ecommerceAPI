@@ -10,7 +10,7 @@ namespace DAL.Abstract
         public List<Product> GetPaged(int page, int pageSize, ProductFilter productFilter);
         public ProductStock GetStock(int ProductId);
         public int GetFilteredCount(ProductFilter productFilter);
-        public void AddImage(int productId, Guid guid, string ImagePath);
+        public void AddImage(ProductImage productImage);
         public List<ProductImage> GetImages(int productId);
         public void DeleteImage(Guid imageId);
     }

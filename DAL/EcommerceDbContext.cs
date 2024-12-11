@@ -182,6 +182,7 @@ public partial class EcommerceDbContext : DbContext
 
             entity.Property(e => e.ProductImageId).HasDefaultValueSql("(newid())");
             entity.Property(e => e.ImagePath).HasMaxLength(254);
+            entity.Property(e => e.ImageExtension).HasMaxLength(15);
 
             entity.HasOne(d => d.Product).WithMany(p => p.ProductImages)
                 .HasForeignKey(d => d.ProductId)

@@ -1,13 +1,14 @@
 ﻿using AutoMapper;
 using BAL.Abstract;
 using DAL.Abstract;
-using DAL.Concrete;
 using Entities.DTO;
 using Entities.Models;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore.Query;
-using Microsoft.Extensions.Azure;
-using System.IO;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats.Jpeg;
+using SixLabors.ImageSharp.Formats.Png;
+using SixLabors.ImageSharp.Processing;
+
 
 namespace BAL.Concrete
 {
@@ -58,7 +59,7 @@ namespace BAL.Concrete
             var items = _productRepository.GetPaged(page, pageSize, productFilter);
             int totalItems = _productRepository.GetFilteredCount(productFilter);
             int totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
-            List<ProductDTO> itemsDTO = mapper.Map<List<Product>,List<ProductDTO>>(items);
+            List<ProductDTO> itemsDTO = mapper.Map<List<Product>, List<ProductDTO>>(items);
 
             var response = new ProductPagedResponse();
             var metadata = new PageMetadata();
@@ -107,20 +108,65 @@ namespace BAL.Concrete
         public bool UpdateStock(int productId, int stock)
         {
             var product = _productRepository.GetById(productId);
-            if(product == null) { return false; }
+            if (product == null) { return false; }
             _productRepository.UpdateStock(productId, stock);
             return true;
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility")]
         public string UploadImage(int productId, IFormFile file)
         {
             var product = _productRepository.GetById(productId);
             if (product == null) { throw new Exception("Product not found."); }
-            var newGuid = Guid.NewGuid();
 
-            var path = _fileRepository.UploadFile($"{newGuid}.jpg", ConvertIFormFileToFileStream(file));
-            _productRepository.AddImage(productId, newGuid, path);
-            return path;
+            var newGuid = Guid.NewGuid();
+            ProductImage productImage = new();
+            productImage.ProductId = productId;
+            productImage.ProductImageId = newGuid;
+            productImage.ImageExtension = "jpg";
+
+            using (var readStream = file.OpenReadStream())
+            {
+                using (var img = Image.Load(readStream))
+                {
+                    if (!(img.Metadata.DecodedImageFormat is JpegFormat || img.Metadata.DecodedImageFormat is PngFormat))
+                        throw new Exception("Uploaded file should be in png or jpeg.");
+
+                    var tempFile = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+
+                    try
+                    {
+                        img.Mutate(x => x.Resize(new ResizeOptions
+                        {
+                            Size = new Size(720, 720),
+                            Mode = ResizeMode.Crop
+                        }));
+
+                        img.Save(tempFile, new JpegEncoder());
+
+                        using (var tempFileStream = new FileStream(tempFile, FileMode.Open))
+                        {
+                            var path = _fileRepository.UploadFile($"{newGuid}.jpg", tempFileStream);
+                            productImage.ImagePath = path;
+
+                            _productRepository.AddImage(productImage);
+                            return path;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+                        throw;
+                    }
+                    finally
+                    {
+                        if (File.Exists(tempFile))
+                        {
+                            File.Delete(tempFile);
+                        }
+                    }
+                }
+            }
         }
 
         public List<string> GetImages(int productId)
@@ -133,7 +179,8 @@ namespace BAL.Concrete
         public void DeleteImage(Guid guid)
         {
             _productRepository.DeleteImage(guid);
-            _fileRepository.DeleteFile(guid);
+            var path = String.Concat(guid.ToString(), ".jpg");
+            _fileRepository.DeleteFile(path);
         }
 
         private static FileStream ConvertIFormFileToFileStream(IFormFile formFile)

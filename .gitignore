@@ -412,3 +412,4 @@ __azurite_db_blob_extent__.json
 # Azurite table
 __azurite_db_table__.json
 __azurite_db_table_extent__.json
+*.kf1

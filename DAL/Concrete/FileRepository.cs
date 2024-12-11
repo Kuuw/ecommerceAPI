@@ -66,7 +66,7 @@ namespace DAL.Concrete
 
                 blobClient.Delete();
             }
-            catch
+            catch (Exception ex)
             {
                 Console.WriteLine($"Error deleting file: {ex.Message}");
                 throw;

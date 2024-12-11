@@ -8,5 +8,6 @@
 
         public string ImagePath { get; set; } = null!;
 
+        public string ImageExtension { get; set; } = null!;
     }
 }
