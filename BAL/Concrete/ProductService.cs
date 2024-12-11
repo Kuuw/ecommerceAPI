@@ -130,6 +130,12 @@ namespace BAL.Concrete
             return _productRepository.GetImages(productId).Select(x => x.ImagePath).ToList();
         }
 
+        public void DeleteImage(Guid guid)
+        {
+            _productRepository.DeleteImage(guid);
+            _fileRepository.DeleteFile(guid);
+        }
+
         private static FileStream ConvertIFormFileToFileStream(IFormFile formFile)
         {
             var tempFilePath = Path.GetRandomFileName();

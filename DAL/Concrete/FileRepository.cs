@@ -55,5 +55,22 @@ namespace DAL.Concrete
                 throw;
             }
         }
+
+        public void DeleteFile(string fileName)
+        {
+            try
+            {
+                var containerClient = _blobServiceClient.GetBlobContainerClient(_containerName);
+
+                var blobClient = containerClient.GetBlobClient(fileName);
+
+                blobClient.Delete();
+            }
+            catch
+            {
+                Console.WriteLine($"Error deleting file: {ex.Message}");
+                throw;
+            }
+        }
     }
 }

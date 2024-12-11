@@ -15,5 +15,6 @@ namespace BAL.Abstract
         public bool UpdateStock(int productId, int stock);
         public string UploadImage(int productId, IFormFile file);
         public List<string> GetImages(int productId);
+        public void DeleteImage(Guid guid);
     }
 }

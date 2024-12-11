@@ -4,5 +4,6 @@
     {
         public string UploadFile(string fileName, Stream fileContent);
         public Stream GetFile(string fileName);
+        public void DeleteFile(string fileName);
     }
 }

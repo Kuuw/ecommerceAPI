@@ -80,5 +80,13 @@ namespace PL.Controllers
             if (success != null) { return Ok(success); }
             else { return BadRequest(); }
         }
+
+        [HttpDelete("Images/{id}")]
+        [Authorize(Roles = "Admin")]
+        public IActionResult Image(Guid id)
+        {
+            _productService.DeleteImage(id);
+            return Ok();
+        }
     }
 }
