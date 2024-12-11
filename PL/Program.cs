@@ -128,6 +128,14 @@ builder.Services.AddSwaggerGen(setup =>
     });
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowLocalhost",
+        builder => builder.WithOrigins("http://localhost:5173")
+                          .AllowAnyMethod()
+                          .AllowAnyHeader());
+});
+
 builder.Services.AddAuthorization();
 
 var app = builder.Build();
@@ -148,6 +156,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+app.UseCors("AllowLocalhost");
 // var apiVersionSet = app.NewApiVersionSet()
 
 app.Run();

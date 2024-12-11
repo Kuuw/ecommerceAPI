@@ -21,7 +21,7 @@ namespace PL.Controllers
 
         [HttpPost("GetPaged")]
         [AllowAnonymous]
-        public IActionResult Product(int page, int pageSize, ProductFilter? productFilter)
+        public IActionResult Product(int page, int pageSize, [FromBody] ProductFilter? productFilter)
         {
             var response = _productService.GetPaged(page, pageSize, productFilter);
 

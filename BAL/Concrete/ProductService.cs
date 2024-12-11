@@ -55,22 +55,20 @@ namespace BAL.Concrete
             if (page < 1) { page = 1; }
             if (pageSize > 30 || pageSize < 1) { pageSize = 10; }
             if (productFilter == null) { productFilter = new ProductFilter(); }
-
-            var items = _productRepository.GetPaged(page, pageSize, productFilter);
-            int totalItems = _productRepository.GetFilteredCount(productFilter);
-            int totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
-            List<ProductDTO> itemsDTO = mapper.Map<List<Product>, List<ProductDTO>>(items);
-
             var response = new ProductPagedResponse();
             var metadata = new PageMetadata();
+            var items = _productRepository.GetPaged(page, pageSize, productFilter);
+            
+            List<ProductDTO> itemsDTO = mapper.Map<List<Product>, List<ProductDTO>>(items);
+            response.Items = itemsDTO;
+
+            int totalItems = _productRepository.GetFilteredCount(productFilter);
+            int totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
             metadata.Page = page;
             metadata.PageSize = pageSize;
             metadata.TotalPages = totalPages;
 
-            response.Items = itemsDTO;
             response.Metadata = metadata;
-
-            Console.WriteLine($"Metadata: Page={response.Metadata.Page}, PageSize={response.Metadata.PageSize}, TotalPages={response.Metadata.TotalPages}");
 
             return response;
         }
