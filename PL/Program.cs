@@ -130,10 +130,11 @@ builder.Services.AddSwaggerGen(setup =>
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowLocalhost",
-        builder => builder.WithOrigins("http://localhost:5173")
-                          .AllowAnyMethod()
-                          .AllowAnyHeader());
+options.AddPolicy("AllowLocalhost",
+    builder => builder.WithOrigins("http://localhost:5173", "https://localhost:5173")
+                      .AllowAnyMethod()
+                      .AllowAnyHeader()
+                      .AllowCredentials());
 });
 
 builder.Services.AddAuthorization();
