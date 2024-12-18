@@ -18,11 +18,11 @@ namespace BAL.Concrete
 
         public CartDTO Get(int userId)
         {
-            var items = _repository.Where(x => x.UserId == userId);
+            var items = _repository.ListWithProductData(userId);
             var itemsDTO = new CartDTO();
-            List<CartItemDTO> CartDTO = new();
-            mapper.Map(items, CartDTO);
-            itemsDTO.Cart = CartDTO;
+            List<CartItemDTO> cartItemDTO = new();
+            mapper.Map(items, cartItemDTO);
+            itemsDTO.Cart = cartItemDTO;
             return itemsDTO;
         }
 
