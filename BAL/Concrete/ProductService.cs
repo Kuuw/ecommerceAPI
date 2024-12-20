@@ -137,7 +137,7 @@ namespace BAL.Concrete
                         img.Mutate(x => x.Resize(new ResizeOptions
                         {
                             Size = new Size(720, 720),
-                            Mode = ResizeMode.Crop
+                            Mode = ResizeMode.Pad
                         }));
 
                         img.Save(tempFile, new JpegEncoder());
