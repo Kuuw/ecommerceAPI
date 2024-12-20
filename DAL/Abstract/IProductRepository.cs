@@ -13,5 +13,6 @@ namespace DAL.Abstract
         public void AddImage(ProductImage productImage);
         public List<ProductImage> GetImages(int productId);
         public void DeleteImage(Guid imageId);
+        public new Product? GetById(int id);
     }
 }

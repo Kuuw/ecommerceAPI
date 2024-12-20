@@ -152,5 +152,11 @@ namespace DAL.Concrete
             imageData.Remove(image);
             _context.SaveChanges();
         }
+
+        public new Product? GetById(int id)
+        {
+            var product = productData.Include(x => x.ProductImages).FirstOrDefault(x => x.ProductId == id);
+            return product;
+        }
     }
 }
