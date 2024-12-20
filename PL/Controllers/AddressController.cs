@@ -29,6 +29,16 @@ namespace PL.Controllers
             return Ok(addresses);
         }
 
+        [HttpGet("{id}")]
+        [Authorize]
+        public IActionResult AddressById(int id)
+        {
+            var userId = int.Parse(User.FindFirst("UserId")?.Value!);
+            var addresses = _addressService.GetByAddressId(id, userId);
+
+            return Ok(addresses);
+        }
+
         [HttpPost]
         [Authorize]
         [ValidateModel]

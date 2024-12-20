@@ -30,10 +30,14 @@ namespace BAL.Concrete
             return addressDTOs;
         }
 
-        public AddressDTO? GetByAddressId(int AddressId)
+        public AddressDTO? GetByAddressId(int AddressId, int userId)
         {
             var address = _addressRepository.GetById(AddressId);
-            return mapper.Map<AddressDTO>(address);
+            if (address?.UserId == userId)
+            {
+                return mapper.Map<AddressDTO>(address);
+            }
+            return null;
         }
 
         public Address Add(AddressDTO addressDTO)
