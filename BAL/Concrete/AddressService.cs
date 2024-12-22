@@ -20,7 +20,7 @@ namespace BAL.Concrete
             _userContext = userContext;
         }
 
-        public List<AddressDTO> GetByUserId()
+        public ServiceResult<List<AddressDTO>> GetByUserId()
         {
             var adresses = _addressRepository.Where(x => x.UserId == _userContext.UserId).ToList();
             var addressDTOs = new List<AddressDTO>();
@@ -30,20 +30,24 @@ namespace BAL.Concrete
                 addressDTOs.Add(mapper.Map<AddressDTO>(address));
             }
 
-            return addressDTOs;
+            var result = ServiceResult<List<AddressDTO>>.Ok(addressDTOs);
+
+            return result;
         }
 
-        public AddressDTO? GetByAddressId(int AddressId)
+        public ServiceResult<AddressDTO?> GetByAddressId(int AddressId)
         {
             var address = _addressRepository.GetById(AddressId);
             if (address?.UserId == _userContext.UserId)
             {
-                return mapper.Map<AddressDTO>(address);
+                var result = ServiceResult<AddressDTO>.Ok(mapper.Map<AddressDTO>(address));
+
+                return result;
             }
-            return null;
+            return ServiceResult<AddressDTO?>.NotFound("Not found or belongs to another user.");
         }
 
-        public Address Add(AddressDTO addressDTO)
+        public ServiceResult<bool> Add(AddressDTO addressDTO)
         {
             addressDTO.UserId = _userContext.UserId;
             var address = mapper.Map<Address>(addressDTO);
@@ -52,31 +56,30 @@ namespace BAL.Concrete
             address.UpdatedAt = DateTime.UtcNow;
 
             _addressRepository.Insert(address);
-            return address;
+            return ServiceResult<bool>.Ok(true);
         }
 
-        public bool Delete(int addressID)
+        public ServiceResult<bool> Delete(int addressID)
         {
             var address = _addressRepository.GetById(addressID);
             if (address != null && address.UserId == _userContext.UserId)
             {
                 _addressRepository.Delete(address);
-                return true;
+                return ServiceResult<bool>.Ok(true);
             }
-            return false;
+            return ServiceResult<bool>.BadRequest("Not found or belongs to another user.");
         }
 
-        public bool Update(AddressDTO addressDTO)
+        public ServiceResult<bool> Update(AddressDTO addressDTO)
         {
             var address = _addressRepository.GetById((int)addressDTO.AddressId!);
-            if (address == null) { return false; }
-            if (address.UserId != _userContext.UserId) { return false; }
+            if (address == null || address.UserId != _userContext.UserId) { return ServiceResult<bool>.NotFound("Address not found or belongs to another user."); }
 
             mapper.Map(addressDTO, address);
             address.UpdatedAt = DateTime.UtcNow;
 
             _addressRepository.Update(address);
-            return true;
+            return ServiceResult<bool>.Ok(true);
         }
     }
 }

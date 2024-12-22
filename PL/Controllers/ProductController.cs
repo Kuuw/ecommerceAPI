@@ -23,19 +23,24 @@ namespace PL.Controllers
         [AllowAnonymous]
         public IActionResult Product(int page, int pageSize, [FromBody] ProductFilter? productFilter)
         {
-            var response = _productService.GetPaged(page, pageSize, productFilter);
-
-            return Ok(response);
+            var result = _productService.GetPaged(page, pageSize, productFilter);
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+            return StatusCode(result.StatusCode, result.ErrorMessage);
         }
 
         [HttpGet("{id}")]
         [AllowAnonymous]
         public IActionResult Product(int id)
         {
-            ProductDTO? product = _productService.GetById(id);
-
-            if (product != null) { return Ok(product); }
-            return NotFound();
+            var result = _productService.GetById(id);
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+            return StatusCode(result.StatusCode, result.ErrorMessage);
         }
 
         [HttpPost]
@@ -43,8 +48,12 @@ namespace PL.Controllers
         [ValidateModel]
         public IActionResult Product(ProductDTO productDTO)
         {
-            var product = _productService.Add(productDTO);
-            return Ok(product);
+            var result = _productService.Add(productDTO);
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+            return StatusCode(result.StatusCode, result.ErrorMessage);
         }
 
         [HttpPut("{id}")]
@@ -52,41 +61,59 @@ namespace PL.Controllers
         [ValidateModel]
         public IActionResult Product(int id, ProductDTO productDTO)
         {
-            var success = _productService.Update(productDTO, id);
-            if (success) { return Ok(); } else { return BadRequest(); }
+            var result = _productService.Update(productDTO, id);
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+            return StatusCode(result.StatusCode, result.ErrorMessage);
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            _productService.Delete(id);
-            return Ok();
+            var result = _productService.Delete(id);
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+            return StatusCode(result.StatusCode, result.ErrorMessage);
         }
 
         [HttpPut("Stock/{id}")]
         [Authorize(Roles = "Admin")]
         public IActionResult Stock(int id, int stock)
         {
-            var success = _productService.UpdateStock(id, stock);
-            if (success) { return Ok(); }
-            else { return BadRequest(); }
+            var result = _productService.UpdateStock(id, stock);
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+            return StatusCode(result.StatusCode, result.ErrorMessage);
         }
 
         [HttpPost("Image/{id}")]
         [Authorize(Roles = "Admin")]
         public IActionResult Image(int id, IFormFile file)
         {
-            var success = _productService.UploadImage(id, file);
-            if (success != null) { return Ok(success); }
-            else { return BadRequest(); }
+            var result = _productService.UploadImage(id, file);
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+            return StatusCode(result.StatusCode, result.ErrorMessage);
         }
 
         [HttpDelete("Image/{id}")]
         [Authorize(Roles = "Admin")]
         public IActionResult Image(Guid id)
         {
-            _productService.DeleteImage(id);
-            return Ok();
+            var result = _productService.DeleteImage(id);
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+            return StatusCode(result.StatusCode, result.ErrorMessage);
         }
     }
 }

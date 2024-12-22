@@ -24,7 +24,7 @@ namespace BAL.Concrete
             _fileRepository = fileRepository;
         }
 
-        public Product Add(ProductDTO productDTO)
+        public ServiceResult<bool> Add(ProductDTO productDTO)
         {
             Product product = new();
             mapper.Map(productDTO, product);
@@ -34,23 +34,24 @@ namespace BAL.Concrete
 
             _productRepository.Insert(product);
 
-            return product;
+            return ServiceResult<bool>.Ok(true);
         }
 
-        public void Delete(int id)
+        public ServiceResult<bool> Delete(int id)
         {
             Product? product = _productRepository.GetById(id);
             if (product != null)
             {
                 _productRepository.Delete(product);
+                return ServiceResult<bool>.Ok(true);
             }
             else
             {
-                Console.WriteLine($"Product with id:{id} is not found.");
+                return ServiceResult<bool>.NotFound("Product not found.");
             }
         }
 
-        public ProductPagedResponse GetPaged(int page, int pageSize, ProductFilter? productFilter)
+        public ServiceResult<ProductPagedResponse> GetPaged(int page, int pageSize, ProductFilter? productFilter)
         {
             if (page < 1) { page = 1; }
             if (pageSize > 30 || pageSize < 1) { pageSize = 10; }
@@ -70,49 +71,50 @@ namespace BAL.Concrete
 
             response.Metadata = metadata;
 
-            return response;
+            return ServiceResult<ProductPagedResponse>.Ok(response);
         }
 
-        public ProductDTO? GetById(int id)
+        public ServiceResult<ProductDTO?> GetById(int id)
         {
             var item = _productRepository.GetById(id);
             if (item != null)
             {
-                return mapper.Map<ProductDTO>(item);
+                var product = mapper.Map<ProductDTO>(item);
+                return ServiceResult<ProductDTO?>.Ok(product);
             }
-            return null;
+            return ServiceResult<ProductDTO?>.NotFound("Product not found.");
         }
 
-        public bool Update(ProductDTO productDTO, int id)
+        public ServiceResult<bool> Update(ProductDTO productDTO, int id)
         {
             Product? product = _productRepository.GetById(id);
 
-            if (product == null) { return false; }
+            if (product == null) { return ServiceResult<bool>.NotFound("Product not found"); }
             productDTO.ProductId = id;
             mapper.Map(productDTO, product);
             product.UpdatedAt = DateTime.UtcNow;
 
             _productRepository.Update(product);
 
-            return true;
+            return ServiceResult<bool>.Ok(true);
         }
 
-        public int GetStock(int productId)
+        public ServiceResult<int> GetStock(int productId)
         {
             var stock = _productRepository.GetStock(productId);
-            return stock.Stock;
+            return ServiceResult<int>.Ok(stock.Stock);
         }
 
-        public bool UpdateStock(int productId, int stock)
+        public ServiceResult<bool> UpdateStock(int productId, int stock)
         {
             var product = _productRepository.GetById(productId);
-            if (product == null) { return false; }
+            if (product == null) { return ServiceResult<bool>.NotFound("Product not found"); }
             _productRepository.UpdateStock(productId, stock);
-            return true;
+            return ServiceResult<bool>.Ok(true);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility")]
-        public string UploadImage(int productId, IFormFile file)
+        public ServiceResult<string> UploadImage(int productId, IFormFile file)
         {
             var product = _productRepository.GetById(productId);
             if (product == null) { throw new Exception("Product not found."); }
@@ -148,7 +150,7 @@ namespace BAL.Concrete
                             productImage.ImagePath = path;
 
                             _productRepository.AddImage(productImage);
-                            return path;
+                            return ServiceResult<string>.Ok(path);
                         }
                     }
                     catch (Exception e)
@@ -167,18 +169,20 @@ namespace BAL.Concrete
             }
         }
 
-        public List<string> GetImages(int productId)
+        public ServiceResult<List<string>> GetImages(int productId)
         {
             var product = _productRepository.GetById(productId);
             if (product == null) { throw new Exception("Product not found."); }
-            return _productRepository.GetImages(productId).Select(x => x.ImagePath).ToList();
+            var images = _productRepository.GetImages(productId).Select(x => x.ImagePath).ToList();
+            return ServiceResult<List<string>>.Ok(images);
         }
 
-        public void DeleteImage(Guid guid)
+        public ServiceResult<bool> DeleteImage(Guid guid)
         {
             _productRepository.DeleteImage(guid);
             var path = String.Concat(guid.ToString(), ".jpg");
             _fileRepository.DeleteFile(path);
+            return ServiceResult<bool>.Ok(true);
         }
 
         private static FileStream ConvertIFormFileToFileStream(IFormFile formFile)

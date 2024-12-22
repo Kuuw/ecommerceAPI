@@ -16,47 +16,50 @@ namespace BAL.Concrete
             _repository = repository;
         }
 
-        public CategoryDTO Add(CategoryDTO categoryDTO)
+        public ServiceResult<CategoryDTO> Add(CategoryDTO categoryDTO)
         {
             var category = mapper.Map<Category>(categoryDTO);
             _repository.Insert(category);
             categoryDTO.CategoryId = category.CategoryId;
-            return categoryDTO;
+            return ServiceResult<CategoryDTO>.Ok(categoryDTO);
         }
 
-        public void Delete(int id)
+        public ServiceResult<bool> Delete(int id)
         {
             var category = _repository.GetById(id);
             if (category != null)
             {
                 _repository.Delete(category);
+                return ServiceResult<bool>.Ok(true);
             }
+            return ServiceResult<bool>.NotFound("Category not found.");
         }
 
-        public List<CategoryDTO> Get()
+        public ServiceResult<List<CategoryDTO>> Get()
         {
             var list = _repository.List();
             List<CategoryDTO> listDTO;
             listDTO = mapper.Map<List<CategoryDTO>>(list).ToList();
-            return listDTO;
+            return ServiceResult<List<CategoryDTO>>.Ok(listDTO);
         }
 
-        public CategoryDTO? GetById(int id)
+        public ServiceResult<CategoryDTO?> GetById(int id)
         {
             var category = _repository.GetById(id);
-            if (category != null) { return mapper.Map<CategoryDTO>(category); }
-            else { return null; }
+            if (category != null) { return ServiceResult<CategoryDTO?>.Ok(mapper.Map<CategoryDTO>(category)); }
+            else { return ServiceResult<CategoryDTO>.NotFound("Category not found."); }
         }
 
-        public void Update(CategoryDTO categoryDTO)
+        public ServiceResult<bool> Update(CategoryDTO categoryDTO)
         {
-            if(categoryDTO.CategoryId == null) { return; }
+            if(categoryDTO.CategoryId == null) { return ServiceResult<bool>.BadRequest("CategoryId cannot be null."); }
             var category = _repository.GetById((int)categoryDTO.CategoryId);
 
-            if (category == null) { return; }
+            if (category == null) { return ServiceResult<bool>.NotFound("Category not found."); }
 
             mapper.Map(categoryDTO, category);
             _repository.Update(category);
+            return ServiceResult<bool>.Ok(true);
         }
     }
 }

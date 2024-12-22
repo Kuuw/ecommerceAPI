@@ -22,7 +22,7 @@ namespace BAL.Concrete
             _userContext = userContext;
         }
 
-        public User Register(UserDTO userData)
+        public ServiceResult<bool> Register(UserDTO userData)
         {
             var user = mapper.Map<User>(userData);
 
@@ -33,33 +33,33 @@ namespace BAL.Concrete
             user.PasswordHash = _bcryptService.HashPassword(user.PasswordHash);
 
             _userRepository.Insert(user);
-            return user;
+            return ServiceResult<bool>.Ok(true);
         }
 
-        public UserDTO? GetByEmail(string email)
+        public ServiceResult<UserDTO?> GetByEmail(string email)
         {
             User? user = _userRepository.Where(x => x.Email == email).FirstOrDefault();
 
-            return mapper.Map<UserDTO>(user);
+            return ServiceResult<UserDTO?>.Ok(mapper.Map<UserDTO>(user));
         }
 
-        public UserDTO? GetById()
+        public ServiceResult<UserDTO?> GetById()
         {
             User? user = _userRepository.GetById(_userContext.UserId);
             
-            return mapper.Map<UserDTO>(user);
+            return ServiceResult<UserDTO?>.Ok(mapper.Map<UserDTO>(user));
         }
-        public bool Update(UserDTO userData)
+        public ServiceResult<bool> Update(UserDTO userData)
         {
             userData.UserId = _userContext.UserId;
             userData.Role = _userContext.Role;
             User? user = _userRepository.GetById((int)userData.UserId!);
-            if (user == null) { return false; }
+            if (user == null) { return ServiceResult<bool>.NotFound("User not found."); }
             userData.Password = _bcryptService.HashPassword(userData.Password);
             mapper.Map(userData, user);
 
             _userRepository.Update(user);
-            return true;
+            return ServiceResult<bool>.Ok(true);
         }
     }
 }

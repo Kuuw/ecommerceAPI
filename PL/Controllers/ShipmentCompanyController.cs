@@ -23,16 +23,24 @@ namespace PL.Controllers
         [AllowAnonymous]
         public IActionResult ShipmentCompany()
         {
-            var shipmentCompanies = _shipmentCompanyService.Get();
-            return Ok(shipmentCompanies);
+            var result = _shipmentCompanyService.Get();
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+            return StatusCode(result.StatusCode, result.ErrorMessage);
         }
 
         [HttpGet("{id}")]
         [AllowAnonymous]
         public IActionResult ShipmentCompany(int id)
         {
-            var shipmentComapny = _shipmentCompanyService.GetById(id);
-            return Ok(shipmentComapny);
+            var result = _shipmentCompanyService.GetById(id);
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+            return StatusCode(result.StatusCode, result.ErrorMessage);
         }
 
         [HttpPost]
@@ -40,8 +48,12 @@ namespace PL.Controllers
         [ValidateModel]
         public IActionResult ShipmentCompany(ShipmentCompanyDTO shipmentCompanyDTO)
         {
-            _shipmentCompanyService.Add(shipmentCompanyDTO);
-            return Ok();
+            var result = _shipmentCompanyService.Add(shipmentCompanyDTO);
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+            return StatusCode(result.StatusCode, result.ErrorMessage);
         }
 
         [HttpPut("{id}")]
@@ -50,16 +62,24 @@ namespace PL.Controllers
         public IActionResult ShipmentCompany(int id, ShipmentCompanyDTO shipmentCompanyDTO)
         {
             shipmentCompanyDTO.ShipmentCompanyId = id;
-            _shipmentCompanyService.Update(shipmentCompanyDTO);
-            return Ok();
+            var result = _shipmentCompanyService.Update(shipmentCompanyDTO);
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+            return StatusCode(result.StatusCode, result.ErrorMessage);
         }
 
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
         public IActionResult ShipmentCompanyDelete(int id)
         {
-            _shipmentCompanyService.Delete(id);
-            return Ok();
+            var result = _shipmentCompanyService.Delete(id);
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+            return StatusCode(result.StatusCode, result.ErrorMessage);
         }
     }
 }

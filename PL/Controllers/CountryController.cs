@@ -23,16 +23,24 @@ namespace PL.Controllers
         [AllowAnonymous]
         public IActionResult Country()
         {
-            var countries = _countryService.Get();
-            return Ok(countries);
+            var result = _countryService.Get();
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+            return StatusCode(result.StatusCode, result.ErrorMessage);
         }
 
         [HttpGet("{id}")]
         [AllowAnonymous]
         public IActionResult Country(int id)
         {
-            var country = _countryService.GetById(id);
-            return Ok(country);
+            var result = _countryService.GetById(id);
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+            return StatusCode(result.StatusCode, result.ErrorMessage);
         }
 
         [HttpPost]
@@ -40,8 +48,12 @@ namespace PL.Controllers
         [ValidateModel]
         public IActionResult Country(CountryDTO countryDTO)
         {
-            _countryService.Add(countryDTO);
-            return Ok();
+            var result = _countryService.Add(countryDTO);
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+            return StatusCode(result.StatusCode, result.ErrorMessage);
         }
 
         [HttpPut("{id}")]
@@ -50,16 +62,24 @@ namespace PL.Controllers
         public IActionResult Country(int id, CountryDTO countryDTO)
         {
             countryDTO.CountryId = id;
-            _countryService.Update(countryDTO);
-            return Ok();
+            var result = _countryService.Update(countryDTO);
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+            return StatusCode(result.StatusCode, result.ErrorMessage);
         }
 
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
         public IActionResult CountryDelete(int id)
         {
-            _countryService.Delete(id);
-            return Ok();
+            var result = _countryService.Delete(id);
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+            return StatusCode(result.StatusCode, result.ErrorMessage);
         }
     }
 }

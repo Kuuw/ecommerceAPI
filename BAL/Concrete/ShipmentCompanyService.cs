@@ -16,24 +16,26 @@ namespace BAL.Concrete
             _repository = repository;
         }
 
-        public ShipmentCompanyDTO Add(ShipmentCompanyDTO shipmentCompanyDTO)
+        public ServiceResult<ShipmentCompanyDTO> Add(ShipmentCompanyDTO shipmentCompanyDTO)
         {
             var shipmentCompany = mapper.Map<ShipmentCompany>(shipmentCompanyDTO);
             _repository.Insert(shipmentCompany);
             shipmentCompanyDTO.ShipmentCompanyId = shipmentCompany.ShipmentCompanyId;
-            return shipmentCompanyDTO;
+            return ServiceResult<ShipmentCompanyDTO>.Ok(shipmentCompanyDTO);
         }
 
-        public void Delete(int id)
+        public ServiceResult<bool> Delete(int id)
         {
             var shipmentCompany = _repository.GetById(id);
             if (shipmentCompany != null)
             {
                 _repository.Delete(shipmentCompany);
+                return ServiceResult<bool>.Ok(true);
             }
+            return ServiceResult<bool>.NotFound("Shipment company not found.");
         }
 
-        public List<ShipmentCompanyDTO> Get()
+        public ServiceResult<List<ShipmentCompanyDTO>> Get()
         {
             var listDTO = new List<ShipmentCompanyDTO>();
             var list = _repository.List();
@@ -41,25 +43,33 @@ namespace BAL.Concrete
             {
                 listDTO.Add(mapper.Map<ShipmentCompanyDTO>(list[i]));
             }
-            return listDTO;
+            return ServiceResult<List<ShipmentCompanyDTO>>.Ok(listDTO);
         }
 
-        public ShipmentCompanyDTO? GetById(int id)
+        public ServiceResult<ShipmentCompanyDTO?> GetById(int id)
         {
             var shipmentCompany = _repository.GetById(id);
-            if (shipmentCompany != null) { return mapper.Map<ShipmentCompanyDTO>(shipmentCompany); }
-            else { return null; }
+            if (shipmentCompany != null) 
+            {
+                var shipmentCompanyDto = mapper.Map<ShipmentCompanyDTO>(shipmentCompany);
+                return ServiceResult<ShipmentCompanyDTO?>.Ok(shipmentCompanyDto);
+            }
+            else 
+            {
+                return ServiceResult<ShipmentCompanyDTO?>.NotFound("Shipment company not found.");
+            }
         }
 
-        public void Update(ShipmentCompanyDTO shipmentCompanyDTO)
+        public ServiceResult<bool> Update(ShipmentCompanyDTO shipmentCompanyDTO)
         {
-            if (shipmentCompanyDTO.ShipmentCompanyId == null) { return; }
+            if (shipmentCompanyDTO.ShipmentCompanyId == null) { return ServiceResult<bool>.BadRequest("ShipmentCompanyId cannot be null."); }
             var shipmentCompany = _repository.GetById((int)shipmentCompanyDTO.ShipmentCompanyId);
 
-            if (shipmentCompany == null) { return; }
+            if (shipmentCompany == null) { return ServiceResult<bool>.NotFound("Shipment Company not found."); }
 
             mapper.Map(shipmentCompanyDTO, shipmentCompany);
             _repository.Update(shipmentCompany);
+            return ServiceResult<bool>.Ok(true);
         }
     }
 }

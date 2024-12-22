@@ -1,12 +1,13 @@
 ﻿using Entities.DTO;
+using Entities.Models;
 
 namespace BAL.Abstract
 {
     public interface IOrderService
     {
-        public List<OrderDTO> Get();
-        public OrderDTO? GetById(int id);
-        public void Delete(int id);
-        public OrderDTO Add(OrderDTO orderDTO);
+        public ServiceResult<List<OrderDTO>> Get();
+        public ServiceResult<OrderDTO?> GetById(int id);
+        public ServiceResult<bool> Delete(int id);
+        public ServiceResult<OrderDTO> Add(OrderDTO orderDTO);
     }
 }

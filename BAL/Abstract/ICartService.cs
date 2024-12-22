@@ -1,11 +1,12 @@
 ﻿using Entities.DTO;
+using Entities.Models;
 
 namespace BAL.Abstract
 {
     public interface ICartService
     {
-        public CartDTO Get();
-        public void Update(CartItemDTO cartItemDTO);
-        public void Delete(int productId);
+        public ServiceResult<CartDTO> Get();
+        public ServiceResult<bool> Update(CartItemDTO cartItemDTO);
+        public ServiceResult<bool> Delete(int productId);
     }
 }

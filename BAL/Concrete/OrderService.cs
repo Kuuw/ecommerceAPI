@@ -19,34 +19,36 @@ namespace BAL.Concrete
             _userContext = userContext;
         }
 
-        public OrderDTO Add(OrderDTO orderDTO)
+        public ServiceResult<OrderDTO> Add(OrderDTO orderDTO)
         {
             orderDTO.OrderId = null;
             var order = mapper.Map<Order>(orderDTO);
             order.UserId = _userContext.UserId;
             _repository.Insert(order);
 
-            return orderDTO;
+            return ServiceResult<OrderDTO>.Ok(orderDTO);
         }
 
-        public void Delete(int id)
+        public ServiceResult<bool> Delete(int id)
         {
             var order = _repository.GetById(id);
             if (order != null)
             {
                 _repository.Delete(order);
+                return ServiceResult<bool>.Ok(true);
             }
+            return ServiceResult<bool>.NotFound("Order not found.");
         }
 
-        public List<OrderDTO> Get()
+        public ServiceResult<List<OrderDTO>> Get()
         {
             var orders = _repository.Get(_userContext.UserId);
             List<OrderDTO> ordersDTO = mapper.Map<List<OrderDTO>>(orders);
 
-            return ordersDTO;
+            return ServiceResult<List<OrderDTO>>.Ok(ordersDTO);
         }
 
-        public OrderDTO? GetById(int id)
+        public ServiceResult<OrderDTO?> GetById(int id)
         {
             var orderDTO = new OrderDTO();
             var order = _repository.GetById(id);
@@ -61,9 +63,9 @@ namespace BAL.Concrete
                 }
                 orderDTO.OrderItems = orderItemsDTO;
 
-                return orderDTO;
+                return ServiceResult<OrderDTO?>.Ok(orderDTO);
             }
-            return null;
+            return ServiceResult<OrderDTO?>.NotFound("Order not found.");
         }
     }
 }

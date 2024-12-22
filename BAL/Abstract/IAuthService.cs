@@ -1,9 +1,10 @@
 ﻿using Entities.DTO;
+using Entities.Models;
 
 namespace BAL.Abstract
 {
     public interface IAuthService
     {
-        public string? Authenticate(UserLogin userLogin);
+        public ServiceResult<AuthenticateResponse?> Authenticate(UserLogin userLogin);
     }
 }

@@ -27,33 +27,36 @@ namespace PL.Controllers
         [ValidateModel]
         public IActionResult Register(UserDTO userData)
         {
-            var user = _userService.Register(userData);
-            return Ok(user);
+            var result = _userService.Register(userData);
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+            return StatusCode(result.StatusCode, result.ErrorMessage);
         }
 
         [HttpPost("Login")]
         [AllowAnonymous]
         public IActionResult Login(UserLogin userLogin)
         {
-            var token = _authService.Authenticate(userLogin);
-            if (token == null)
+            var result = _authService.Authenticate(userLogin);
+            if (result.Success)
             {
-                return NotFound();
+                return Ok(result.Data);
             }
-
-            var user = _userService.GetByEmail(userLogin.Email);
-            var authenticateResponse = new AuthenticateResponse(user!, token);
-
-            return Ok(authenticateResponse);
+            return StatusCode(result.StatusCode, result.ErrorMessage);
         }
 
         [HttpGet]
         [Authorize]
         public IActionResult UserGet()
         {
-            var user = _userService.GetById();
-
-            return Ok(user);
+            var result = _userService.GetById();
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+            return StatusCode(result.StatusCode, result.ErrorMessage);
         }
 
         [HttpPut]
@@ -61,13 +64,12 @@ namespace PL.Controllers
         [ValidateModel]
         public IActionResult UserPut(UserDTO userDTO)
         {
-            var user = _userService.GetById();
-            if (user == null)
+            var result = _userService.Update(userDTO);
+            if (result.Success)
             {
-                return NotFound();
+                return Ok(result.Data);
             }
-            _userService.Update(userDTO);
-            return Ok();
+            return StatusCode(result.StatusCode, result.ErrorMessage);
         }
     }
 }

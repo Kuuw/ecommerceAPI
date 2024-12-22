@@ -23,18 +23,24 @@ namespace PL.Controllers
         [Authorize]
         public IActionResult Address()
         {
-            var addresses = _addressService.GetByUserId();
-
-            return Ok(addresses);
+            var result = _addressService.GetByUserId();
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+            return StatusCode(result.StatusCode, result.ErrorMessage);
         }
 
         [HttpGet("{id}")]
         [Authorize]
         public IActionResult AddressById(int id)
         {
-            var addresses = _addressService.GetByAddressId(id);
-
-            return Ok(addresses);
+            var result = _addressService.GetByAddressId(id);
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+            return StatusCode(result.StatusCode, result.ErrorMessage);
         }
 
         [HttpPost]
@@ -42,18 +48,24 @@ namespace PL.Controllers
         [ValidateModel]
         public IActionResult Address(AddressDTO addressDTO)
         {
-            var address = _addressService.Add(addressDTO);
-            return Ok(address);
+            var result = _addressService.Add(addressDTO);
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+            return StatusCode(result.StatusCode, result.ErrorMessage);
         }
 
         [HttpDelete("{id}")]
         [Authorize]
         public IActionResult Address(int id)
         {
-            var success = _addressService.Delete(id);
-
-            if (success) { return Ok(); }
-            else { return BadRequest(); }
+            var result = _addressService.Delete(id);
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+            return StatusCode(result.StatusCode, result.ErrorMessage);
         }
 
         [HttpPut("{id}")]
@@ -61,10 +73,12 @@ namespace PL.Controllers
         [ValidateModel]
         public IActionResult Address(int id, AddressDTO addressDTO)
         {
-            var success = _addressService.Update(addressDTO);
-
-            if (success) { return Ok(); }
-            else { return BadRequest(); }
+            var result = _addressService.Update(addressDTO);
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+            return StatusCode(result.StatusCode, result.ErrorMessage);
         }
     }
 }

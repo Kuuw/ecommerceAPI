@@ -5,10 +5,10 @@ namespace BAL.Abstract
 {
     public interface IAddressService
     {
-        public List<AddressDTO> GetByUserId();
-        public AddressDTO? GetByAddressId(int AddressId);
-        public Address Add(AddressDTO addressDTO);
-        public bool Delete(int addressID);
-        public bool Update(AddressDTO addressDTO);
+        public ServiceResult<List<AddressDTO>> GetByUserId();
+        public ServiceResult<AddressDTO?> GetByAddressId(int AddressId);
+        public ServiceResult<bool> Add(AddressDTO addressDTO);
+        public ServiceResult<bool> Delete(int addressID);
+        public ServiceResult<bool> Update(AddressDTO addressDTO);
     }
 }

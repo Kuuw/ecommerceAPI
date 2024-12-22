@@ -19,17 +19,17 @@ namespace BAL.Concrete
             _userContext = userContext;
         }
 
-        public CartDTO Get()
+        public ServiceResult<CartDTO> Get()
         {
             var items = _repository.ListWithProductData(_userContext.UserId);
             var itemsDTO = new CartDTO();
             List<CartItemDTO> cartItemDTO = new();
             mapper.Map(items, cartItemDTO);
             itemsDTO.Cart = cartItemDTO;
-            return itemsDTO;
+            return ServiceResult<CartDTO>.Ok(itemsDTO);
         }
 
-        public void Update(CartItemDTO cartItemDTO)
+        public ServiceResult<bool> Update(CartItemDTO cartItemDTO)
         {
             var cartItem = _repository.Where(x => x.UserId == _userContext.UserId && x.ProductId == cartItemDTO.ProductId).FirstOrDefault();
             if (cartItem != null) 
@@ -43,15 +43,18 @@ namespace BAL.Concrete
                 newCartItem.UserId = _userContext.UserId;
                 _repository.Insert(newCartItem);
             }
+            return ServiceResult<bool>.Ok(true);
         }
 
-        public void Delete(int productId) 
+        public ServiceResult<bool> Delete(int productId) 
         {
             var cartItem = _repository.Where(x => x.UserId == _userContext.UserId && x.ProductId == productId).FirstOrDefault();
             if (cartItem != null) 
             {
                 _repository.Delete(cartItem);
+                return ServiceResult<bool>.Ok(true);
             }
+            return ServiceResult<bool>.NotFound("Item not found.");
         }
     }
 }

@@ -23,16 +23,24 @@ namespace PL.Controllers
         [AllowAnonymous]
         public IActionResult Category()
         {
-            var categories = _categoryService.Get();
-            return Ok(categories);
+            var result = _categoryService.Get();
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+            return StatusCode(result.StatusCode, result.ErrorMessage);
         }
 
         [HttpGet("{id}")]
         [AllowAnonymous]
         public IActionResult Category(int id)
         {
-            var category = _categoryService.GetById(id);
-            return Ok(category);
+            var result = _categoryService.GetById(id);
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+            return StatusCode(result.StatusCode, result.ErrorMessage);
         }
 
         [HttpPost]
@@ -40,8 +48,12 @@ namespace PL.Controllers
         [ValidateModel]
         public IActionResult Category(CategoryDTO categoryDTO)
         {
-            _categoryService.Add(categoryDTO);
-            return Ok();
+            var result = _categoryService.Add(categoryDTO);
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+            return StatusCode(result.StatusCode, result.ErrorMessage);
         }
 
         [HttpPut("{id}")]
@@ -50,16 +62,24 @@ namespace PL.Controllers
         public IActionResult Category(int id, CategoryDTO categoryDTO)
         {
             categoryDTO.CategoryId = id;
-            _categoryService.Update(categoryDTO);
-            return Ok();
+            var result = _categoryService.Update(categoryDTO);
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+            return StatusCode(result.StatusCode, result.ErrorMessage);
         }
 
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
         public IActionResult CategoryDelete(int id)
         {
-            _categoryService.Delete(id);
-            return Ok();
+            var result = _categoryService.Delete(id);
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+            return StatusCode(result.StatusCode, result.ErrorMessage);
         }
     }
 }

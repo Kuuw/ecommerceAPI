@@ -1,4 +1,5 @@
 ﻿using Entities.DTO;
+using Entities.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +10,10 @@ namespace BAL.Abstract
 {
     public interface ICountryService
     {
-        public List<CountryDTO> Get();
-        public CountryDTO? GetById(int id);
-        public void Update(CountryDTO countryDTO);
-        public void Delete(int id);
-        public CountryDTO Add(CountryDTO countryDTO);
+        public ServiceResult<List<CountryDTO>> Get();
+        public ServiceResult<CountryDTO?> GetById(int id);
+        public ServiceResult<bool> Update(CountryDTO countryDTO);
+        public ServiceResult<bool> Delete(int id);
+        public ServiceResult<CountryDTO> Add(CountryDTO countryDTO);
     }
 }

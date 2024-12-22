@@ -23,24 +23,35 @@ namespace PL.Controllers
         [HttpGet]
         public IActionResult Order()
         {
-            var orders = _orderService.Get();
-            return Ok(orders);
+            var result = _orderService.Get();
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+            return StatusCode(result.StatusCode, result.ErrorMessage);
         }
 
         [HttpGet("{id}")]
         public IActionResult Order(int id)
         {
-            var order = _orderService.GetById(id);
-            if (order == null) { return BadRequest(); }
-            return Ok(order);
+            var result = _orderService.GetById(id);
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+            return StatusCode(result.StatusCode, result.ErrorMessage);
         }
 
         [HttpPost]
         [ValidateModel]
         public IActionResult Order(OrderDTO orderDTO)
         {
-            _orderService.Add(orderDTO);
-            return Ok();
+            var result = _orderService.Add(orderDTO);
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+            return StatusCode(result.StatusCode, result.ErrorMessage);
         }
     }
 }

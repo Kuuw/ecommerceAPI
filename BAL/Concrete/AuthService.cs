@@ -17,12 +17,14 @@ namespace BAL.Concrete
         private readonly IConfiguration _config;
         private readonly IUserRepository _userRepository;
         private readonly IBcryptService _bcryptService;
+        private readonly IUserService _userService;
 
-        public AuthService(IConfiguration config, IUserRepository repository, IBcryptService bcrypt)
+        public AuthService(IConfiguration config, IUserRepository repository, IBcryptService bcrypt, IUserService userService)
         {
             _config = config;
             _userRepository = repository;
             _bcryptService = bcrypt;
+            _userService = userService;
         }
 
         private string Generate(User user)
@@ -51,16 +53,21 @@ namespace BAL.Concrete
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        public string? Authenticate(UserLogin userLogin)
+        public ServiceResult<AuthenticateResponse?> Authenticate(UserLogin userLogin)
         {
             var user = _userRepository.Where(x => x.Email == userLogin.Email.ToLower()).FirstOrDefault();
             if (user == null) { return null; }
 
             if (_bcryptService.VerifyPassword(userLogin.Password, user.PasswordHash))
             {
-                return Generate(user);
+                var token = Generate(user);
+                var userData = _userService.GetByEmail(userLogin.Email).Data;
+
+                var response = new AuthenticateResponse(userData!, token);
+
+                return ServiceResult<AuthenticateResponse?>.Ok(response);
             }
-            return null;
+            return ServiceResult<AuthenticateResponse?>.BadRequest("Email or password is invalid.");
         }
     }
 }
