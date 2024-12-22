@@ -16,6 +16,7 @@ namespace PL.Middlewares
             var user = context.User;
             
             var userIdClaim = user.FindFirst("UserId");
+            var roleClaim = user.FindFirst("Role");
             if (userIdClaim != null && int.TryParse(userIdClaim.Value, out var userId))
             {
                 userContext.UserId = userId;
@@ -23,6 +24,15 @@ namespace PL.Middlewares
             else
             {
                 Console.WriteLine("UserId claim not found or invalid.");
+            }
+
+            if (roleClaim != null)
+            {
+                userContext.Role = roleClaim.Value;
+            }
+            else
+            {
+                Console.WriteLine("Role claim not found.");
             }
 
             await _next(context);

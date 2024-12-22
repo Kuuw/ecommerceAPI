@@ -52,6 +52,7 @@ namespace BAL.Concrete
         public bool Update(UserDTO userData)
         {
             userData.UserId = _userContext.UserId;
+            userData.Role = _userContext.Role;
             User? user = _userRepository.GetById((int)userData.UserId!);
             if (user == null) { return false; }
             userData.Password = _bcryptService.HashPassword(userData.Password);

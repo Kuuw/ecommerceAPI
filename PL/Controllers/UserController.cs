@@ -61,13 +61,11 @@ namespace PL.Controllers
         [ValidateModel]
         public IActionResult UserPut(UserDTO userDTO)
         {
-            var userRole = User.FindFirst(ClaimTypes.Role)!.Value;
             var user = _userService.GetById();
             if (user == null)
             {
                 return NotFound();
             }
-            userDTO.Role = userRole;
             _userService.Update(userDTO);
             return Ok();
         }
