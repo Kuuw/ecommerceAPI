@@ -1,4 +1,5 @@
 ﻿using Entities.Context.Abstract;
+using System.Security.Claims;
 
 namespace PL.Middlewares
 {
@@ -16,7 +17,7 @@ namespace PL.Middlewares
             var user = context.User;
             
             var userIdClaim = user.FindFirst("UserId");
-            var roleClaim = user.FindFirst("Role");
+            var roleClaim = user.FindFirst(ClaimTypes.Role);
             if (userIdClaim != null && int.TryParse(userIdClaim.Value, out var userId))
             {
                 userContext.UserId = userId;
