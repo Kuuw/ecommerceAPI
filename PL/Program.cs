@@ -1,23 +1,19 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using Asp.Versioning;
-using PL.Middlewares;
-using Microsoft.OpenApi.Models;
-using Microsoft.Extensions.DependencyInjection;
 using BAL.Abstract;
 using BAL.Concrete;
+using DAL;
 using DAL.Abstract;
 using DAL.Concrete;
-using DAL;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using FluentValidation.AspNetCore;
+using Entities.Context.Abstract;
+using Entities.Context.Concrete;
 using FluentValidation;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using PL.FluentValidation;
-using System;
-using Entities.Models;
-using Entities.DTO;
+using PL.Middlewares;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
@@ -79,6 +75,7 @@ builder.Services.AddScoped<IShipmentCompanyRepository, ShipmentCompanyRepository
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IFileRepository>(provider => new FileRepository(config["Azurite:connectionString"]!, config["Azurite:containerName"]!));
 
+builder.Services.AddScoped<IUserContext, UserContext>();
 
 builder.Services
     .AddAuthentication(x =>
@@ -130,11 +127,11 @@ builder.Services.AddSwaggerGen(setup =>
 
 builder.Services.AddCors(options =>
 {
-options.AddPolicy("AllowLocalhost",
-    builder => builder.WithOrigins("http://localhost:5173", "https://localhost:5173")
-                      .AllowAnyMethod()
-                      .AllowAnyHeader()
-                      .AllowCredentials());
+    options.AddPolicy("AllowLocalhost",
+        builder => builder.WithOrigins("http://localhost:5173", "https://localhost:5173")
+                          .AllowAnyMethod()
+                          .AllowAnyHeader()
+                          .AllowCredentials());
 });
 
 builder.Services.AddAuthorization();
@@ -154,6 +151,8 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseMiddleware<UserContextMiddleware>(); // This needs to be after UseAuthentication and UseAuthorization because it needs to access the User object.
 
 app.MapControllers();
 

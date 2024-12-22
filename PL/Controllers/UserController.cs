@@ -51,8 +51,7 @@ namespace PL.Controllers
         [Authorize]
         public IActionResult UserGet()
         {
-            var userId = int.Parse(User.FindFirst("UserId")?.Value!);
-            var user = _userService.GetById(userId);
+            var user = _userService.GetById();
 
             return Ok(user);
         }
@@ -62,14 +61,12 @@ namespace PL.Controllers
         [ValidateModel]
         public IActionResult UserPut(UserDTO userDTO)
         {
-            var userId = int.Parse(User.FindFirst("UserId")?.Value!);
             var userRole = User.FindFirst(ClaimTypes.Role)!.Value;
-            var user = _userService.GetById(userId);
+            var user = _userService.GetById();
             if (user == null)
             {
                 return NotFound();
             }
-            userDTO.UserId = userId;
             userDTO.Role = userRole;
             _userService.Update(userDTO);
             return Ok();

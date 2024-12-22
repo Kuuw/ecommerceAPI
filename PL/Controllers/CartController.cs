@@ -22,24 +22,21 @@ namespace PL.Controllers
         [HttpGet]
         public IActionResult Cart()
         {
-            var userId = int.Parse(User.FindFirst("UserId")?.Value!);
-            var items = _cartService.Get(userId);
+            var items = _cartService.Get();
             return Ok(items);
         }
 
         [HttpPut]
         public IActionResult Cart(CartItemDTO cartItemDTO)
         {
-            var userId = int.Parse(User.FindFirst("UserId")?.Value!);
-            _cartService.Update(userId, cartItemDTO);
+            _cartService.Update(cartItemDTO);
             return Ok();
         }
 
         [HttpDelete("{productId}")]
         public IActionResult Cart(int productId)
         {
-            var userId = int.Parse(User.FindFirst("UserId")?.Value!);
-            _cartService.Delete(userId, productId);
+            _cartService.Delete(productId);
             return Ok();
         }
     }

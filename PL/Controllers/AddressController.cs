@@ -23,8 +23,7 @@ namespace PL.Controllers
         [Authorize]
         public IActionResult Address()
         {
-            var userId = int.Parse(User.FindFirst("UserId")?.Value!);
-            var addresses = _addressService.GetByUserId(userId);
+            var addresses = _addressService.GetByUserId();
 
             return Ok(addresses);
         }
@@ -33,8 +32,7 @@ namespace PL.Controllers
         [Authorize]
         public IActionResult AddressById(int id)
         {
-            var userId = int.Parse(User.FindFirst("UserId")?.Value!);
-            var addresses = _addressService.GetByAddressId(id, userId);
+            var addresses = _addressService.GetByAddressId(id);
 
             return Ok(addresses);
         }
@@ -44,9 +42,6 @@ namespace PL.Controllers
         [ValidateModel]
         public IActionResult Address(AddressDTO addressDTO)
         {
-            var userId = int.Parse(User.FindFirst("UserId")?.Value!);
-            addressDTO.UserId = userId;
-
             var address = _addressService.Add(addressDTO);
             return Ok(address);
         }
@@ -55,8 +50,7 @@ namespace PL.Controllers
         [Authorize]
         public IActionResult Address(int id)
         {
-            int userId = int.Parse(User.FindFirst("UserId")?.Value!);
-            var success = _addressService.Delete(id, userId);
+            var success = _addressService.Delete(id);
 
             if (success) { return Ok(); }
             else { return BadRequest(); }
@@ -67,10 +61,7 @@ namespace PL.Controllers
         [ValidateModel]
         public IActionResult Address(int id, AddressDTO addressDTO)
         {
-            int userId = int.Parse(User.FindFirst("UserId")?.Value!);
-            addressDTO.AddressId = id;
-            addressDTO.UserId = userId;
-            var success = _addressService.Update(addressDTO, userId);
+            var success = _addressService.Update(addressDTO);
 
             if (success) { return Ok(); }
             else { return BadRequest(); }

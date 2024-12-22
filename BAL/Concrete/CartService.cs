@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BAL.Abstract;
 using DAL.Abstract;
+using Entities.Context.Abstract;
 using Entities.DTO;
 using Entities.Models;
 
@@ -10,15 +11,17 @@ namespace BAL.Concrete
     {
         private readonly ICartRepository _repository;
         private readonly Mapper mapper = MapperConfig.InitializeAutomapper();
+        private readonly IUserContext _userContext;
 
-        public CartService(ICartRepository repository)
+        public CartService(ICartRepository repository, IUserContext userContext)
         {
             _repository = repository;
+            _userContext = userContext;
         }
 
-        public CartDTO Get(int userId)
+        public CartDTO Get()
         {
-            var items = _repository.ListWithProductData(userId);
+            var items = _repository.ListWithProductData(_userContext.UserId);
             var itemsDTO = new CartDTO();
             List<CartItemDTO> cartItemDTO = new();
             mapper.Map(items, cartItemDTO);
@@ -26,9 +29,9 @@ namespace BAL.Concrete
             return itemsDTO;
         }
 
-        public void Update(int userId, CartItemDTO cartItemDTO)
+        public void Update(CartItemDTO cartItemDTO)
         {
-            var cartItem = _repository.Where(x => x.UserId == userId && x.ProductId == cartItemDTO.ProductId).FirstOrDefault();
+            var cartItem = _repository.Where(x => x.UserId == _userContext.UserId && x.ProductId == cartItemDTO.ProductId).FirstOrDefault();
             if (cartItem != null) 
             {
                 mapper.Map(cartItemDTO, cartItem);
@@ -37,14 +40,14 @@ namespace BAL.Concrete
             else
             {
                 var newCartItem = mapper.Map<CartItem>(cartItemDTO);
-                newCartItem.UserId = userId;
+                newCartItem.UserId = _userContext.UserId;
                 _repository.Insert(newCartItem);
             }
         }
 
-        public void Delete(int userId, int productId) 
+        public void Delete(int productId) 
         {
-            var cartItem = _repository.Where(x => x.UserId == userId && x.ProductId == productId).FirstOrDefault();
+            var cartItem = _repository.Where(x => x.UserId == _userContext.UserId && x.ProductId == productId).FirstOrDefault();
             if (cartItem != null) 
             {
                 _repository.Delete(cartItem);

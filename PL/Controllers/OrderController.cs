@@ -23,16 +23,14 @@ namespace PL.Controllers
         [HttpGet]
         public IActionResult Order()
         {
-            var userId = int.Parse(User.FindFirst("UserId")?.Value!);
-            var orders = _orderService.Get(userId);
+            var orders = _orderService.Get();
             return Ok(orders);
         }
 
         [HttpGet("{id}")]
         public IActionResult Order(int id)
         {
-            var userId = int.Parse(User.FindFirst("UserId")?.Value!);
-            var order = _orderService.GetById(id, userId);
+            var order = _orderService.GetById(id);
             if (order == null) { return BadRequest(); }
             return Ok(order);
         }
@@ -41,8 +39,7 @@ namespace PL.Controllers
         [ValidateModel]
         public IActionResult Order(OrderDTO orderDTO)
         {
-            var userId = int.Parse(User.FindFirst("UserId")?.Value!);
-            _orderService.Add(orderDTO, userId);
+            _orderService.Add(orderDTO);
             return Ok();
         }
     }

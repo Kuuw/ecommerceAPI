@@ -4,9 +4,9 @@ namespace BAL.Abstract
 {
     public interface IOrderService
     {
-        public List<OrderDTO> Get(int userId);
-        public OrderDTO? GetById(int id, int userId);
+        public List<OrderDTO> Get();
+        public OrderDTO? GetById(int id);
         public void Delete(int id);
-        public OrderDTO Add(OrderDTO orderDTO, int userId);
+        public OrderDTO Add(OrderDTO orderDTO);
     }
 }

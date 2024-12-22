@@ -7,7 +7,7 @@ namespace BAL.Abstract
     {
         public User Register(UserDTO userData);
         public UserDTO? GetByEmail(string email);
-        public UserDTO? GetById(int id);
+        public UserDTO? GetById();
         public bool Update(UserDTO userData);
     }
 }
