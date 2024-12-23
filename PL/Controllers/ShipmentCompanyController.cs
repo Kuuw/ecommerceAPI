@@ -10,7 +10,7 @@ namespace PL.Controllers
     [ApiController]
     [Route("[controller]")]
     [ApiVersion("1.0")]
-    public class ShipmentCompanyController : ControllerBase
+    public class ShipmentCompanyController : BaseController
     {
         private readonly IShipmentCompanyService _shipmentCompanyService;
 

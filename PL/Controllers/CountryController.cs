@@ -10,7 +10,7 @@ namespace PL.Controllers
     [ApiController]
     [Route("[controller]")]
     [ApiVersion("1.0")]
-    public class CountryController : ControllerBase
+    public class CountryController : BaseController
     {
         private readonly ICountryService _countryService;
 
@@ -24,11 +24,7 @@ namespace PL.Controllers
         public IActionResult Country()
         {
             var result = _countryService.Get();
-            if (result.Success)
-            {
-                return Ok(result.Data);
-            }
-            return StatusCode(result.StatusCode, result.ErrorMessage);
+            return HandleServiceResult(result);
         }
 
         [HttpGet("{id}")]
@@ -36,11 +32,7 @@ namespace PL.Controllers
         public IActionResult Country(int id)
         {
             var result = _countryService.GetById(id);
-            if (result.Success)
-            {
-                return Ok(result.Data);
-            }
-            return StatusCode(result.StatusCode, result.ErrorMessage);
+            return HandleServiceResult(result);
         }
 
         [HttpPost]
@@ -49,11 +41,7 @@ namespace PL.Controllers
         public IActionResult Country(CountryDTO countryDTO)
         {
             var result = _countryService.Add(countryDTO);
-            if (result.Success)
-            {
-                return Ok(result.Data);
-            }
-            return StatusCode(result.StatusCode, result.ErrorMessage);
+            return HandleServiceResult(result);
         }
 
         [HttpPut("{id}")]
@@ -63,11 +51,7 @@ namespace PL.Controllers
         {
             countryDTO.CountryId = id;
             var result = _countryService.Update(countryDTO);
-            if (result.Success)
-            {
-                return Ok(result.Data);
-            }
-            return StatusCode(result.StatusCode, result.ErrorMessage);
+            return HandleServiceResult(result);
         }
 
         [HttpDelete("{id}")]
@@ -75,11 +59,7 @@ namespace PL.Controllers
         public IActionResult CountryDelete(int id)
         {
             var result = _countryService.Delete(id);
-            if (result.Success)
-            {
-                return Ok(result.Data);
-            }
-            return StatusCode(result.StatusCode, result.ErrorMessage);
+            return HandleServiceResult(result);
         }
     }
 }

@@ -10,7 +10,7 @@ namespace PL.Controllers
     [ApiController]
     [Route("[controller]")]
     [ApiVersion("1.0")]
-    public class AddressController : ControllerBase
+    public class AddressController : BaseController
     {
         private readonly IAddressService _addressService;
 
@@ -24,11 +24,7 @@ namespace PL.Controllers
         public IActionResult Address()
         {
             var result = _addressService.GetByUserId();
-            if (result.Success)
-            {
-                return Ok(result.Data);
-            }
-            return StatusCode(result.StatusCode, result.ErrorMessage);
+            return HandleServiceResult(result);
         }
 
         [HttpGet("{id}")]
@@ -36,11 +32,7 @@ namespace PL.Controllers
         public IActionResult AddressById(int id)
         {
             var result = _addressService.GetByAddressId(id);
-            if (result.Success)
-            {
-                return Ok(result.Data);
-            }
-            return StatusCode(result.StatusCode, result.ErrorMessage);
+            return HandleServiceResult(result);
         }
 
         [HttpPost]
@@ -49,11 +41,7 @@ namespace PL.Controllers
         public IActionResult Address(AddressDTO addressDTO)
         {
             var result = _addressService.Add(addressDTO);
-            if (result.Success)
-            {
-                return Ok(result.Data);
-            }
-            return StatusCode(result.StatusCode, result.ErrorMessage);
+            return HandleServiceResult(result);
         }
 
         [HttpDelete("{id}")]
@@ -61,11 +49,7 @@ namespace PL.Controllers
         public IActionResult Address(int id)
         {
             var result = _addressService.Delete(id);
-            if (result.Success)
-            {
-                return Ok(result.Data);
-            }
-            return StatusCode(result.StatusCode, result.ErrorMessage);
+            return HandleServiceResult(result);
         }
 
         [HttpPut("{id}")]
@@ -74,11 +58,7 @@ namespace PL.Controllers
         public IActionResult Address(int id, AddressDTO addressDTO)
         {
             var result = _addressService.Update(addressDTO);
-            if (result.Success)
-            {
-                return Ok(result.Data);
-            }
-            return StatusCode(result.StatusCode, result.ErrorMessage);
+            return HandleServiceResult(result);
         }
     }
 }

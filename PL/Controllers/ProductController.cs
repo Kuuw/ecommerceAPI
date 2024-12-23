@@ -10,7 +10,7 @@ namespace PL.Controllers
     [ApiController]
     [Route("[controller]")]
     [ApiVersion("1.0")]
-    public class ProductController : ControllerBase
+    public class ProductController : BaseController
     {
         private readonly IProductService _productService;
 
@@ -24,11 +24,7 @@ namespace PL.Controllers
         public IActionResult Product(int page, int pageSize, [FromBody] ProductFilter? productFilter)
         {
             var result = _productService.GetPaged(page, pageSize, productFilter);
-            if (result.Success)
-            {
-                return Ok(result.Data);
-            }
-            return StatusCode(result.StatusCode, result.ErrorMessage);
+            return HandleServiceResult(result);
         }
 
         [HttpGet("{id}")]
@@ -36,11 +32,7 @@ namespace PL.Controllers
         public IActionResult Product(int id)
         {
             var result = _productService.GetById(id);
-            if (result.Success)
-            {
-                return Ok(result.Data);
-            }
-            return StatusCode(result.StatusCode, result.ErrorMessage);
+            return HandleServiceResult(result);
         }
 
         [HttpPost]
@@ -49,11 +41,7 @@ namespace PL.Controllers
         public IActionResult Product(ProductDTO productDTO)
         {
             var result = _productService.Add(productDTO);
-            if (result.Success)
-            {
-                return Ok(result.Data);
-            }
-            return StatusCode(result.StatusCode, result.ErrorMessage);
+            return HandleServiceResult(result);
         }
 
         [HttpPut("{id}")]
@@ -62,22 +50,14 @@ namespace PL.Controllers
         public IActionResult Product(int id, ProductDTO productDTO)
         {
             var result = _productService.Update(productDTO, id);
-            if (result.Success)
-            {
-                return Ok(result.Data);
-            }
-            return StatusCode(result.StatusCode, result.ErrorMessage);
+            return HandleServiceResult(result);
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
             var result = _productService.Delete(id);
-            if (result.Success)
-            {
-                return Ok(result.Data);
-            }
-            return StatusCode(result.StatusCode, result.ErrorMessage);
+            return HandleServiceResult(result);
         }
 
         [HttpPut("Stock/{id}")]
@@ -85,11 +65,7 @@ namespace PL.Controllers
         public IActionResult Stock(int id, int stock)
         {
             var result = _productService.UpdateStock(id, stock);
-            if (result.Success)
-            {
-                return Ok(result.Data);
-            }
-            return StatusCode(result.StatusCode, result.ErrorMessage);
+            return HandleServiceResult(result);
         }
 
         [HttpPost("Image/{id}")]
@@ -97,11 +73,7 @@ namespace PL.Controllers
         public IActionResult Image(int id, IFormFile file)
         {
             var result = _productService.UploadImage(id, file);
-            if (result.Success)
-            {
-                return Ok(result.Data);
-            }
-            return StatusCode(result.StatusCode, result.ErrorMessage);
+            return HandleServiceResult(result);
         }
 
         [HttpDelete("Image/{id}")]
@@ -109,11 +81,7 @@ namespace PL.Controllers
         public IActionResult Image(Guid id)
         {
             var result = _productService.DeleteImage(id);
-            if (result.Success)
-            {
-                return Ok(result.Data);
-            }
-            return StatusCode(result.StatusCode, result.ErrorMessage);
+            return HandleServiceResult(result);
         }
     }
 }

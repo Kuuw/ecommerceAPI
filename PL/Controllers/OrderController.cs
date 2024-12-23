@@ -11,7 +11,7 @@ namespace PL.Controllers
     [Route("[controller]")]
     [ApiVersion("1.0")]
     [Authorize]
-    public class OrderController : ControllerBase
+    public class OrderController : BaseController
     {
         private readonly IOrderService _orderService;
 
@@ -24,22 +24,14 @@ namespace PL.Controllers
         public IActionResult Order()
         {
             var result = _orderService.Get();
-            if (result.Success)
-            {
-                return Ok(result.Data);
-            }
-            return StatusCode(result.StatusCode, result.ErrorMessage);
+            return HandleServiceResult(result);
         }
 
         [HttpGet("{id}")]
         public IActionResult Order(int id)
         {
             var result = _orderService.GetById(id);
-            if (result.Success)
-            {
-                return Ok(result.Data);
-            }
-            return StatusCode(result.StatusCode, result.ErrorMessage);
+            return HandleServiceResult(result);
         }
 
         [HttpPost]
@@ -47,11 +39,7 @@ namespace PL.Controllers
         public IActionResult Order(OrderDTO orderDTO)
         {
             var result = _orderService.Add(orderDTO);
-            if (result.Success)
-            {
-                return Ok(result.Data);
-            }
-            return StatusCode(result.StatusCode, result.ErrorMessage);
+            return HandleServiceResult(result);
         }
     }
 }

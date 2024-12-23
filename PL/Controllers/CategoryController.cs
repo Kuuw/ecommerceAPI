@@ -10,7 +10,7 @@ namespace PL.Controllers
     [ApiController]
     [Route("[controller]")]
     [ApiVersion("1.0")]
-    public class CategoryController : ControllerBase
+    public class CategoryController : BaseController
     {
         private readonly ICategoryService _categoryService;
 
@@ -24,11 +24,7 @@ namespace PL.Controllers
         public IActionResult Category()
         {
             var result = _categoryService.Get();
-            if (result.Success)
-            {
-                return Ok(result.Data);
-            }
-            return StatusCode(result.StatusCode, result.ErrorMessage);
+            return HandleServiceResult(result);
         }
 
         [HttpGet("{id}")]
@@ -36,11 +32,7 @@ namespace PL.Controllers
         public IActionResult Category(int id)
         {
             var result = _categoryService.GetById(id);
-            if (result.Success)
-            {
-                return Ok(result.Data);
-            }
-            return StatusCode(result.StatusCode, result.ErrorMessage);
+            return HandleServiceResult(result);
         }
 
         [HttpPost]
@@ -49,11 +41,7 @@ namespace PL.Controllers
         public IActionResult Category(CategoryDTO categoryDTO)
         {
             var result = _categoryService.Add(categoryDTO);
-            if (result.Success)
-            {
-                return Ok(result.Data);
-            }
-            return StatusCode(result.StatusCode, result.ErrorMessage);
+            return HandleServiceResult(result);
         }
 
         [HttpPut("{id}")]
@@ -63,11 +51,7 @@ namespace PL.Controllers
         {
             categoryDTO.CategoryId = id;
             var result = _categoryService.Update(categoryDTO);
-            if (result.Success)
-            {
-                return Ok(result.Data);
-            }
-            return StatusCode(result.StatusCode, result.ErrorMessage);
+            return HandleServiceResult(result);
         }
 
         [HttpDelete("{id}")]
@@ -75,11 +59,7 @@ namespace PL.Controllers
         public IActionResult CategoryDelete(int id)
         {
             var result = _categoryService.Delete(id);
-            if (result.Success)
-            {
-                return Ok(result.Data);
-            }
-            return StatusCode(result.StatusCode, result.ErrorMessage);
+            return HandleServiceResult(result);
         }
     }
 }
