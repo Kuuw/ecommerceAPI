@@ -59,7 +59,7 @@ namespace BAL.Concrete
             var response = new ProductPagedResponse();
             var metadata = new PageMetadata();
             var items = _productRepository.GetPaged(page, pageSize, productFilter);
-            
+
             List<ProductDTO> itemsDTO = mapper.Map<List<Product>, List<ProductDTO>>(items);
             response.Items = itemsDTO;
 

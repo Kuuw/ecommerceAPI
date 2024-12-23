@@ -30,8 +30,8 @@ namespace BAL.Concrete
         public ServiceResult<bool> Delete(int id)
         {
             var country = _repository.GetById(id);
-            if (country != null) 
-            { 
+            if (country != null)
+            {
                 _repository.Delete(country);
                 return ServiceResult<bool>.Ok(true);
             }

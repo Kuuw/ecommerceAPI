@@ -2,11 +2,10 @@
 using Entities.DTO;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 
 namespace DAL.Concrete
 {
-    public class ProductRepository:GenericRepository<Product>, IProductRepository
+    public class ProductRepository : GenericRepository<Product>, IProductRepository
     {
         private readonly EcommerceDbContext _context;
         private readonly DbSet<ProductStock> stockData;
@@ -78,8 +77,8 @@ namespace DAL.Concrete
             return items;
         }
 
-        public ProductStock GetStock(int ProductId) 
-        { 
+        public ProductStock GetStock(int ProductId)
+        {
             var stock = stockData.FirstOrDefault(x => x.ProductId == ProductId);
             if (stock == null)
             {

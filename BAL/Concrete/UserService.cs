@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using BAL.Abstract;
 using DAL.Abstract;
-using DAL.Concrete;
 using Entities.Context.Abstract;
 using Entities.DTO;
 using Entities.Models;
@@ -46,7 +45,7 @@ namespace BAL.Concrete
         public ServiceResult<UserDTO?> GetById()
         {
             User? user = _userRepository.GetById(_userContext.UserId);
-            
+
             return ServiceResult<UserDTO?>.Ok(mapper.Map<UserDTO>(user));
         }
         public ServiceResult<bool> Update(UserDTO userData)

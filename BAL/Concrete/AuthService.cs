@@ -1,10 +1,8 @@
 ﻿using BAL.Abstract;
 using DAL.Abstract;
-using DAL.Concrete;
 using Entities.DTO;
 using Entities.Models;
 using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Protocols;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;

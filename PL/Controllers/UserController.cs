@@ -4,7 +4,6 @@ using Entities.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PL.ActionFilters;
-using System.Security.Claims;
 
 namespace PL.Controllers
 {

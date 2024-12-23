@@ -49,12 +49,12 @@ namespace BAL.Concrete
         public ServiceResult<ShipmentCompanyDTO?> GetById(int id)
         {
             var shipmentCompany = _repository.GetById(id);
-            if (shipmentCompany != null) 
+            if (shipmentCompany != null)
             {
                 var shipmentCompanyDto = mapper.Map<ShipmentCompanyDTO>(shipmentCompany);
                 return ServiceResult<ShipmentCompanyDTO?>.Ok(shipmentCompanyDto);
             }
-            else 
+            else
             {
                 return ServiceResult<ShipmentCompanyDTO?>.NotFound("Shipment company not found.");
             }

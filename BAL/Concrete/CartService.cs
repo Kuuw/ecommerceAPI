@@ -32,7 +32,7 @@ namespace BAL.Concrete
         public ServiceResult<bool> Update(CartItemDTO cartItemDTO)
         {
             var cartItem = _repository.Where(x => x.UserId == _userContext.UserId && x.ProductId == cartItemDTO.ProductId).FirstOrDefault();
-            if (cartItem != null) 
+            if (cartItem != null)
             {
                 mapper.Map(cartItemDTO, cartItem);
                 _repository.Update(cartItem);
@@ -46,10 +46,10 @@ namespace BAL.Concrete
             return ServiceResult<bool>.Ok(true);
         }
 
-        public ServiceResult<bool> Delete(int productId) 
+        public ServiceResult<bool> Delete(int productId)
         {
             var cartItem = _repository.Where(x => x.UserId == _userContext.UserId && x.ProductId == productId).FirstOrDefault();
-            if (cartItem != null) 
+            if (cartItem != null)
             {
                 _repository.Delete(cartItem);
                 return ServiceResult<bool>.Ok(true);

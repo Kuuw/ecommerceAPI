@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using BAL.Abstract;
 using DAL.Abstract;
-using DAL.Concrete;
 using Entities.Context.Abstract;
 using Entities.DTO;
 using Entities.Models;
