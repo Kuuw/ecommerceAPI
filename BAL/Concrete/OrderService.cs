@@ -55,13 +55,6 @@ namespace BAL.Concrete
             if (order != null && order.UserId == _userContext.UserId)
             {
                 mapper.Map(order, orderDTO);
-                var orderItems = _repository.GetItems(order.OrderId);
-                var orderItemsDTO = new List<OrderItemDTO>();
-                foreach(var item in orderItems)
-                {
-                    orderItemsDTO.Add(mapper.Map<OrderItemDTO>(item));
-                }
-                orderDTO.OrderItems = orderItemsDTO;
 
                 return ServiceResult<OrderDTO?>.Ok(orderDTO);
             }

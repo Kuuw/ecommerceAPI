@@ -79,5 +79,10 @@ namespace DAL.Concrete
             _orderItems.Update(item);
             _context.SaveChanges();
         }
+
+        public new Order? GetById(int id)
+        {
+            return _order.Include(x => x.OrderItems).FirstOrDefault(x => x.OrderId == id);
+        }
     }
 }
