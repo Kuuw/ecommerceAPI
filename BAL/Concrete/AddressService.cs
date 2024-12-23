@@ -40,7 +40,7 @@ namespace BAL.Concrete
             var address = _addressRepository.GetById(AddressId);
             if (address?.UserId == _userContext.UserId)
             {
-                var result = ServiceResult<AddressDTO>.Ok(mapper.Map<AddressDTO>(address));
+                var result = ServiceResult<AddressDTO?>.Ok(mapper.Map<AddressDTO>(address));
 
                 return result;
             }
