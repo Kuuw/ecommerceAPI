@@ -18,23 +18,19 @@ namespace PL.Middlewares
             
             var userIdClaim = user.FindFirst("UserId");
             var roleClaim = user.FindFirst(ClaimTypes.Role);
+            var emailClaim = user.FindFirst("Email");
+            var firstNameClaim = user.FindFirst("FirstName");
+            var lastNameClaim = user.FindFirst("LastName");
+
             if (userIdClaim != null && int.TryParse(userIdClaim.Value, out var userId))
             {
                 userContext.UserId = userId;
             }
-            else
-            {
-                Console.WriteLine("UserId claim not found or invalid.");
-            }
 
-            if (roleClaim != null)
-            {
-                userContext.Role = roleClaim.Value;
-            }
-            else
-            {
-                Console.WriteLine("Role claim not found.");
-            }
+            userContext.Role = roleClaim?.Value ?? "";
+            userContext.Email = emailClaim?.Value ?? "";
+            userContext.FirstName = firstNameClaim?.Value ?? "";
+            userContext.LastName = lastNameClaim?.Value ?? "";
 
             await _next(context);
         }
