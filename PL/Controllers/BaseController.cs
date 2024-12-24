@@ -9,7 +9,7 @@ namespace PL.Controllers
         {
             if (result.Success)
             {
-                return Ok(result.Data);
+                return StatusCode(result.StatusCode, result.Data);
             }
             return StatusCode(result.StatusCode, result.ErrorMessage);
         }
