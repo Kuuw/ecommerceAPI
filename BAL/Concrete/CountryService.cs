@@ -57,10 +57,29 @@ namespace BAL.Concrete
 
         public ServiceResult<bool> Update(CountryDTO countryDTO)
         {
+            if (countryDTO.CountryId == null)
+            {
+                return ServiceResult<bool>.BadRequest("CountryId is required.");
+            }
+
+            var existingCountry = _repository.GetById(countryDTO.CountryId!.Value);
+            if (existingCountry == null)
+            {
+                return ServiceResult<bool>.NotFound("Country not found.");
+            }
+
             var country = mapper.Map<Country>(countryDTO);
+            country.CountryId = existingCountry.CountryId;
             country.UpdatedAt = DateTime.UtcNow;
-            _repository.Update(country);
-            Console.WriteLine($"Country {country.CountryName}, {country.CountryId}, {country.CountryPhoneCode}");
+
+            try
+            {
+                _repository.Update(country);
+            }
+            catch (Exception ex)
+            {
+                return ServiceResult<bool>.InternalServerError($"An error occurred while updating the country: {ex.Message}");
+            }
             return ServiceResult<bool>.Ok(true);
         }
     }
