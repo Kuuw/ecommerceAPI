@@ -3,8 +3,8 @@
 export ASPNETCORE_ENVIRONMENT=Development
 
 commands=(
-  "azurite"
-  "cd ./PL/ && dotnet run --launch-profile \"https\""
+  "azurite -l c:/Users/ataka"
+  "dotnet run --launch-profile \"https\" --project \"./PL/\""
 )
 
 PID_LIST=""
