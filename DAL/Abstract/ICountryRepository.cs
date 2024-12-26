@@ -4,6 +4,6 @@ namespace DAL.Abstract
 {
     public interface ICountryRepository: IGenericRepository<Country>
     {
-        public void Update(Country country);
+        public new void Update(Country country);
     }
 }

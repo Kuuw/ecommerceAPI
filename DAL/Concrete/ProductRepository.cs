@@ -43,6 +43,7 @@ namespace DAL.Concrete
             {
                 ps.Stock = Stock;
                 ps.UpdatedAt = DateTime.UtcNow;
+                stockData.Update(ps);
                 _context.SaveChanges();
             }
         }
@@ -154,8 +155,14 @@ namespace DAL.Concrete
 
         public new Product? GetById(int id)
         {
-            var product = productData.Include(x => x.ProductImages).FirstOrDefault(x => x.ProductId == id);
+            var product = productData.Include(x => x.ProductImages).Include(x => x.ProductStock).FirstOrDefault(x => x.ProductId == id);
             return product;
+        }
+
+        public new void Update(Product product)
+        {
+            productData.Update(product);
+            _context.SaveChanges();
         }
     }
 }

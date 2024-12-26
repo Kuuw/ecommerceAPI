@@ -109,6 +109,7 @@ namespace BAL.Concrete
         {
             var product = _productRepository.GetById(productId);
             if (product == null) { return ServiceResult<bool>.NotFound("Product not found"); }
+            if (stock < 0) { return ServiceResult<bool>.BadRequest("Stock can not be negative."); }
             _productRepository.UpdateStock(productId, stock);
             return ServiceResult<bool>.Ok(true);
         }
