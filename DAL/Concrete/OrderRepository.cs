@@ -82,7 +82,7 @@ namespace DAL.Concrete
 
         public new Order? GetById(int id)
         {
-            return _order.Include(x => x.OrderItems).FirstOrDefault(x => x.OrderId == id);
+            return _order.Include(x => x.OrderItems).ThenInclude(x => x.Product).FirstOrDefault(x => x.OrderId == id);
         }
     }
 }

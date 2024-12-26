@@ -13,5 +13,7 @@ namespace Entities.DTO
         public int Quantity { get; set; }
 
         public double UnitPrice { get; set; }
+
+        public ProductDTO Product { get; set; } = new ProductDTO();
     }
 }
