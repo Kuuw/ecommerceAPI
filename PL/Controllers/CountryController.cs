@@ -23,16 +23,14 @@ namespace PL.Controllers
         [AllowAnonymous]
         public IActionResult Country()
         {
-            var result = _countryService.Get();
-            return HandleServiceResult(result);
+            return HandleServiceResult(_countryService.Get());
         }
 
         [HttpGet("{id}")]
         [AllowAnonymous]
         public IActionResult Country(int id)
         {
-            var result = _countryService.GetById(id);
-            return HandleServiceResult(result);
+            return HandleServiceResult(_countryService.GetById(id));
         }
 
         [HttpPost]
@@ -40,8 +38,7 @@ namespace PL.Controllers
         [ValidateModel]
         public IActionResult Country(CountryDTO countryDTO)
         {
-            var result = _countryService.Add(countryDTO);
-            return HandleServiceResult(result);
+            return HandleServiceResult(_countryService.Add(countryDTO));
         }
 
         [HttpPut("{id}")]
@@ -50,16 +47,14 @@ namespace PL.Controllers
         public IActionResult Country(int id, CountryDTO countryDTO)
         {
             countryDTO.CountryId = id;
-            var result = _countryService.Update(countryDTO);
-            return HandleServiceResult(result);
+            return HandleServiceResult(_countryService.Update(countryDTO));
         }
 
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
         public IActionResult CountryDelete(int id)
         {
-            var result = _countryService.Delete(id);
-            return HandleServiceResult(result);
+            return HandleServiceResult(_countryService.Delete(id));
         }
     }
 }

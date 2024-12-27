@@ -23,16 +23,14 @@ namespace PL.Controllers
         [AllowAnonymous]
         public IActionResult Category()
         {
-            var result = _categoryService.Get();
-            return HandleServiceResult(result);
+            return HandleServiceResult(_categoryService.Get());
         }
 
         [HttpGet("{id}")]
         [AllowAnonymous]
         public IActionResult Category(int id)
         {
-            var result = _categoryService.GetById(id);
-            return HandleServiceResult(result);
+            return HandleServiceResult(_categoryService.GetById(id));
         }
 
         [HttpPost]
@@ -40,8 +38,7 @@ namespace PL.Controllers
         [ValidateModel]
         public IActionResult Category(CategoryDTO categoryDTO)
         {
-            var result = _categoryService.Add(categoryDTO);
-            return HandleServiceResult(result);
+            return HandleServiceResult(_categoryService.Add(categoryDTO));
         }
 
         [HttpPut("{id}")]
@@ -50,16 +47,14 @@ namespace PL.Controllers
         public IActionResult Category(int id, CategoryDTO categoryDTO)
         {
             categoryDTO.CategoryId = id;
-            var result = _categoryService.Update(categoryDTO);
-            return HandleServiceResult(result);
+            return HandleServiceResult(_categoryService.Update(categoryDTO));
         }
 
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
         public IActionResult CategoryDelete(int id)
         {
-            var result = _categoryService.Delete(id);
-            return HandleServiceResult(result);
+            return HandleServiceResult(_categoryService.Delete(id));
         }
     }
 }

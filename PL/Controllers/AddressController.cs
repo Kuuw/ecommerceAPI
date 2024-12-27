@@ -23,16 +23,14 @@ namespace PL.Controllers
         [Authorize]
         public IActionResult Address()
         {
-            var result = _addressService.GetByUserId();
-            return HandleServiceResult(result);
+            return HandleServiceResult(_addressService.GetByUserId());
         }
 
         [HttpGet("{id}")]
         [Authorize]
         public IActionResult AddressById(int id)
         {
-            var result = _addressService.GetByAddressId(id);
-            return HandleServiceResult(result);
+            return HandleServiceResult(_addressService.GetByAddressId(id));
         }
 
         [HttpPost]
@@ -40,16 +38,14 @@ namespace PL.Controllers
         [ValidateModel]
         public IActionResult Address(AddressDTO addressDTO)
         {
-            var result = _addressService.Add(addressDTO);
-            return HandleServiceResult(result);
+            return HandleServiceResult(_addressService.Add(addressDTO));
         }
 
         [HttpDelete("{id}")]
         [Authorize]
         public IActionResult Address(int id)
         {
-            var result = _addressService.Delete(id);
-            return HandleServiceResult(result);
+            return HandleServiceResult(_addressService.Delete(id));
         }
 
         [HttpPut("{id}")]
@@ -57,8 +53,7 @@ namespace PL.Controllers
         [ValidateModel]
         public IActionResult Address(int id, AddressDTO addressDTO)
         {
-            var result = _addressService.Update(addressDTO);
-            return HandleServiceResult(result);
+            return HandleServiceResult(_addressService.Update(addressDTO));
         }
     }
 }

@@ -22,22 +22,19 @@ namespace PL.Controllers
         [HttpGet]
         public IActionResult Cart()
         {
-            var result = _cartService.Get();
-            return HandleServiceResult(result);
+            return HandleServiceResult(_cartService.Get());
         }
 
         [HttpPut]
         public IActionResult Cart(CartItemDTO cartItemDTO)
         {
-            var result = _cartService.Update(cartItemDTO);
-            return HandleServiceResult(result);
+            return HandleServiceResult(_cartService.Update(cartItemDTO));
         }
 
         [HttpDelete("{productId}")]
         public IActionResult Cart(int productId)
         {
-            var result = _cartService.Delete(productId);
-            return HandleServiceResult(result);
+            return HandleServiceResult(_cartService.Delete(productId));
         }
     }
 }

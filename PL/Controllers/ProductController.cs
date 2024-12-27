@@ -23,16 +23,14 @@ namespace PL.Controllers
         [AllowAnonymous]
         public IActionResult Product(int page, int pageSize, [FromBody] ProductFilter? productFilter)
         {
-            var result = _productService.GetPaged(page, pageSize, productFilter);
-            return HandleServiceResult(result);
+            return HandleServiceResult(_productService.GetPaged(page, pageSize, productFilter));
         }
 
         [HttpGet("{id}")]
         [AllowAnonymous]
         public IActionResult Product(int id)
         {
-            var result = _productService.GetById(id);
-            return HandleServiceResult(result);
+            return HandleServiceResult(_productService.GetById(id));
         }
 
         [HttpPost]
@@ -40,8 +38,7 @@ namespace PL.Controllers
         [ValidateModel]
         public IActionResult Product(ProductDTO productDTO)
         {
-            var result = _productService.Add(productDTO);
-            return HandleServiceResult(result);
+            return HandleServiceResult(_productService.Add(productDTO));
         }
 
         [HttpPut("{id}")]
@@ -49,39 +46,34 @@ namespace PL.Controllers
         [ValidateModel]
         public IActionResult Product(int id, ProductDTO productDTO)
         {
-            var result = _productService.Update(productDTO, id);
-            return HandleServiceResult(result);
+            return HandleServiceResult(_productService.Update(productDTO, id));
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            var result = _productService.Delete(id);
-            return HandleServiceResult(result);
+            return HandleServiceResult(_productService.Delete(id));
         }
 
         [HttpPut("Stock/{id}")]
         [Authorize(Roles = "Admin")]
         public IActionResult Stock(int id, int stock)
         {
-            var result = _productService.UpdateStock(id, stock);
-            return HandleServiceResult(result);
+            return HandleServiceResult(_productService.UpdateStock(id, stock));
         }
 
         [HttpPost("Image/{id}")]
         [Authorize(Roles = "Admin")]
         public IActionResult Image(int id, IFormFile file)
         {
-            var result = _productService.UploadImage(id, file);
-            return HandleServiceResult(result);
+            return HandleServiceResult(_productService.UploadImage(id, file));
         }
 
         [HttpDelete("Image/{id}")]
         [Authorize(Roles = "Admin")]
         public IActionResult Image(Guid id)
         {
-            var result = _productService.DeleteImage(id);
-            return HandleServiceResult(result);
+            return HandleServiceResult(_productService.DeleteImage(id));
         }
     }
 }

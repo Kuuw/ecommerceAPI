@@ -26,36 +26,21 @@ namespace PL.Controllers
         [ValidateModel]
         public IActionResult Register(UserDTO userData)
         {
-            var result = _userService.Register(userData);
-            if (result.Success)
-            {
-                return Ok(result.Data);
-            }
-            return StatusCode(result.StatusCode, result.ErrorMessage);
+            return HandleServiceResult(_userService.Register(userData));
         }
 
         [HttpPost("Login")]
         [AllowAnonymous]
         public IActionResult Login(UserLogin userLogin)
         {
-            var result = _authService.Authenticate(userLogin);
-            if (result.Success)
-            {
-                return Ok(result.Data);
-            }
-            return StatusCode(result.StatusCode, result.ErrorMessage);
+            return HandleServiceResult(_authService.Authenticate(userLogin));
         }
 
         [HttpGet]
         [Authorize]
         public IActionResult UserGet()
         {
-            var result = _userService.GetById();
-            if (result.Success)
-            {
-                return Ok(result.Data);
-            }
-            return StatusCode(result.StatusCode, result.ErrorMessage);
+            return HandleServiceResult(_userService.GetById());
         }
 
         [HttpPut]
@@ -63,12 +48,7 @@ namespace PL.Controllers
         [ValidateModel]
         public IActionResult UserPut(UserDTO userDTO)
         {
-            var result = _userService.Update(userDTO);
-            if (result.Success)
-            {
-                return Ok(result.Data);
-            }
-            return StatusCode(result.StatusCode, result.ErrorMessage);
+            return HandleServiceResult(_userService.Update(userDTO));
         }
     }
 }
