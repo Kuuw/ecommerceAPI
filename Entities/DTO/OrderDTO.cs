@@ -11,5 +11,7 @@
         public string? ShipmentTrack { get; set; }
 
         public ICollection<OrderItemDTO> OrderItems { get; set; } = new List<OrderItemDTO>();
+
+        public AddressDTO? Address { get; set; }
     }
 }

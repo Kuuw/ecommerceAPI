@@ -14,6 +14,6 @@ namespace Entities.DTO
 
         public double UnitPrice { get; set; }
 
-        public ProductDTO Product { get; set; } = new ProductDTO();
+        public ProductDTO? Product { get; set; } = null!;
     }
 }
