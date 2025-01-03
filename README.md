@@ -4,6 +4,8 @@ This is an Ecommerce API built with .NET 8.0. It provides various endpoints for 
 
 For frontend [Click Here](https://github.com/Kuuw/ecommerceFE)
 
+For database [Click Here](https://github.com/Kuuw/eCommerceDB)
+
 ## Technologies Used
 
 - .NET 8.0
