@@ -32,9 +32,9 @@ For frontend [Click Here](https://github.com/Kuuw/ecommerceFE)
 
 - **GET /Category** - Get all categories
 - **GET /Category/{id}** - Get category by ID
-- **POST /Category** - Add a new category (Admin only)
-- **PUT /Category/{id}** - Update a category (Admin only)
-- **DELETE /Category/{id}** - Delete a category (Admin only)
+- **POST /Category** - Add a new category
+- **PUT /Category/{id}** - Update a category
+- **DELETE /Category/{id}** - Delete a category
 
 ### User Endpoints
 
