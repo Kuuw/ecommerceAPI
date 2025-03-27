@@ -3,11 +3,9 @@ using BAL.Abstract;
 using DAL.Abstract;
 using Entities.DTO;
 using Entities.Models;
+using ImageMagick;
 using Microsoft.AspNetCore.Http;
 using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Formats.Jpeg;
-using SixLabors.ImageSharp.Formats.Png;
-using SixLabors.ImageSharp.Processing;
 
 
 namespace BAL.Concrete
@@ -128,22 +126,17 @@ namespace BAL.Concrete
 
             using (var readStream = file.OpenReadStream())
             {
-                using (var img = Image.Load(readStream))
+                using (var img = new MagickImage(readStream))
                 {
-                    if (!(img.Metadata.DecodedImageFormat is JpegFormat || img.Metadata.DecodedImageFormat is PngFormat))
+                    if (!(img.Format == MagickFormat.Jpeg || img.Format == MagickFormat.Png))
                         throw new Exception("Uploaded file should be in png or jpeg.");
 
                     var tempFile = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
 
                     try
                     {
-                        img.Mutate(x => x.Resize(new ResizeOptions
-                        {
-                            Size = new Size(720, 720),
-                            Mode = ResizeMode.Pad
-                        }));
-
-                        img.Save(tempFile, new JpegEncoder());
+                        img.Resize(new MagickGeometry(720, 720) { IgnoreAspectRatio = false });
+                        img.Write(tempFile, MagickFormat.Jpeg);
 
                         using (var tempFileStream = new FileStream(tempFile, FileMode.Open))
                         {
